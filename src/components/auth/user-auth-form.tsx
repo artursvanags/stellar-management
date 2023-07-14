@@ -171,7 +171,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
-          {getURL() && redirect_path}
+          {getURL() + redirect_path}
         </div>
       </div>
       <div className="flex items-center justify-center gap-2">
