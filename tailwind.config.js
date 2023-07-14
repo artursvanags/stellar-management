@@ -50,6 +50,14 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        badge: {
+          green: "hsl(var(--badge-green))",
+          greenForeground: "hsl(var(--badge-green-foreground))",
+          amber: "hsl(var(--badge-amber))",
+          amberForeground: "hsl(var(--badge-amber-foreground))",
+          gray: "hsl(var(--badge-gray))",
+          grayForeground: "hsl(var(--badge-gray-foreground))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

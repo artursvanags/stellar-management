@@ -35,7 +35,7 @@ interface SocialAuthButtonProps {
 type FormData = z.infer<typeof userAuthSchema>;
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const redirect_path = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback/`;
+  const redirect_path = `${window.location.origin}/auth/callback/`;
   const [isLoading, setIsLoading] = useState(false);
   
   const supabase = createClientComponentClient<Database>();

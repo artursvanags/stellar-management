@@ -15,7 +15,7 @@
  
     --card: 0 0% 100%;
     --card-foreground: 224 71.4% 4.1%;
- 
+
     --border: 220 13% 91%;
     --input: 220 13% 91%;
  
@@ -34,6 +34,13 @@
     --ring: 217.9 10.6% 64.9%;
  
     --radius: 0.5rem;
+
+    --badge-green: 171 65% 77%;
+    --badge-green-foreground: 171 65% 86%;
+    --badge-amber: 32 65% 77%;
+    --badge-amber-foreground: 32 65% 86%;
+    --badge-gray: 0 65% 77%;
+    --badge-gray-foreground: 0 65% 86%;
   }
  
   .dark {
@@ -65,6 +72,13 @@
     --destructive-foreground: 0 85.7% 97.3%;
 
     --ring: 240 3.7% 15.9%;
+
+    --badge-green: 171 65% 77%;
+    --badge-green-foreground: 240 5.9% 10%;
+    --badge-amber: 32 65% 77%;
+    --badge-amber-foreground: 240 5.9% 10%;
+    --badge-gray: 0 65% 77%;
+    --badge-gray-foreground: 240 5.9% 10%;
   }
 }
  
