@@ -2,24 +2,15 @@
 import { columns } from "./columns";
 import { DataTable } from "@/components/dashboard/dataTable";
 import useSWR from 'swr'
+import axios from 'axios'
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = ( url: string ) => axios.get(url).then(res => res.data)
 
-export function getData() {
+export default function getData() {
     const { data, error, isLoading } = useSWR('http://localhost:3000/api/filaments', fetcher);
     
-    return {
-        data,
-        isLoading,
-        error
-    }
-}
-
-export default function setData() {
-    const { data, error, isLoading } = getData();
-    
     if (error) return <div>Failed to load</div>;
-    if (isLoading) return <div>Loading...</div>;
+    if (!data) return <div>Loading...</div>;
 
     return (
         <>
