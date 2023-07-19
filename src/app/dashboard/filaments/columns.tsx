@@ -86,22 +86,6 @@ export const columns: ColumnDef<Database>[] = [
   {
     accessorKey: "stock_weight",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Stock Weight" />
-    ),
-    cell: ({ row }) => {
-      const weight = parseFloat(row.getValue("stock_weight"))
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "unit",
-        unit: weight >= 1000 ? "kilogram" : "gram",
-        unitDisplay: "short",
-      }).format(weight >= 1000 ? weight / 1000 : weight)
- 
-      return <div>{formatted}</div>
-    },
-  },
-  {
-    accessorKey: "Weight",
-    header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Weight" />
     ),
     cell: ({ row }) => {
