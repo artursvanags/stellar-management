@@ -64,6 +64,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         emailRedirectTo: redirect_path,
       },
     });
+    router.push(redirect_path);
     setIsLoading(false);
 
     if (resp.error) {
@@ -77,7 +78,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         title: 'Success!',
         description: 'A confirmation has been sent to your email.',
       });
-      router.push(redirect_path);
+      
     }
   };
   
