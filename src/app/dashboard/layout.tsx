@@ -1,9 +1,5 @@
 import SideBar from "@/components/global/SideBar"
-<<<<<<< HEAD
 import SiteHeader from "@/components/global/SiteHeader"
-=======
-import { SiteHeader } from "@/components/global/site-header"
->>>>>>> d4a4b9e6e4907aa21c1ac3408ccf82f29ae72f15
 
 export default function DashboardLayout({
   children,

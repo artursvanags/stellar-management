@@ -1,4 +1,4 @@
-'use client'; 
+'use client';
 import { columns } from "./columns";
 import { DataTable } from "@/components/dashboard/dataTable";
 import useSWR from "swr";

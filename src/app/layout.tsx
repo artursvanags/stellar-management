@@ -11,12 +11,9 @@ import { Toaster } from "@/components/ui/toaster"
 
 import { ThemeProvider } from "@/components/global/ThemeProvider"
 
-<<<<<<< HEAD
 // Added to force dynamic site generation to avoid cookie errors.
 export const dynamic = 'force-dynamic';
 
-=======
->>>>>>> d4a4b9e6e4907aa21c1ac3408ccf82f29ae72f15
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
