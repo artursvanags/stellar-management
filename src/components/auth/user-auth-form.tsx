@@ -92,11 +92,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           redirectTo: redirect_path,
         }
       });
+      router.push(redirect_path);
 
       if (error) {
         throw new Error(error.message);
       }
-      router.push(redirect_path);
     } catch (error: any) {
       toast({
         title: 'Something went wrong.',
