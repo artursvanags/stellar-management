@@ -4,6 +4,8 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import type { Database } from '@/types/db'
 
+export const dynamic = 'force-dynamic'
+
 // サインアップ後のリダイレクト先
 export async function GET(request: NextRequest) {
   // URL取得
