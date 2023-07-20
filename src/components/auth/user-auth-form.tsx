@@ -64,9 +64,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         emailRedirectTo: redirect_path,
       },
     });
-    router.push(redirect_path);
     setIsLoading(false);
-
+  
     if (resp.error) {
       return toast({
         title: 'Something went wrong.',
@@ -78,7 +77,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         title: 'Success!',
         description: 'A confirmation has been sent to your email.',
       });
-      
+      router.push(redirect_path);
     }
   };
   
@@ -92,11 +91,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           redirectTo: redirect_path,
         }
       });
-      router.push(redirect_path);
 
       if (error) {
         throw new Error(error.message);
       }
+
+      router.push(redirect_path);
     } catch (error: any) {
       toast({
         title: 'Something went wrong.',
