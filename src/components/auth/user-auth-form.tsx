@@ -47,6 +47,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const socialAuthProviders = [
     { providerName: 'Github', authType: 'github' },
     { providerName: 'Google', authType: 'google' },
+    { providerName: 'Gitlab', authType: 'gitlab' },
   ]; 
 
   const {
