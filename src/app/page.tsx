@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+import { getSession } from "@/lib/supabase/supabaseServer";
+
+export default async function Home() {
+  const session = await getSession();
+=======
 import { cookies } from "next/headers";
 
 import { Database } from "@/types/db";
@@ -13,6 +19,7 @@ export default async function Home() {
   const {
     data: { session },
   } = await supabase.auth.getSession();
+>>>>>>> d4a4b9e6e4907aa21c1ac3408ccf82f29ae72f15
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
