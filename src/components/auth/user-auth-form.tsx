@@ -46,7 +46,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const spinnerClass = <Loader2 className="mr-2 h-4 w-4 animate-spin" />
   const socialAuthProviders = [
     { providerName: 'Github', authType: 'github' },
-    { providerName: 'Google', authType: 'google' },
+    { providerName: 'Google ', authType: 'google' },
     { providerName: 'Gitlab', authType: 'gitlab' },
   ]; 
 

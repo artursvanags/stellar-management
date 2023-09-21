@@ -35,12 +35,14 @@
  
     --radius: 0.5rem;
 
-    --badge-green: 171 65% 77%;
-    --badge-green-foreground: 171 65% 86%;
-    --badge-amber: 32 65% 77%;
-    --badge-amber-foreground: 32 65% 86%;
-    --badge-gray: 0 65% 77%;
-    --badge-gray-foreground: 0 65% 86%;
+    --badge-green: 140 89% 50%;
+    --badge-green-foreground: 140 89% 80%;
+
+    --badge-amber: 17 89% 50%;
+    --badge-amber-foreground: 17 89% 80%;
+    
+    --badge-gray: 0 89% 50%;
+    --badge-gray-foreground: 0 89% 80%;
   }
  
   .dark {
@@ -75,8 +77,10 @@
 
     --badge-green: 171 65% 77%;
     --badge-green-foreground: 240 5.9% 10%;
+
     --badge-amber: 32 65% 77%;
     --badge-amber-foreground: 240 5.9% 10%;
+
     --badge-gray: 0 65% 77%;
     --badge-gray-foreground: 240 5.9% 10%;
   }

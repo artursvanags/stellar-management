@@ -1,6 +1,6 @@
 'use client';
 import { columns } from "./columns";
-import { DataTable } from "@/components/dashboard/dataTable";
+import { DataTable } from "@/components/dashboard/table/dataTable";
 import useSWR from "swr";
 
 const fetcher = (url: any) => fetch(url).then((res) => res.json());
