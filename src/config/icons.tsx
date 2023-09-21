@@ -14,6 +14,14 @@ import {
   Menu,
 } from 'lucide-react';
 
+import {
+  IconBrandNextjs,
+  IconBrandTypescript,
+  IconBrandGraphql,
+  IconBrandJavascript,
+  IconBrandWordpress,
+  IconBrandTailwind,
+} from '@tabler/icons-react';
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
@@ -44,7 +52,13 @@ const DefaultLogo = (props: React.ComponentProps<'img'>) => {
 
   return (
     <>
-      <Image src={logoSrc} alt="Logo" width={100} height={100} className={props.className}/>
+      <Image
+        src={logoSrc}
+        alt="Logo"
+        width={100}
+        height={100}
+        className={props.className}
+      />
     </>
   );
 };
@@ -65,4 +79,13 @@ export const ThemeIcons = {
   Sun: Sun,
   Moon: Moon,
   System: Laptop,
+};
+
+export const ToolStackIcons = {
+  Tailwind: IconBrandTailwind,
+  Nextjs: IconBrandNextjs,
+  Typescript: IconBrandTypescript,
+  Javascript: IconBrandJavascript,
+  Wordpress: IconBrandWordpress,
+  Graphql: IconBrandGraphql
 };

@@ -1,4 +1,4 @@
-import { SiteFooter } from '@/components/global/footer';
+import SiteFooter from '@/components/layout/footer';
 import SiteHeader from '@/components/layout/header';
 
 interface MarketingLayoutProps {

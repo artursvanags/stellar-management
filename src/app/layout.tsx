@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import { siteConfig } from '@/config/site';
 
 import { Toaster } from '@/components/ui/toaster';
-
+import { TailwindIndicator } from '@/lib/tailwind-indicator';
 import { ThemeProvider } from '@/components/global/ThemeProvider';
 
 // Added to force dynamic site generation to avoid cookie errors.
@@ -20,7 +20,7 @@ const fontSans = FontSans({
 
 // Font files can be colocated inside of `pages`
 const fontHeading = localFont({
-  src: "assets/fonts/CalSans-SemiBold.woff2",
+  src: 'assets/fonts/CalSans-SemiBold.woff2',
   variable: '--font-heading',
 });
 
@@ -57,6 +57,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <main className="relative">{children}</main>
+          <TailwindIndicator />
         </ThemeProvider>
         <Toaster />
       </body>

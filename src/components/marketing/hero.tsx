@@ -6,8 +6,8 @@ import { siteConfig } from '@/config/site';
 
 export default function Hero() {
   return (
-    <section className="container grid grid-cols-12 space-y-6 pb-8 pt-6 md:pb-12 md:pt-10 lg:py-32">
-      <div className="col-span-8 mr-auto place-self-center">
+    <section className="container flex flex-col gap-4 py-14 lg:grid lg:grid-cols-12 lg:py-32">
+      <div className="order-2 lg:place-self-center lg:order-1 lg:col-span-8">
         <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
           My name is {siteConfig.author}
         </h1>
@@ -17,16 +17,16 @@ export default function Hero() {
         </p>
 
         <div className="pt-4">
-          <div className="space-x-2">
+          <div className="flex space-x-2">
             <Link
               href="about-us"
-              className={cn(buttonVariants({ size: 'lg', variant: 'default' }))}
+              className={cn('flex-grow lg:flex-none', buttonVariants({ size: 'lg', variant: 'default' }))}
             >
               Download CV
             </Link>
             <Link
               href="about-me"
-              className={cn(buttonVariants({ size: 'lg', variant: 'outline' }))}
+              className={cn('flex-grow lg:flex-none',buttonVariants({ size: 'lg', variant: 'outline' }))}
             >
               Learn More
             </Link>
@@ -34,7 +34,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="col-span-4">
+      <div className="order-1 lg:order-2 lg:col-span-4">
         <div className="relative aspect-square">
           <Image
             src="/avatar.jpg"
