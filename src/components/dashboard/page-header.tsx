@@ -1,5 +1,5 @@
-import  NavMenu from "@/components/dashboard/nav-menu"
-import { ModeToggle } from "@/components/global/ThemeToggleButton"
+import NavMenu from '@/components/dashboard/nav-menu';
+import ModeToggle from '@/components/global/ThemeToggleButton';
 
 export default function SiteHeader() {
   return (
@@ -13,5 +13,5 @@ export default function SiteHeader() {
         </div>
       </div>
     </header>
-  )
+  );
 }
