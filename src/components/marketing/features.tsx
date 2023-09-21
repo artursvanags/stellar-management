@@ -46,7 +46,7 @@ export default function Features() {
           Toolstack
         </h2>
         <div className="mx-auto flex gap-4 py-8 sm:grid-cols-3">
-          <TooltipProvider>
+          <TooltipProvider delayDuration={0}>
             {ToolStack.map((i, index) => (
               <Tooltip key={index}>
                 <TooltipTrigger>{i.icon}</TooltipTrigger>
