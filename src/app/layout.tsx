@@ -10,9 +10,6 @@ import { Toaster } from '@/components/ui/toaster';
 import { TailwindIndicator } from '@/lib/tailwind-indicator';
 import { ThemeProvider } from '@/components/global/ThemeProvider';
 
-// Added to force dynamic site generation to avoid cookie errors.
-export const dynamic = 'force-dynamic';
-
 const fontSans = FontSans({
   subsets: ['latin'],
   variable: '--font-sans',
