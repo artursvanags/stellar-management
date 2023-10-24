@@ -119,7 +119,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
       return (
         <div className="flex space-x-2">
           {tags.map((tag) => (
-            <span className="rounded-sm border px-1 py-[1px] text-xs text-muted-foreground">
+            <span key={tag} className="rounded-sm border px-1 py-[1px] text-xs text-muted-foreground">
               {tag}
             </span>
           ))}
