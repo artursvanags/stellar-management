@@ -1,21 +1,155 @@
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
-import { getFilaments } from '@/lib/supabase/supabaseServer';
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]/route';
 
-export const dynamic = 'force-dynamic'
+import prismadb from '@/lib/prismadb';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  // Create a Supabase client configured to use cookies
-  const supabase = createRouteHandlerClient({ cookies })
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-  // This assumes you have a `todos` table in Supabase. Check out
-  // the `Create Table and seed with data` section of the README 👇
-  // https://github.com/vercel/next.js/blob/canary/examples/with-supabase/README.md
-  const { data, error } = await getFilaments();
+    const user = await prismadb.user.findUnique({
+      where: { email: session?.user?.email! },
+    });
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-  if (error) {
-    return NextResponse.json(error)
+    const data = await prismadb.filament.findMany({
+      where: { userId: user?.id },
+      include: {
+        manufacturer: true,
+        material: true,
+        color: true,
+        tags: true,
+      },
+    });
+
+    // Restructure the data
+    const formatData = data.map((filament) => ({
+      id: filament.id,
+      userId: filament.userId,
+      status: filament.status,
+      manufacturer: filament.manufacturer.name,
+      material: filament.material.name,
+      color: filament.color.name,
+      weight: filament.weight,
+      remainingWeight: filament.remainingWeight,
+      createdAt: filament.createdAt,
+      updatedAt: filament.updatedAt,
+      tags: filament.tags.map((tag) => tag.name), // Assuming tags have a 'name' property
+    }));
+
+    return NextResponse.json(formatData, { status: 200 });
+  } catch (err) {
+    console.error(err);
+    return new NextResponse('Internal Error', { status: 500 });
   }
-  return NextResponse.json(data)
+}
+
+export async function POST(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized1' }, { status: 401 });
+    }
+
+    const user = await prismadb.user.findUnique({
+      where: { email: session?.user?.email! },
+    });
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+
+    // Prepare an array to store all the form data
+    const formData = [];
+
+    // Iterate over each form in the body
+    for (const formKey in body) {
+      if (body.hasOwnProperty(formKey)) {
+        const form = body[formKey];
+        for (const key in form) {
+          if (form.hasOwnProperty(key)) {
+            let {
+              manufacturer,
+              material,
+              color,
+              diameter,
+              net_weight,
+              used_weight,
+              state,
+            } = form[key];
+
+            // Check if manufacturer, material, and color exist, if not create them
+            const [existingManufacturer] = await prismadb.manufacturer.findMany(
+              {
+                where: { name: manufacturer },
+              },
+            );
+            if (!existingManufacturer) {
+              const newManufacturer = await prismadb.manufacturer.create({
+                data: { name: manufacturer },
+              });
+              manufacturer = newManufacturer.id;
+            } else {
+              manufacturer = existingManufacturer.id;
+            }
+
+            const [existingMaterial] = await prismadb.material.findMany({
+              where: { name: material },
+            });
+            if (!existingMaterial) {
+              const newMaterial = await prismadb.material.create({
+                data: { name: material },
+              });
+              material = newMaterial.id;
+            } else {
+              material = existingMaterial.id;
+            }
+
+            const [existingColor] = await prismadb.color.findMany({
+              where: { name: color },
+            });
+            if (!existingColor) {
+              const newColor = await prismadb.color.create({
+                data: { name: color },
+              });
+              color = newColor.id;
+            } else {
+              color = existingColor.id;
+            }
+
+            // Push the form data into the formData array
+            formData.push({
+              userId: user.id,
+              status: state,
+              diameter: parseFloat(diameter),
+              manufacturerId: manufacturer,
+              materialId: material,
+              colorId: color,
+              weight: parseFloat(net_weight),
+              remainingWeight: parseFloat(used_weight),
+            });
+          }
+        }
+      }
+    }
+
+    // Create many filaments using the formData array
+    const data = await prismadb.filament.createMany({
+      data: formData,
+    });
+
+    return NextResponse.json(data, { status: 201 });
+  } catch (err) {
+    console.log(err);
+    return new NextResponse('Internal Error', { status: 500 });
+  }
 }

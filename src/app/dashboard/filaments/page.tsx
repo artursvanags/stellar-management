@@ -1,19 +1,24 @@
 'use client';
-import { columns } from "./columns";
-import { DataTable } from "@/components/dashboard/table/dataTable";
-import useSWR from "swr";
+import useSWR from 'swr';
+import { columns } from './columns';
+import { DataTable } from '@/components/dashboard/table/dataTable';
 
-const fetcher = (url: any) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function Page() {
-  const { data: filaments, error } = useSWR("/api/filaments", fetcher);
+  const { data, error, isLoading } = useSWR('/api/filaments', fetcher);
 
-  if (error) return <div>Failed to load</div>;
-  if (!filaments) return <div>Loading...</div>;
-            
-    return (
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
     <div className="mx-auto py-10">
-      <DataTable columns={columns} data={filaments} />
+      <DataTable columns={columns} data={data} />
     </div>
-  )
+  );
 }

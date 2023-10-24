@@ -1,31 +1,27 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Database } from '@/types/db';
 
-import { Badge, badgeVariants } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
-import Link from 'next/link';
-import { Icons } from '@/config/icons';
 
 import { DataTableColumnHeader } from '@/components/dashboard/table/dataTableColumnHeader';
 import { DataTableRowActions } from '@/components/dashboard/table/dataTableActions';
-import { cn } from '@/lib/utils';
 
-const weight: { threshold: { low: number; medium: number } } = {
-  threshold: {
-    low: 100,
-    medium: 300,
-  },
+export type ProductColumn = {
+  id: string;
+  userId: string;
+  status: string;
+  manufacturer: string;
+  material: string;
+  color: string;
+  weight: number;
+  remainingWeight: number;
+  createdAt: Date;
+  updatedAt: Date;
+  tags: string[];
 };
 
-const columnLabels = [
-  {
-    label: 'Task',
-  },
-];
-
-export const columns: ColumnDef<Database>[] = [
+export const columns: ColumnDef<ProductColumn>[] = [
   {
     accessorKey: 'select',
     header: ({ table }) => (
@@ -66,6 +62,9 @@ export const columns: ColumnDef<Database>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Manufacturer" />
     ),
+    cell: ({ row }) => {
+      return <div>{row.original.manufacturer}</div>;
+    },
   },
   {
     accessorKey: 'material',
@@ -73,13 +72,7 @@ export const columns: ColumnDef<Database>[] = [
       <DataTableColumnHeader column={column} title="Material" />
     ),
     cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[80px] truncate">
-            {row.getValue('material')}
-          </span>
-        </div>
-      );
+      return <div>{row.original.material}</div>;
     },
   },
   {
@@ -88,126 +81,60 @@ export const columns: ColumnDef<Database>[] = [
       <DataTableColumnHeader column={column} title="Color" />
     ),
     cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[80px] truncate">{row.getValue('color')}</span>
-        </div>
-      );
+      return <div>{row.original.color}</div>;
     },
   },
   {
-    accessorKey: 'leftover_weight',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Color" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[80px] truncate">
-            {row.getValue('leftover_weight')}
-          </span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'stock_weight',
+    accessorKey: 'weight',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Weight" />
     ),
     cell: ({ row }) => {
-      const stock_weight = parseFloat(row.getValue('stock_weight'));
-      const leftover_weight = parseFloat(row.getValue('leftover_weight'));
-      const leftover_percent = (leftover_weight / stock_weight) * 100;
-
-      const formatWeight = (weight: number): string => {
-        return new Intl.NumberFormat('en-US', {
-          style: 'unit',
-          unit: weight >= 1000 ? 'kilogram' : 'gram',
-          unitDisplay: 'short',
-        }).format(weight >= 1000 ? weight / 1000 : weight);
-      };
-      // Check if leftover_weight is available, and if not, display only the stock_weight
-      if (!isNaN(leftover_weight)) {
-        let leftoverClass = 'text-muted-foreground';
-        if (
-          leftover_weight <= weight.threshold.medium &&
-          leftover_weight > weight.threshold.low
-        ) {
-          leftoverClass = 'text-orange-500';
-        } else if (leftover_weight <= weight.threshold.low) {
-          leftoverClass = 'text-red-500';
-        }
-        return (
-          <div>
-            {formatWeight(stock_weight)}
-            {' / '}
-            <span className={leftoverClass}>
-              {formatWeight(leftover_weight)} ({leftover_percent.toFixed(2)}%)
-            </span>{' '}
-          </div>
-        );
-      } else {
-        return <div>{formatWeight(stock_weight)}</div>;
-      }
+      const currentWeight = row.original.weight;
+      const remainingWeight = row.original.remainingWeight;
+      const percentage = (remainingWeight / currentWeight) * 100;
+      return (
+        <div>
+          {remainingWeight} / {currentWeight} ( {percentage} % )
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: 'status',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="status" />
+    ),
+    cell: ({ row }) => {
+      return <div>{row.original.status}</div>;
     },
   },
   {
     accessorKey: 'tags',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Tags" />
+      <DataTableColumnHeader column={column} title="tags" />
     ),
     cell: ({ row }) => {
-      const tags = row.getValue('tags');
-      if (typeof tags === 'string') {
-        const tagList = tags.split(',').map((tag: string) => (
-          <Badge key={tag} variant="outline">
-            {tag.trim()}
-          </Badge>
-        ));
-        return <div className="flex space-x-1">{tagList}</div>;
-      } else {
-        return (
-          <>
-            <Link href="/" className={badgeVariants({ variant: 'secondary' })}>
-              <Icons.plus className="" /> Add
-            </Link>
-          </>
-        );
-      }
-    },
-  },
-
-  {
-    accessorKey: 'state',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="State" />
-    ),
-    cell: ({ row }) => {
-      const filament_state: string = row.getValue('state');
-      const state_color =
-        filament_state.toLowerCase() === 'new'
-          ? 'bg-badge-greenForeground border-badge-green'
-          : filament_state.toLowerCase() === 'used'
-          ? 'bg-badge-amberForeground border-badge-amber'
-          : 'bg-badge-grayForeground border-badge-gray';
-      const className = cn(`${state_color}`);
+      const tags = row.original.tags;
       return (
-        <Badge variant="outline" className={className}>
-          {filament_state}
-        </Badge>
+        <div className="flex space-x-2">
+          {tags.map((tag) => (
+            <span className="rounded-sm border px-1 py-[1px] text-xs text-muted-foreground">
+              {tag}
+            </span>
+          ))}
+        </div>
       );
     },
   },
   {
-    accessorKey: 'created_at',
+    accessorKey: 'createdAt',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date Created" />
+      <DataTableColumnHeader column={column} title="createdAt" />
     ),
     cell: ({ row }) => {
-      const date = row.getValue('created_at');
-      const formatted = new Date(date as string).toLocaleString();
-      return <div>{formatted}</div>;
+      const date = new Date(row.original.createdAt).toLocaleDateString('en-US');
+      return <div>{date}</div>;
     },
   },
   {

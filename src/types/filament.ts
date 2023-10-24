@@ -1,0 +1,40 @@
+export type FilamentTableType = {
+  id: string;
+  userId: string;
+  status: string;
+  manufacturer: string;
+  material: string;
+  color: string;
+  weight: number;
+  remainingWeight: number;
+  createdAt: Date;
+  updatedAt: Date;
+  tags: string[];
+};
+
+export const filamentState = {
+  new: {
+    value: 'new',
+    label: 'New',
+  },
+  used: {
+    value: 'used',
+    label: 'Used',
+  },
+  archived: {
+    value: 'archived',
+    label: 'Archived',
+  },
+};
+
+
+export const filamentDiameter = {
+  default: {
+    value: '175',
+    label: '1.75 mm',
+  },
+  large: {
+    value: '285',
+    label: '2.85 mm',
+  },
+};

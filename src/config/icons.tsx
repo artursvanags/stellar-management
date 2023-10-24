@@ -12,6 +12,9 @@ import {
   User,
   Plus,
   Menu,
+  Github,
+  Loader2,
+  Trash,
 } from 'lucide-react';
 
 import {
@@ -25,6 +28,7 @@ import {
 import Image from 'next/image';
 import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
 const DefaultLogo = (props: React.ComponentProps<'img'>) => {
   const { resolvedTheme } = useTheme();
@@ -73,6 +77,8 @@ export const Icons = {
   eyeOff: EyeOff,
   sort: ChevronsUpDown,
   HamburgerMenu: Menu,
+  Trash: Trash,
+
 };
 
 export const ThemeIcons = {
@@ -87,5 +93,20 @@ export const ToolStackIcons = {
   Typescript: IconBrandTypescript,
   Javascript: IconBrandJavascript,
   Wordpress: IconBrandWordpress,
-  Graphql: IconBrandGraphql
+  Graphql: IconBrandGraphql,
+};
+
+export const Spinner = Loader2;
+
+interface AuthProviderIconsProps extends React.HTMLAttributes<HTMLDivElement> {
+  icon: string;
+}
+
+export const AuthProviderIcons = (props: AuthProviderIconsProps) => {
+  switch (props.icon) {
+    case 'GitHub':
+      return <Github className={cn('h-4 w-4', props.className)} />;
+    default:
+      return <Github className={cn('h-4 w-4', props.className)} />;
+  }
 };

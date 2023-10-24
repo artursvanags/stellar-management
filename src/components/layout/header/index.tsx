@@ -1,10 +1,11 @@
-import { getSession } from '@/lib/supabase/supabaseServer';
 import Navigation from './navigation';
 import { marketingNavigation } from '@/config/marketing';
 import MobileNavigation from './mobile-navigation';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
 export default async function SiteHeader() {
-  const session = await getSession();
+  const session = await getServerSession(authOptions);
 
   return (
     <header className="sticky top-0 z-50 lg:static">

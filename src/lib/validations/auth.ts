@@ -2,7 +2,7 @@ import * as z from "zod"
 
 export const userAuthSchema = z.object({
   email: z.string().nonempty('Email is required.').email(),
-  //password: z.string().nonempty('Password cannot be empty.').min(6, { message: 'Password is too short. It should be atleast 6 characters.' }),
+  password: z.string().nonempty('Password cannot be empty.').min(6, { message: 'Password is too short. It should be atleast 6 characters.' }),
 })
 
 

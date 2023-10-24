@@ -23,3 +23,4 @@ export const CheckActive = ({ href }: { href: string }) => {
   const isActive = pathname.startsWith(href);
   return isActive;
 };
+
