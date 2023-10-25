@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { use, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { filamentDiameter, filamentState } from '@/types/filament';
+import { filamentDiameter, filamentState } from '@/config/filament';
 
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
@@ -17,14 +17,19 @@ import {
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/config/icons';
 import { useToast } from '@/components/ui/use-toast';
-import { useRouter } from 'next/navigation';
 
-export default function FilamentForm() {
+const FilamentForm = () => {
+  const ref = useRef<HTMLFormElement>(null);
+
   const { toast } = useToast();
-  const router  = useRouter();
   const { register, unregister, handleSubmit, setValue } = useForm();
-
+  console.log(useForm())
   const [copies, setCopies] = useState([0]);
+
+  const [formData, setFormData] = useState('');
+
+  const [weights, setWeights] = useState<{ [key: number]: number }>({});
+  const [usedWeights, setUsedWeights] = useState<{ [key: number]: number }>({});
 
   const handleCopy = () => {
     setCopies([...copies, copies[copies.length - 1] + 1]);
@@ -50,37 +55,34 @@ export default function FilamentForm() {
     setCopies(copies.filter((_, i) => i !== index));
   };
 
-  const [data, setData] = useState('');
-  const [weight, setWeight] = useState(0);
-  const [usedWeight, setUsedWeight] = useState(0);
-
-  const handleWeight = (value: number) => {
-    if (value < 0 || value > 5000) return;
-    setWeight(value);
-    if (usedWeight === 0 || usedWeight === weight) {
-      setUsedWeight(value);
+  const handleWeight = (value: number, id: number) => {
+    if (value >= 0 && value <= 5000) {
+      setWeights({ ...weights, [id]: value });
+      setUsedWeights({ ...usedWeights, [id]: value });
+      setValue(`form_${id}.used_weight`, value);
     }
   };
 
-  const handleUsedWeight = (value: number) => {
-    if (value < 0 || value > weight!) return;
-    setUsedWeight(value);
+  const handleUsedWeight = (value: number, id: number) => {
+    if (value >= 0 && value <= weights[id]) {
+      setUsedWeights({ ...usedWeights, [id]: value });
+    }
   };
 
-  const onSubmitForm = async (data: any) => {
+  const onSubmitForm = async (formData: any) => {
+    setFormData(JSON.stringify(formData, null, 2));
     try {
-      setData(JSON.stringify(data, null, 2));
-      const response = await fetch('/api/filaments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ data }),
-      });
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      
+      // const response = await fetch('/api/filaments', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify({ formData }),
+      // });
+      // if (!response.ok) {
+      //   throw new Error(response.statusText);
+      // }
+
       toast({
         title: 'Success!',
         description: `You have successfully added ${
@@ -96,8 +98,10 @@ export default function FilamentForm() {
       );
     }
   };
+
   return (
     <form
+      ref={ref}
       onSubmit={handleSubmit(onSubmitForm)}
       className="flex flex-col gap-4 py-4"
     >
@@ -170,10 +174,10 @@ export default function FilamentForm() {
                     id="net_weight"
                     type="number"
                     step="any"
-                    value={weight || 0}
+                    value={weights[id] || 0}
                     className="bg-background"
                     {...register(`form_${id}.net_weight`, {
-                      onChange: (e) => handleWeight(parseFloat(e.target.value)),
+                      onChange: (e) => handleWeight(Number(e.target.value), id),
                     })}
                   />
                 </div>
@@ -183,10 +187,10 @@ export default function FilamentForm() {
                     type="number"
                     step="any"
                     className="bg-background"
-                    value={usedWeight || 0}
+                    value={usedWeights[id] || 0}
                     {...register(`form_${id}.used_weight`, {
                       onChange: (e) =>
-                        handleUsedWeight(parseFloat(e.target.value)),
+                        handleUsedWeight(Number(e.target.value), id),
                     })}
                   />
                 </div>
@@ -238,9 +242,9 @@ export default function FilamentForm() {
         ))}
       </div>
 
-      {data && (
+      {formData && (
         <code className=" h-48 overflow-auto rounded-sm bg-stone-900 p-4 text-stone-200">
-          <pre>{data}</pre>
+          <pre>{formData}</pre>
         </code>
       )}
 
@@ -251,4 +255,6 @@ export default function FilamentForm() {
       </Button>
     </form>
   );
-}
+};
+
+export default FilamentForm;

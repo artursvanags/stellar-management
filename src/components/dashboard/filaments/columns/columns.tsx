@@ -4,24 +4,13 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { Checkbox } from '@/components/ui/checkbox';
 
-import { DataTableColumnHeader } from '@/components/dashboard/table/dataTableColumnHeader';
-import { DataTableRowActions } from '@/components/dashboard/table/dataTableActions';
+import { DataTableColumnHeader } from '@/components/dashboard/filaments/table/dataTableColumnHeader';
+import { DataTableRowActions } from '@/components/dashboard/filaments/table/dataTableActions';
+import { Filaments } from '@/types/database';
 
-export type ProductColumn = {
-  id: string;
-  userId: string;
-  status: string;
-  manufacturer: string;
-  material: string;
-  color: string;
-  weight: number;
-  remainingWeight: number;
-  createdAt: Date;
-  updatedAt: Date;
-  tags: string[];
-};
 
-export const columns: ColumnDef<ProductColumn>[] = [
+
+export const columns: ColumnDef<Filaments>[] = [
   {
     accessorKey: 'select',
     header: ({ table }) => (
@@ -119,7 +108,10 @@ export const columns: ColumnDef<ProductColumn>[] = [
       return (
         <div className="flex space-x-2">
           {tags.map((tag) => (
-            <span key={tag} className="rounded-sm border px-1 py-[1px] text-xs text-muted-foreground">
+            <span
+              key={tag}
+              className="rounded-sm border px-1 py-[1px] text-xs text-muted-foreground"
+            >
               {tag}
             </span>
           ))}

@@ -13,7 +13,7 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 import ModeToggle from '@/components/global/ThemeToggleButton';
-import { NavigationInterface } from '@/types';
+import { NavigationInterface } from '@/types/navigation';
 
 export default function MobileNavigation({
   items,

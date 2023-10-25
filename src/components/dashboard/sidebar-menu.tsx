@@ -1,27 +1,35 @@
-'use client'
+'use client';
 
-import { usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-import { Button } from "@/components/ui/button"
-import { LuDatabase, LuMoon } from "react-icons/lu"
+import { Button } from '@/components/ui/button';
+import { LuDatabase, LuMoon } from 'react-icons/lu';
 
 type LinkItem = {
   href: string;
   title: string;
   icon: JSX.Element;
-}
+};
 
 const links: LinkItem[] = [
-  { href: "/dashboard/filaments", title: "Filaments", icon: <LuDatabase className="text-lg mr-2" /> },
-  { href: "/dashboard/colors", title: "Colors", icon: <LuMoon className="text-lg mr-2" /> },
+  {
+    href: '/dashboard/filaments',
+    title: 'Filaments',
+    icon: <LuDatabase className="mr-2 text-lg" />,
+  },
+  {
+    href: '/dashboard/colors',
+    title: 'Colors',
+    icon: <LuMoon className="mr-2 text-lg" />,
+  },
 ];
 
 const CheckActive = ({ href }: { href: string }) => {
   const pathname = usePathname();
   const isActive = pathname.startsWith(href);
   return isActive;
-}
+};
 
 const SideBar = () => {
   return (
@@ -36,7 +44,9 @@ const SideBar = () => {
               <Button
                 key={link.href}
                 asChild
-                variant={CheckActive({ href: link.href }) ? "secondary" : "ghost"}
+                variant={
+                  CheckActive({ href: link.href }) ? 'secondary' : 'ghost'
+                }
                 className="w-full justify-start"
               >
                 <Link href={link.href}>

@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth/options';
 
-import prismadb from '@/lib/prismadb';
+import prismadb from '@/lib/database';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,7 +10,7 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: 'Session not found' }, { status: 401 });
     }
 
     const user = await prismadb.user.findUnique({
@@ -56,7 +56,7 @@ export async function POST(request: Request) {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
-      return NextResponse.json({ error: 'Unauthorized1' }, { status: 401 });
+      return NextResponse.json({ error: 'Session not found' }, { status: 401 });
     }
 
     const user = await prismadb.user.findUnique({
@@ -151,5 +151,35 @@ export async function POST(request: Request) {
   } catch (err) {
     console.log(err);
     return new NextResponse('Internal Error', { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ error: 'Session not found' }, { status: 401 });
+    }
+
+    const user = await prismadb.user.findUnique({
+      where: { email: session?.user?.email! },
+    });
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+
+    const { id } = body;
+
+    const data = await prismadb.filament.delete({
+      where: {
+        id: id,
+      },
+    });
+
+    return NextResponse.json(data);
+  } catch (error) {
+    return new NextResponse('Internal error', { status: 500 });
   }
 }

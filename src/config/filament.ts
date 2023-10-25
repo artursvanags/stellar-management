@@ -1,17 +1,3 @@
-export type FilamentTableType = {
-  id: string;
-  userId: string;
-  status: string;
-  manufacturer: string;
-  material: string;
-  color: string;
-  weight: number;
-  remainingWeight: number;
-  createdAt: Date;
-  updatedAt: Date;
-  tags: string[];
-};
-
 export const filamentState = {
   new: {
     value: 'new',

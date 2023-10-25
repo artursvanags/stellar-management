@@ -2,7 +2,7 @@
 import { CheckActive } from '@/lib/utils';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { NavigationInterface } from '@/types/index';
+import { NavigationInterface } from '@/types/navigation';
 import { Icons } from '@/config/icons';
 
 type AuthButtonProps = {

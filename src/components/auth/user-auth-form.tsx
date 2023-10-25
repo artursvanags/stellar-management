@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 
 import { signIn } from 'next-auth/react';
-import { useProviders } from '@/lib/getProviders';
+import { useProviders } from '@/lib/auth/helpers';
 import { AuthProviderIcons, Spinner } from '@/config/icons';
 import { useState } from 'react';
 

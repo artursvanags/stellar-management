@@ -4,4 +4,5 @@ module.exports = {
     singleQuote: true,
     plugins: ['prettier-plugin-tailwindcss'],
     debug: true, // Enable debugging
+    
   }

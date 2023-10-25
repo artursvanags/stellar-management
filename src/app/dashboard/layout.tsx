@@ -9,14 +9,14 @@ export default function DashboardLayout({
   return (
     <div className="flex h-screen flex-col">
       <SiteHeader />
-      <div className="flex flex-1 flex-col overflow-y-auto">
+
         <div className="flex h-full flex-row">
           <aside className="primary-border w-64 overflow-y-auto border-r">
             <SideBar />
           </aside>
-          <main className="flex-1 overflow-y-auto p-2">{children}</main>
+          <main className="flex-1 p-2">{children}</main>
         </div>
-      </div>
+
     </div>
   );
 }

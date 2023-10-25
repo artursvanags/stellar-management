@@ -1,4 +1,4 @@
-import { SiteConfig, NavItem } from '@/types/index';
+import { SiteConfig, NavItem } from '@/types/navigation';
 
 export const siteConfig: SiteConfig = {
   name: 'Vanamio',
