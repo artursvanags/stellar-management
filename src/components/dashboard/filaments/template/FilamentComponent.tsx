@@ -2,7 +2,7 @@
 
 import useSWR from 'swr';
 
-import { columns } from '@/components/dashboard/filaments/columns/columns';
+import { columns } from '@/components/dashboard/filaments/table/columns';
 import { DataTable } from '@/components/dashboard/filaments/table/dataTable';
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());

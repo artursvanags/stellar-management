@@ -149,7 +149,7 @@ const FilamentForm = () => {
             </div>
 
             <Select
-              defaultValue={filamentDiameter.default.value}
+              defaultValue={filamentDiameter.default.value.toString()}
               onValueChange={(value) => setValue(`form_${id}.diameter`, value)}
               {...register(`form_${id}.diameter`, {
                 value: filamentDiameter.default.value,
@@ -160,7 +160,7 @@ const FilamentForm = () => {
               </SelectTrigger>
               <SelectContent>
                 {Object.values(filamentDiameter).map((state) => (
-                  <SelectItem key={state.value} value={state.value}>
+                  <SelectItem key={state.value} value={state.value.toString()}>
                     {state.label}
                   </SelectItem>
                 ))}
