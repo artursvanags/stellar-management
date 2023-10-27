@@ -21,6 +21,8 @@ import { Filaments } from '@/types/database';
 import { useState } from 'react';
 import { AlertModal } from '@/components/modals/alertModal';
 import { useRouter } from 'next/navigation';
+import { useToast } from '@/components/ui/use-toast';
+import { filamentDiameter } from '@/config/filament';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData & Filaments>;
@@ -29,7 +31,11 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
+  const data = row.original;
+
   const router = useRouter();
+  const { toast } = useToast();
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -41,7 +47,7 @@ export function DataTableRowActions<TData>({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: row.original.id,
+        body: JSON.stringify({ id: data.id }),
       });
 
       router.refresh();
@@ -51,10 +57,22 @@ export function DataTableRowActions<TData>({
         error,
       );
     } finally {
+      toast({
+        description: `${data.manufacturer} has been deleted.`,
+      })
       setLoading(false);
       setOpen(false);
     }
   };
+
+  const getDiameter = (data:Filaments) => {
+    for (const key in filamentDiameter) {
+      const object = filamentDiameter[key as keyof typeof filamentDiameter];
+      if (object.value === data.diameter) {
+        return object.label;
+      }
+    }
+  }
 
   return (
     <>
@@ -63,8 +81,16 @@ export function DataTableRowActions<TData>({
         onClose={() => setOpen(false)}
         onConfirm={onDelete}
         loading={loading}
-      />
-
+        description='You are about to delete the following:'
+      >
+ <div className="rounded-sm font-mono text-xs dark:bg-stone-900 bg-stone-100 p-4 dark:text-amber-200">
+          ID: {data.id}
+          <br />
+            Filament: {data.manufacturer} - {data.material} - {getDiameter(data)}
+          <br />
+          Weight: {data.weight} g ( Remaining {data.remainingWeight} g )
+        </div>
+</AlertModal>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

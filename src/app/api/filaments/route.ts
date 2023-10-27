@@ -35,6 +35,7 @@ export async function GET() {
       id: filament.id,
       userId: filament.userId,
       status: filament.status,
+      diameter: filament.diameter,
       manufacturer: filament.manufacturer.name,
       material: filament.material.name,
       color: filament.color.name,

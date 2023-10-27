@@ -1,22 +1,27 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
-import { Modal } from "@/components/ui/modal";
-import { Button } from "@/components/ui/button";
+import { Modal } from '@/components/ui/modal';
+import { Button } from '@/components/ui/button';
+import { Icons, Spinner } from '@/config/icons';
 
 interface AlertModalProps {
+  description?: string;
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
   loading: boolean;
+  children?: React.ReactNode;
 }
 
 export const AlertModal: React.FC<AlertModalProps> = ({
   isOpen,
   onClose,
   onConfirm,
-  loading
+  loading,
+  children,
+  description,
 }) => {
   const [isMounted, setIsMounted] = useState(false);
 
@@ -31,15 +36,24 @@ export const AlertModal: React.FC<AlertModalProps> = ({
   return (
     <Modal
       title="Are you sure?"
-      description="This action cannot be undone."
+      description={!description ? 'This action cannot be undone.' : description}
       isOpen={isOpen}
       onClose={onClose}
     >
-      <div className="pt-6 space-x-2 flex items-center justify-end w-full">
+      {children}
+      <div className="flex w-full items-center justify-end space-x-2 pt-6">
         <Button disabled={loading} variant="outline" onClick={onClose}>
           Cancel
         </Button>
-        <Button disabled={loading} variant="destructive" onClick={onConfirm}>Continue</Button>
+        <Button disabled={loading} variant="destructive" onClick={onConfirm}>
+          {loading ? (
+            <>
+              <Spinner className="mr-2 h-4 w-4 animate-spin" /> Loading
+            </>
+          ) : (
+            'Confirm'
+          )}
+        </Button>
       </div>
     </Modal>
   );

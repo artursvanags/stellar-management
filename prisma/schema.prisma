@@ -89,7 +89,7 @@ model Filament {
   user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
   status          String       @default("NEW")
-  diameter        Float
+  diameter        Int
   manufacturer    Manufacturer @relation("ManufacturerToFilament", fields: [manufacturerId], references: [id])
   manufacturerId  String
   material        Material     @relation("MaterialToFilament", fields: [materialId], references: [id])
