@@ -171,16 +171,66 @@ export async function DELETE(request: Request) {
 
     const body = await request.json();
 
-    const { id } = body;
+    let action = {}
+    
+    ;
+    if(Array.isArray(body)) {
+      // Get the filaments to be deleted
+      const filaments = await prismadb.filament.findMany({
+        where: {
+          id: {
+            in: body,
+          },
+        },
+        include: {
+          manufacturer: true,
+          color: true,
+          material: true,
+          tags: true,
+        },
+      });
 
-    const data = await prismadb.filament.delete({
-      where: {
-        id: id,
-      },
-    });
+      // Delete the filaments
+      action = await prismadb.filament.deleteMany({
+        where: {
+          id: {
+            in: body,
+          },
+        },
+      });
 
-    return NextResponse.json(data);
+      // Check if the associated manufacturer, color, material, and tags are used by any other filament
+      for (const filament of filaments) {
+        const otherFilaments = await prismadb.filament.findMany({
+          where: {
+            OR: [
+              { manufacturerId: filament.manufacturerId },
+              { colorId: filament.colorId },
+              { materialId: filament.materialId },
+            ],
+          },
+        });
+
+        // If there are no other filaments, delete the manufacturer, color, material, and tags
+        if (otherFilaments.length === 0) {
+          await prismadb.manufacturer.delete({ where: { id: filament.manufacturerId } });
+          await prismadb.color.delete({ where: { id: filament.colorId } });
+          await prismadb.material.delete({ where: { id: filament.materialId } });
+          for (const tag of filament.tags) {
+            await prismadb.tag.delete({ where: { id: tag.id } });
+          }
+        }
+      }
+    } else {
+      action = await prismadb.filament.delete({
+        where: { id: body.id },
+      });
+    }
+
+    return NextResponse.json(action);
+
   } catch (error) {
+    
     return new NextResponse('Internal error', { status: 500 });
   }
 }

@@ -1,4 +1,5 @@
 'use client';
+import { mutate } from 'swr'; // <-- import mutate from SWR
 
 import { use, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -18,15 +19,16 @@ import { Button } from '@/components/ui/button';
 import { Icons } from '@/config/icons';
 import { useToast } from '@/components/ui/use-toast';
 
-const FilamentForm = () => {
+const FilamentForm = ({ closeModal }: { closeModal: () => void }) => {
+
   const ref = useRef<HTMLFormElement>(null);
 
   const { toast } = useToast();
   const { register, unregister, handleSubmit, setValue } = useForm();
-  console.log(useForm())
+  console.log(useForm());
   const [copies, setCopies] = useState([0]);
 
-  const [formData, setFormData] = useState('');
+ // const [formData, setFormData] = useState('');
 
   const [weights, setWeights] = useState<{ [key: number]: number }>({});
   const [usedWeights, setUsedWeights] = useState<{ [key: number]: number }>({});
@@ -70,19 +72,20 @@ const FilamentForm = () => {
   };
 
   const onSubmitForm = async (formData: any) => {
-    setFormData(JSON.stringify(formData, null, 2));
+    //setFormData(JSON.stringify(formData, null, 2));
     try {
-      // const response = await fetch('/api/filaments', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({ formData }),
-      // });
-      // if (!response.ok) {
-      //   throw new Error(response.statusText);
-      // }
-
+      const response = await fetch('/api/filaments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ formData }),
+      });
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      closeModal();
+      mutate('/api/filaments'); // <-- trigger SWR to update
       toast({
         title: 'Success!',
         description: `You have successfully added ${
@@ -242,11 +245,14 @@ const FilamentForm = () => {
         ))}
       </div>
 
+      {/* 
+      For debugging purposes
+
       {formData && (
         <code className=" h-48 overflow-auto rounded-sm bg-stone-900 p-4 text-stone-200">
           <pre>{formData}</pre>
         </code>
-      )}
+      )} */}
 
       <Button className="ml-auto" type="submit">
         {copies.length < 2

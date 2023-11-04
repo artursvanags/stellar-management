@@ -5,7 +5,7 @@ import FilamentForm from '../dashboard/filaments/components/FilamentForm';
 import { Modal } from '@/components/ui/modal';
 import { useState } from 'react';
 
-export function FilamentModal() {
+export function FilamentModalButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -19,7 +19,7 @@ export function FilamentModal() {
   return (
     <>
       <Button onClick={handleOpen} variant="outline">
-        Add New
+        Add Filament
       </Button>
       <Modal
         title="Filament Form"
@@ -28,8 +28,7 @@ export function FilamentModal() {
         onClose={handleClose}
         className="overflow-auto sm:max-h-[80vh] sm:max-w-screen-xl"
       >
-        TEST
-        <FilamentForm />
+        <FilamentForm closeModal={handleClose}/>
       </Modal>
     </>
   );

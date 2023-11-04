@@ -90,7 +90,7 @@ model Filament {
   userId          String
   status          String       @default("NEW")
   diameter        Int
-  manufacturer    Manufacturer @relation("ManufacturerToFilament", fields: [manufacturerId], references: [id])
+  manufacturer    Manufacturer @relation("ManufacturerToFilament", fields: [manufacturerId], references: [id], onDelete: Cascade)
   manufacturerId  String
   material        Material     @relation("MaterialToFilament", fields: [materialId], references: [id])
   materialId      String
@@ -98,6 +98,7 @@ model Filament {
   colorId         String
   weight          Float
   remainingWeight Float
+  isFavorite      Boolean      @default(false)
   createdAt       DateTime     @default(now())
   updatedAt       DateTime?    @updatedAt
   tags            Tag[]

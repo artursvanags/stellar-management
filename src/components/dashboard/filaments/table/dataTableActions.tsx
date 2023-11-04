@@ -1,7 +1,7 @@
 'use client';
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { Row } from '@tanstack/react-table';
+import { Row, RowSelection } from '@tanstack/react-table';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -36,7 +36,7 @@ export function DataTableRowActions<TData>({
   const router = useRouter();
   const { toast } = useToast();
 
-  const [open, setOpen] = useState(false);
+  const [openAlertModal, setAlertModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const onDelete = async () => {
@@ -47,10 +47,9 @@ export function DataTableRowActions<TData>({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: data.id }),
+        body: JSON.stringify(data),
       });
-
-      router.refresh();
+      row.toggleSelected(false);
     } catch (error) {
       console.error(
         'There has been a problem with your fetch operation:',
@@ -59,38 +58,41 @@ export function DataTableRowActions<TData>({
     } finally {
       toast({
         description: `${data.manufacturer} has been deleted.`,
-      })
+      });
+      router.refresh();
       setLoading(false);
-      setOpen(false);
+      setAlertModalOpen(false);
     }
   };
 
-  const getDiameter = (data:Filaments) => {
+  const getDiameter = (data: Filaments) => {
     for (const key in filamentDiameter) {
       const object = filamentDiameter[key as keyof typeof filamentDiameter];
       if (object.value === data.diameter) {
         return object.label;
       }
     }
-  }
+    return data.diameter;
+  };
 
   return (
     <>
       <AlertModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
+        isOpen={openAlertModal}
+        onClose={() => setAlertModalOpen(false)}
         onConfirm={onDelete}
         loading={loading}
-        description='You are about to delete the following:'
+        description="You are about to delete the following:"
       >
- <div className="rounded-sm font-mono text-xs dark:bg-stone-900 bg-stone-100 p-4 dark:text-amber-200">
+        <div className="rounded-sm bg-stone-100 p-4 font-mono text-xs dark:bg-stone-900 dark:text-amber-200">
           ID: {data.id}
           <br />
-            Filament: {data.manufacturer} - {data.material} - {getDiameter(data)}
+          Filament: {data.manufacturer} - {data.material} - {getDiameter(data)}
           <br />
           Weight: {data.weight} g ( Remaining {data.remainingWeight} g )
         </div>
-</AlertModal>
+      </AlertModal>
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -106,7 +108,7 @@ export function DataTableRowActions<TData>({
           <DropdownMenuItem>Make a copy</DropdownMenuItem>
           <DropdownMenuItem>Favorite</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+          <DropdownMenuItem onClick={() => setAlertModalOpen(true)}>
             Delete
             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>

@@ -2,7 +2,7 @@ import FilamentComponent from '@/components/dashboard/filaments/template/Filamen
 
 export default function FilamentPage() {
   return (
-    <div className="mx-auto py-10">
+    <div className=" w-full py-10">
       <FilamentComponent />
     </div>
   );

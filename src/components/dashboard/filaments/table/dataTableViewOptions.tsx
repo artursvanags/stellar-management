@@ -33,13 +33,32 @@ export function DataTableViewOptions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
-        <DropdownMenuLabel>View preset</DropdownMenuLabel>
+        <DropdownMenuLabel>View Presets</DropdownMenuLabel>
         <DropdownMenuCheckboxItem
-               key='test'
+               key='default'
                className="capitalize"
-               checked={true}
+               onCheckedChange={() => {
+                 table.getAllColumns().forEach((column) => {
+                   column.toggleVisibility(true);
+                 });
+               }}
               >
                 Default view
+              </DropdownMenuCheckboxItem>
+              <DropdownMenuCheckboxItem
+               key='minimal'
+               className="capitalize"
+               onCheckedChange={() => {
+                 table.getAllColumns().forEach((column) => {
+                   if (['Manufacturer', 'material', 'color', 'weight', 'tags', 'actions'].includes(column.id)) {
+                     column.toggleVisibility(true);
+                   } else {
+                     column.toggleVisibility(false);
+                   }
+                 });
+               }}
+              >
+                Minimal
               </DropdownMenuCheckboxItem>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
@@ -58,7 +77,8 @@ export function DataTableViewOptions<TData>({
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.id}
+                {column.id.replace(/([A-Z])/g, " $1").trim()}
+                
               </DropdownMenuCheckboxItem>
             )
           })}

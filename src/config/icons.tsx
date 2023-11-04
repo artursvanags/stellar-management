@@ -1,5 +1,3 @@
-'use client';
-
 import {
   ChevronsUpDown,
   Sun,
@@ -15,6 +13,10 @@ import {
   Github,
   Loader2,
   Trash,
+  CreditCard,
+  Package,
+  LogInIcon,
+  LogOutIcon,
 } from 'lucide-react';
 
 import {
@@ -30,45 +32,45 @@ import { useTheme } from 'next-themes';
 import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
-const DefaultLogo = (props: React.ComponentProps<'img'>) => {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  let logoSrc;
-  switch (resolvedTheme) {
-    case 'dark':
-      logoSrc = '/logo-white.svg';
-      break;
-    case 'light':
-      logoSrc = '/logo-black.svg';
-      break;
-    default:
-      logoSrc = '/logo-white.svg';
-      break;
-  }
-  // useEffect only runs on the client, so now we can safely show the UI
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+// const DefaultLogo = (props: React.ComponentProps<'img'>) => {
+//   const { resolvedTheme } = useTheme();
+//   const [mounted, setMounted] = useState(false);
+//   let logoSrc;
+//   switch (resolvedTheme) {
+//     case 'dark':
+//       logoSrc = '/logo-white.svg';
+//       break;
+//     case 'light':
+//       logoSrc = '/logo-black.svg';
+//       break;
+//     default:
+//       logoSrc = '/logo-white.svg';
+//       break;
+//   }
+//   // useEffect only runs on the client, so now we can safely show the UI
+//   useEffect(() => {
+//     setMounted(true);
+//   }, []);
 
-  if (!mounted) {
-    return null;
-  }
+//   if (!mounted) {
+//     return null;
+//   }
 
-  return (
-    <>
-      <Image
-        src={logoSrc}
-        alt="Logo"
-        width={100}
-        height={100}
-        className={props.className}
-      />
-    </>
-  );
-};
+//   return (
+//     <>
+//       <Image
+//         src={logoSrc}
+//         alt="Logo"
+//         width={100}
+//         height={100}
+//         className={props.className}
+//       />
+//     </>
+//   );
+// };
 
 export const Icons = {
-  logo: DefaultLogo,
+  logo: User,
   login: LogIn,
   dashboard: User,
   plus: Plus,
@@ -109,4 +111,12 @@ export const AuthProviderIcons = (props: AuthProviderIconsProps) => {
     default:
       return <Github className={cn('h-4 w-4', props.className)} />;
   }
+};
+
+export const MyAccount = {
+  User: User,
+  Billing: CreditCard,
+  Orders: Package,
+  Login: LogInIcon,
+  Logout: LogOutIcon,
 };

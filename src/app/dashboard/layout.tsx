@@ -1,5 +1,5 @@
-import SideBar from '@/components/dashboard/sidebar-menu';
-import SiteHeader from '@/components/dashboard/page-header';
+import DashboardFooter from '@/components/dashboard/footer';
+import DashboardHeader from '@/components/dashboard/header';
 
 export default function DashboardLayout({
   children,
@@ -7,16 +7,16 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen flex-col">
-      <SiteHeader />
+    <div className="flex min-h-screen flex-col">
+      <header className="border-b">
+        <DashboardHeader />
+      </header>
 
-        <div className="flex h-full flex-row">
-          <aside className="primary-border w-64 overflow-y-auto border-r">
-            <SideBar />
-          </aside>
-          <main className="flex-1 p-2">{children}</main>
-        </div>
+      <main className="container flex flex-1 py-2">{children}</main>
 
+      <footer className="border-t">
+        <DashboardFooter />
+      </footer>
     </div>
   );
 }

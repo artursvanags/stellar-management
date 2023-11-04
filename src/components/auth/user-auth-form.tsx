@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-
+import { useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { useProviders } from '@/lib/auth/helpers';
 import { AuthProviderIcons, Spinner } from '@/config/icons';
@@ -12,11 +12,14 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function UserAuthForm({ ...props }: UserAuthFormProps) {
   const [isLoading, setLoading] = useState(false);
   const providers = useProviders();
+  const searchParams = useSearchParams();
 
   async function handleClick(id: string): Promise<void> {
     setLoading(true);
     try {
-      const response = await signIn(id, { callbackUrl: '/dashboard' });
+      const response = await signIn(id, {
+        callbackUrl: searchParams?.get('callbackUrl') || '/dashboard',
+      });
       console.log(response);
     } catch (error: any) {
       console.log(error);

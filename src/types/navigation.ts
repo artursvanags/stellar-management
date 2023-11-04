@@ -17,13 +17,12 @@ export type NavItem = {
   disabled?: boolean;
 };
 
-export type MainNavItem = NavItem;
-
-export type MarketingConfig = {
-  mainNav: MainNavItem[];
-};
-
 export interface NavigationInterface {
   items: NavItem[];
   session?: any;
 }
+
+export type MarketingConfig = {
+  mainNav: NavItem[];
+};
+

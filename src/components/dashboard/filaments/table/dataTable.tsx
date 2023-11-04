@@ -43,7 +43,9 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: 'Date Created', desc: true },
+  ]);
 
   const table = useReactTable({
     data,
@@ -70,14 +72,14 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-4">
       <DataTableToolbar table={table} />
-      <div className="rounded-md border">
+      <div className=" rounded-sm border">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-primary-foreground/50">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead className="h-12" key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(

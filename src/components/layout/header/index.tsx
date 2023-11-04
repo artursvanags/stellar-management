@@ -1,5 +1,5 @@
 import Navigation from './navigation';
-import { marketingNavigation } from '@/config/navigation';
+import { marketingNavigation } from '@/config/marketing';
 import MobileNavigation from './mobile-navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/options';
