@@ -10,5 +10,6 @@ export type Filaments = {
     remainingWeight: number;
     createdAt: Date;
     updatedAt: Date | null;
+    isFavorite: boolean;
     tags: (string | null)[];
 }

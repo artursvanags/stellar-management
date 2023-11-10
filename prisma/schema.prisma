@@ -24,7 +24,9 @@ model Account {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+
   @@unique([provider, providerAccountId])
+      @@index([userId])
 }
 
 model Session {
@@ -33,7 +35,9 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+      @@index([userId])
 }
+
 
 model User {
   id            String     @id @default(uuid())
@@ -59,7 +63,8 @@ model Manufacturer {
   name      String?    @unique
   createdAt DateTime?  @default(now())
   updatedAt DateTime?  @updatedAt
-  filaments Filament[] @relation("ManufacturerToFilament")
+  filaments Filament[]
+
 }
 
 model Color {
@@ -67,7 +72,7 @@ model Color {
   name      String?    @unique
   createdAt DateTime?  @default(now())
   updatedAt DateTime?  @updatedAt
-  filaments Filament[] @relation("ColorToFilament")
+  filaments Filament[] 
 }
 
 model Material {
@@ -75,7 +80,7 @@ model Material {
   name      String?    @unique
   createdAt DateTime?  @default(now())
   updatedAt DateTime?  @updatedAt
-  filaments Filament[] @relation("MaterialToFilament")
+  filaments Filament[] 
 }
 
 model Tag {
@@ -90,11 +95,11 @@ model Filament {
   userId          String
   status          String       @default("NEW")
   diameter        Int
-  manufacturer    Manufacturer @relation("ManufacturerToFilament", fields: [manufacturerId], references: [id], onDelete: Cascade)
+  manufacturer    Manufacturer @relation(fields: [manufacturerId], references: [id], onDelete: Cascade)
   manufacturerId  String
-  material        Material     @relation("MaterialToFilament", fields: [materialId], references: [id])
+  material        Material     @relation(fields: [materialId], references: [id])
   materialId      String
-  color           Color        @relation("ColorToFilament", fields: [colorId], references: [id])
+  color           Color        @relation(fields: [colorId], references: [id])
   colorId         String
   weight          Float
   remainingWeight Float

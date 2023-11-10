@@ -1,6 +1,6 @@
 import Navigation from './navigation';
 
-import { getFilaments } from '@/lib/filaments/filament-actions';
+import { getFilaments } from '@/lib/actions/getFilaments';
 
 export default async function DashboardHeader() {
   const data = await getFilaments();

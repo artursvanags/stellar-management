@@ -22,17 +22,20 @@ import { useState } from 'react';
 import { AlertModal } from '@/components/modals/alertModal';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
-import { filamentDiameter } from '@/config/filament';
 
-interface DataTableRowActionsProps<TData> {
-  row: Row<TData & Filaments>;
+import { deleteFilament, updateFilament } from '@/lib/actions/filamentActions';
+import { ActionsIcons, Icons } from '@/config/icons';
+
+interface CellActionProps {
+  data: Filaments;
 }
 
-export function DataTableRowActions<TData>({
-  row,
-}: DataTableRowActionsProps<TData>) {
-  const data = row.original;
+const diameterToLabel = {
+  175: '1.75 mm',
+  285: '2.85 mm',
+};
 
+export function DataTableRowActions({ data }: CellActionProps) {
   const router = useRouter();
   const { toast } = useToast();
 
@@ -40,39 +43,52 @@ export function DataTableRowActions<TData>({
   const [loading, setLoading] = useState(false);
 
   const onDelete = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      await fetch(`/api/filaments/`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      row.toggleSelected(false);
+      await deleteFilament(data.id);
     } catch (error) {
-      console.error(
-        'There has been a problem with your fetch operation:',
-        error,
-      );
-    } finally {
-      toast({
-        description: `${data.manufacturer} has been deleted.`,
-      });
-      router.refresh();
-      setLoading(false);
-      setAlertModalOpen(false);
+      console.error(error);
     }
+    setAlertModalOpen(false);
+    setLoading(false);
+    router.refresh();
+    toast({
+      variant: 'default',
+      description: `Filament deleted successfully!`,
+    });
   };
 
-  const getDiameter = (data: Filaments) => {
-    for (const key in filamentDiameter) {
-      const object = filamentDiameter[key as keyof typeof filamentDiameter];
-      if (object.value === data.diameter) {
-        return object.label;
-      }
+  const toggleArchive = async () => {
+    const newStatus = data.status === "archived" ? "used" : "archived";
+    try {
+      await updateFilament(data.id, { status: newStatus });
+    } catch (error) {
+      console.error(error);
     }
-    return data.diameter;
+    setAlertModalOpen(false);
+    router.refresh();
+    toast({
+      variant: 'default',
+      description: `You have successfully ${
+        newStatus === 'archived' ? 'archived' : 'un-archived'
+      } filament!`,
+    });
+  };
+
+  const toggleFavorite = async () => {
+    try {
+      await updateFilament(data.id, { isFavorite: !data.isFavorite });
+    } catch (error) {
+      console.error(error);
+    }
+    setAlertModalOpen(false);
+    router.refresh();
+    toast({
+      variant: 'default',
+      description: `You have successfully ${
+        data.isFavorite ? 'favorited' : 'un-favorited'
+      } filament!`,
+    });
   };
 
   return (
@@ -82,17 +98,21 @@ export function DataTableRowActions<TData>({
         onClose={() => setAlertModalOpen(false)}
         onConfirm={onDelete}
         loading={loading}
-        description="You are about to delete the following:"
+        description={`You are about to delete the following:`}
       >
-        <div className="rounded-sm bg-stone-100 p-4 font-mono text-xs dark:bg-stone-900 dark:text-amber-200">
-          ID: {data.id}
-          <br />
-          Filament: {data.manufacturer} - {data.material} - {getDiameter(data)}
-          <br />
-          Weight: {data.weight} g ( Remaining {data.remainingWeight} g )
+        <div className="flex max-h-48 flex-col overflow-auto rounded-sm bg-stone-100 p-4 font-mono text-xs dark:bg-stone-900 dark:text-amber-200">
+          <span>{data.id}</span>
+          <span>
+            {data.manufacturer} - {data.material} - {data.color} -{' '}
+            {diameterToLabel[data.diameter as keyof typeof diameterToLabel]}
+          </span>
+
+          <span>
+            Remaining weight {data.remainingWeight} g ( Net weight {data.weight}{' '}
+            g )
+          </span>
         </div>
       </AlertModal>
-
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -103,14 +123,35 @@ export function DataTableRowActions<TData>({
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem className="cursor-pointer">
+            <ActionsIcons.Edit className="mr-2 h-4 w-4" />
+            Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={toggleFavorite} className="cursor-pointer">
+            {data.isFavorite ? (
+              <>
+                <ActionsIcons.Unfavorite className="mr-2 h-4 w-4" />
+                Un-favorite
+              </>
+            ) : (
+              <>
+                <ActionsIcons.Favorite className="mr-2 h-4 w-4" />
+                Favorite
+              </>
+            )}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={toggleArchive} disabled={data.status === "archived"}className="cursor-pointer">
+            <ActionsIcons.Archive className="mr-2 h-4 w-4" />
+            Archive
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setAlertModalOpen(true)}>
+          <DropdownMenuItem
+            onClick={() => setAlertModalOpen(true)}
+            className="cursor-pointer text-red-500"
+          >
+            <ActionsIcons.Delete className="mr-2 h-4 w-4" />
             Delete
-            <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

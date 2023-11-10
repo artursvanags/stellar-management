@@ -1,5 +1,6 @@
 import {
   ChevronsUpDown,
+  ChevronDown,
   Sun,
   Moon,
   Laptop,
@@ -17,6 +18,12 @@ import {
   Package,
   LogInIcon,
   LogOutIcon,
+  Info,
+  Star,
+  StarOff,
+  Check,
+  Pencil,
+  Archive,
 } from 'lucide-react';
 
 import {
@@ -78,8 +85,12 @@ export const Icons = {
   arrowDown: ArrowDown,
   eyeOff: EyeOff,
   sort: ChevronsUpDown,
+  sortAsc: ChevronDown,
   HamburgerMenu: Menu,
   Trash: Trash,
+  Info: Info,
+  Star: Star,
+  Check: Check,
 
 };
 
@@ -119,4 +130,12 @@ export const MyAccount = {
   Orders: Package,
   Login: LogInIcon,
   Logout: LogOutIcon,
+};
+
+export const ActionsIcons = {
+  Edit: Pencil,
+  Archive: Archive,
+  Favorite: Star,
+  Unfavorite: StarOff,
+  Delete: Trash,
 };

@@ -27,6 +27,7 @@ import {
 
 import { DataTableToolbar } from './dataTableToolbar';
 import { DataTablePagination } from './dataTablePagination';
+import { Filaments } from '@/types/database';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -44,7 +45,7 @@ export function DataTable<TData, TValue>({
     [],
   );
   const [sorting, setSorting] = React.useState<SortingState>([
-    { id: 'Date Created', desc: true },
+    { id: 'createdAt', desc: true },
   ]);
 
   const table = useReactTable({

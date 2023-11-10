@@ -1,17 +1,33 @@
 'use client';
+import { DataTableViewOptions } from '@/components/dashboard/filaments/table/dataTableViewOptions';
 
 import { Cross2Icon } from '@radix-ui/react-icons';
+import { Icons } from '@/config/icons';
 import { Table } from '@tanstack/react-table';
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { DataTableViewOptions } from '@/components/dashboard/filaments/table/dataTableViewOptions';
+
+import { DeleteAlertModal } from '@/components/modals/deleteAlertModal';
+
 import { useEffect, useState } from 'react';
-
-import { AlertModal } from '@/components/modals/alertModal';
-
-import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
+import { useRouter } from 'next/navigation';
+
+import {
+  deleteFilaments,
+  updateFilaments,
+} from '@/lib/actions/filamentActions';
+import { Filaments } from '@/types/database';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -20,74 +36,101 @@ interface DataTableToolbarProps<TData> {
 export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
-  const [selectedData, setSelectedData] = useState<string[]>([]);
-
-  useEffect(() => {
-    const selectedRows = table.getSelectedRowModel().rows;
-    const data = selectedRows.map((row) => row.getValue('id') as string);
-    setSelectedData(data);
-  }, [table, table.getSelectedRowModel().rows.length]);
-
   const router = useRouter();
   const { toast } = useToast();
 
+  const [data, setData] = useState<Filaments[]>([]);
   const [openAlertModal, setAlertModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const onDelete = async () => {
-    try {
-      setLoading(true);
-      await fetch(`/api/filaments/`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(selectedData),
-      });
-      table?.resetRowSelection(); 
+  const allFavorite = data.every((item) => item.isFavorite);
 
+  useEffect(() => {
+    const selectedRows = table.getSelectedRowModel().rows;
+    const selectedRowIDs = selectedRows.map((row) => row.original);
+    setData(selectedRowIDs as Filaments[]);
+  }, [table, table.getSelectedRowModel().rows.length]);
+
+  const onDelete = async () => {
+    setLoading(true);
+    try {
+      await deleteFilaments(data);
     } catch (error) {
-      console.error(
-        'There has been a problem with your fetch operation:',
-        error,
-      );
-    } finally {
-      toast({
-        description: `${selectedData.length} filaments have been deleted.`,
-      });
-      router.refresh();
-      setLoading(false);
-      setAlertModalOpen(false);
+      console.error(error);
     }
+    table?.resetRowSelection();
+    setAlertModalOpen(false);
+    setLoading(false);
+    router.refresh();
+    toast({
+      variant: 'notice',
+      description: `You have deleted ${data.length} filaments.`,
+    });
+  };
+
+  const onArchive = async () => {
+    setLoading(true);
+    try {
+      await updateFilaments(
+        data.map((item) => ({
+          id: item.id,
+          status: 'archived',
+        })),
+      );
+    } catch (error) {
+      console.error(error);
+    }
+
+    table?.resetRowSelection();
+
+    setAlertModalOpen(false);
+    setLoading(false);
+    router.refresh();
+    toast({
+      variant: 'notice',
+      description: `You have archived ${data.length} filaments.`,
+    });
+  };
+
+  const toggleFavorite = async () => {
+    try {
+      await updateFilaments(
+        data.map((item) => ({
+          id: item.id,
+          isFavorite: !allFavorite,
+        })),
+      );
+    } catch (error) {
+      console.error(error);
+    }
+    table?.resetRowSelection();
+
+    setAlertModalOpen(false);
+    setLoading(false);
+    router.refresh();
+    toast({
+      variant: 'notice',
+      description: `You have favorited ${data.length} filaments.`,
+    });
   };
 
   const isFiltered = table.getState().columnFilters.length > 0;
 
   return (
     <>
-      <AlertModal
+      <DeleteAlertModal
+        data={data}
         isOpen={openAlertModal}
         onClose={() => setAlertModalOpen(false)}
-        onConfirm={onDelete}
+        onAction={onDelete}
         loading={loading}
-        description="You are about to delete the following:"
-      >
-        <div className="max-h-48 overflow-auto rounded-sm bg-stone-100 p-4 font-mono text-xs dark:bg-stone-900 dark:text-amber-200">
-          {selectedData.map((data) => (
-            <div key={data} className="flex items-center space-x-2">
-              {data}
-            </div>
-          ))}
-        </div>
-      </AlertModal>
+      />
 
       <div className="flex items-center justify-between gap-2">
         <div className="flex flex-1 items-center space-x-2">
           <Input
             placeholder="Filter tasks..."
-            value={
-              (table.getColumn('manufacturer')?.getFilterValue() as string)
-            }
+            value={table.getColumn('manufacturer')?.getFilterValue() as string}
             onChange={(event) =>
               table
                 .getColumn('manufacturer')
@@ -104,12 +147,44 @@ export function DataTableToolbar<TData>({
         </div>
 
         {table.getSelectedRowModel().rows.length > 0 && (
-          <Button
-            onClick={() => setAlertModalOpen(true)}
-            variant={'destructive'}
-          >
-            Delete {table.getSelectedRowModel().rows.length} items
-          </Button>
+          <>
+            <Button variant={'ghost'} onClick={()=>table?.resetRowSelection()}>
+              Clear selection
+
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant={'ghost'} className=" border border-dashed">
+                  Bulk Action
+                  <Icons.sortAsc className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                  onClick={toggleFavorite}
+                  className="cursor-pointer"
+                >
+                  {allFavorite ? 'Un-favorite' : 'Favorite'}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={onArchive}
+                  className="cursor-pointer"
+                >
+                  Archive
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setAlertModalOpen(true)}
+                  className="cursor-pointer text-red-500"
+                >
+                  Delete
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel>
+                  {table.getSelectedRowModel().rows.length} selected
+                </DropdownMenuLabel>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </>
         )}
         <DataTableViewOptions table={table} />
       </div>

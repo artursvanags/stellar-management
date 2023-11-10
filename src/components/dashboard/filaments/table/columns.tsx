@@ -6,9 +6,18 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 import { DataTableColumnHeader } from '@/components/dashboard/filaments/table/dataTableColumnHeader';
 import { DataTableRowActions } from '@/components/dashboard/filaments/table/dataTableActions';
+import { TagActions } from '@/components/dashboard/filaments/table/TagActions';
+
 import { Filaments } from '@/types/database';
 
-const manufacturerTitle = "Manufacturer";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { Icons } from '@/config/icons';
+import { Badge } from '@/components/ui/badge';
 
 export const columns: ColumnDef<Filaments>[] = [
   {
@@ -41,7 +50,11 @@ export const columns: ColumnDef<Filaments>[] = [
       const value = row.getValue('id') as string;
       const showFirst = value.slice(0, 8);
 
-      return <div className=" text-muted-foreground">{showFirst}</div>;
+      return (
+        <div className=" text-muted-foreground flex items-center">
+          {row.original.isFavorite && <Icons.Star className='mr-2 w-4 h-4' />} {showFirst} 
+        </div>
+      );
     },
     enableSorting: false,
     enableHiding: false,
@@ -54,7 +67,6 @@ export const columns: ColumnDef<Filaments>[] = [
     cell: ({ row }) => {
       return <div>{row.original.manufacturer}</div>;
     },
-    
   },
   {
     accessorKey: 'material',
@@ -75,20 +87,46 @@ export const columns: ColumnDef<Filaments>[] = [
     },
   },
   {
-    accessorKey: 'weight',
+    accessorKey: 'remainingWeight',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Weight" />
+      <DataTableColumnHeader column={column} title="Remaining" />
     ),
     cell: ({ row }) => {
-      const currentWeight = row.original.weight;
+      const netWeight = row.original.weight;
       const remainingWeight = row.original.remainingWeight;
-      const percentage = ((remainingWeight / currentWeight) * 100).toFixed(2);
+      const percentage = parseFloat(
+        ((remainingWeight / netWeight) * 100).toFixed(2),
+      );
+      const color =
+        percentage < 50 && row.original.status !== 'archived'
+          ? 'text-red-400 group-hover/weight:text-red-400'
+          : 'text-muted-foreground/10 group-hover/weight:text-muted-foreground';
+
       return (
-        <div>
-          {currentWeight} /{' '}
-          <span className=" text-sm text-muted-foreground">
-            {remainingWeight} ( {percentage} % )
-          </span>
+        <div className="group/weight">
+          <TooltipProvider delayDuration={200}>
+            <Tooltip>
+              <TooltipTrigger className="flex items-center">
+                <Icons.Info
+                  className={`mr-2 h-4 w-4 text-muted-foreground/10 transition ${color}`}
+                />
+                {remainingWeight} g{' '}
+              </TooltipTrigger>
+              <TooltipContent
+                side="left"
+                align="center"
+                sideOffset={20}
+                className="bg-secondary"
+              >
+                <div>
+                  {netWeight} g -{' '}
+                  <span className="text-sm text-muted-foreground">
+                    ( {percentage} % ) Remaining
+                  </span>
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       );
     },
@@ -99,7 +137,23 @@ export const columns: ColumnDef<Filaments>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      return <div>{row.original.status}</div>;
+      const status = row.original.status;
+      return (
+        <Badge
+          variant={
+            status === 'new'
+              ? 'lime'
+              : status === 'used'
+              ? 'amber'
+              : status === 'archived'
+              ? 'stone'
+              : 'outline'
+          }
+          className="text-xs font-medium"
+        >
+          {status.slice(0, 1).toUpperCase() + status.slice(1)}
+        </Badge>
+      );
     },
   },
   {
@@ -107,46 +161,10 @@ export const columns: ColumnDef<Filaments>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Tags" />
     ),
-    cell: ({ row }) => {
-      const tags = row.original.tags;
-      if (tags.length > 3) {
-        const remainingTagsCount = tags.length - 2;
-        return (
-          <div className="flex space-x-2">
-            <span
-              key={tags[0]}
-              className="rounded-sm border bg-secondary/50 px-1 py-[1px] text-xs font-medium"
-            >
-              {tags[0]}
-            </span>
-            <span
-              key={tags[1]}
-              className="rounded-sm border bg-secondary/50 px-1 py-[1px] text-xs font-medium"
-            >
-              {tags[1]}
-            </span>
-            <span className="rounded-sm border bg-secondary/50 px-1 py-[1px] text-xs font-medium">
-              +{remainingTagsCount}
-            </span>
-          </div>
-        );
-      }
-      return (
-        <div className="flex space-x-2">
-          {tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-sm border bg-secondary/50 px-1 py-[1px] text-xs font-medium"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      );
-    },
+    cell: ({ row }) => <TagActions tags={row.original.tags} />,
   },
   {
-    accessorKey: 'Date Created',
+    accessorKey: 'createdAt',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date Created" />
     ),
@@ -157,6 +175,6 @@ export const columns: ColumnDef<Filaments>[] = [
   },
   {
     id: 'actions',
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row }) => <DataTableRowActions data={row.original} />,
   },
 ];
