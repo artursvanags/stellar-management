@@ -1,13 +1,12 @@
 'use client';
 
+import { Filaments } from '@/types/database';
+import { User } from '@prisma/client';
 import Link from 'next/link';
-import { Icons } from '@/config/icons';
 import { Button } from '@/components/ui/button';
-import MyAccountDropdown from '@/components/dashboard/my-account/myAccountDropdown';
 import DefaultLogo from '@/config/logo';
 import { CheckActive } from '@/lib/utils';
-import { User } from '@prisma/client';
-import { Filaments } from '@/types/database';
+import MyAccountDropdown from '@/components/dashboard/my-account/myAccountDropdown';
 import { SideBarNavigation as nav } from '@/config/dashboard';
 
 interface SideBarProps {
@@ -16,7 +15,6 @@ interface SideBarProps {
     filamentData: Filaments[];
   };
 }
-
 
 export default function SideBar({ data }: SideBarProps) {
   return (
