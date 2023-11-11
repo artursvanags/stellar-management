@@ -4,12 +4,12 @@ import { Icons, MyAccount } from './icons';
 export const SideBarNavigation: SideBarNavigationProps = {
   mainNav: [
     {
-      icon: <Icons.Filament className="mr-3 h-4 w-4" />,
+      icon: <Icons.Filament className="mr-3 h-4 w-4 text-muted-foreground" />,
       title: 'Filaments',
       href: '/dashboard/filaments',
     },
     {
-      icon: <Icons.Files className="mr-3 h-4 w-4" />,
+      icon: <Icons.Files className="mr-3 h-4 w-4 text-muted-foreground" />,
       title: 'Files',
       href: '/dashboard/files',
     },

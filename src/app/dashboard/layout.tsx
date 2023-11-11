@@ -1,13 +1,13 @@
 import DashboardHeader from '@/components/dashboard/header';
 import SideBar from '@/components/dashboard/sidebar-menu';
-import { getFilaments } from '@/lib/actions/getFilaments';
+import { getData } from '@/lib/actions/getData';
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const data = await getFilaments();
+  const data = await getData();
   return (
     // Flex container for the entire layout
     <div className="flex max-h-screen min-h-screen">
@@ -23,7 +23,9 @@ export default async function DashboardLayout({
           <DashboardHeader />
         </header>
         {/* Main content area is only component that scrolls */}
-        <main className="flex-grow overflow-y-auto px-8 container">{children}</main>
+        <main className="container flex-grow overflow-y-auto px-8">
+          {children}
+        </main>
       </div>
     </div>
   );

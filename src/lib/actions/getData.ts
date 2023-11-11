@@ -21,7 +21,7 @@ export async function validateSessionAndUser() {
   return user;
 }
 
-export async function getFilaments() {
+export async function getData() {
   try {
     const user = await validateSessionAndUser();
     if (!user) {
