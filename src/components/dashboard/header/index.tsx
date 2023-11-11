@@ -1,4 +1,3 @@
-import Navigation from './navigation';
 import { FilamentModalButton } from '@/components/modals/filamentModal';
 export default function DashboardHeader() {
   return (
