@@ -17,6 +17,7 @@ interface SideBarProps {
   };
 }
 
+
 export default function SideBar({ data }: SideBarProps) {
   return (
     <div className="flex h-screen flex-col p-4">

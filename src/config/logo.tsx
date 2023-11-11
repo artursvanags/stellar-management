@@ -1,23 +1,14 @@
 'use client';
 import { useTheme } from 'next-themes';
-import { useMemo, useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import Image from 'next/image';
 
 const DefaultLogo = (props: React.ComponentProps<'img'>) => {
   const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
 
   const logoSrc = useMemo(() => {
     return resolvedTheme === 'light' ? '/logo-black.svg' : '/logo-white.svg';
   }, [resolvedTheme]);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <div className={props.className}>
