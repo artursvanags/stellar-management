@@ -1,14 +1,15 @@
-import { DashboardConfig } from '@/types/dashboard';
-import { MyAccount } from './icons';
+import { SideBarNavigationProps } from '@/types/dashboard';
+import { Icons, MyAccount } from './icons';
 
-export const DashboardNavigation: DashboardConfig = {
+export const SideBarNavigation: SideBarNavigationProps = {
   mainNav: [
     {
+      icon: <Icons.Filament className="mr-3 h-4 w-4" />,
       title: 'Filaments',
       href: '/dashboard/filaments',
-      showDataLength: true,
     },
     {
+      icon: <Icons.Files className="mr-3 h-4 w-4" />,
       title: 'Files',
       href: '/dashboard/files',
     },
@@ -16,21 +17,15 @@ export const DashboardNavigation: DashboardConfig = {
   accountDropdown: [
     {
       icon: <MyAccount.User className="mr-3 h-4 w-4" />,
-      title: 'View Profile',
+      title: 'Settings',
       href: '/account',
       shortcut: '⇧⌘P',
     },
     {
       icon: <MyAccount.Billing className="mr-3 h-4 w-4" />,
       title: 'Billing',
-      href: '/account/addresses',
+      href: '/account/billing',
       shortcut: '⌘B',
-    },
-    {
-      icon: <MyAccount.Orders className="mr-3 h-4 w-4" />,
-      title: 'Orders',
-      href: '/account/orders',
-      shortcut: '⌘O',
     },
   ],
 };

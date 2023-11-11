@@ -1,13 +1,8 @@
 import Navigation from './navigation';
-
-import { getFilaments } from '@/lib/actions/getFilaments';
-
-export default async function DashboardHeader() {
-  const data = await getFilaments();
-  if (!data) return <div> Loading... </div>;
-
+import { FilamentModalButton } from '@/components/modals/filamentModal';
+export default function DashboardHeader() {
   return (
-    <header className="container sticky top-0 z-50 lg:static">
+    <header className="sticky top-0 z-50 lg:static">
       <div className="lg:hidden">
         {/* <MobileNavigation
           items={marketingNavigation.mainNav}
@@ -15,7 +10,9 @@ export default async function DashboardHeader() {
         /> */}
       </div>
       <div className="hidden lg:block">
-        <Navigation data={data} />
+        <div className="ml-auto flex flex-1 justify-end h-16 items-center">
+          <FilamentModalButton />
+        </div>
       </div>
     </header>
   );

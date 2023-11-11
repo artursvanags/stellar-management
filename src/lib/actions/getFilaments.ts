@@ -3,7 +3,7 @@ import prismadb from '@/lib/database';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/options';
 
-export async function validateSessionAndUser()  {
+export async function validateSessionAndUser() {
   const session = await getServerSession(authOptions);
   if (!session) {
     console.log('Session not found');
@@ -38,8 +38,12 @@ export async function getFilaments() {
       },
     });
 
+    const userData = await prismadb.user.findUnique({
+      where: { id: user?.id },
+    });
+
     // Restructure the data
-    const formatData = data.map((item) => ({
+    const filamentData = data.map((item) => ({
       id: item.id,
       userId: item.userId,
       status: item.status,
@@ -55,8 +59,10 @@ export async function getFilaments() {
       tags: item.tags.map((tag) => tag.name), // Assuming tags have a 'name' property
     }));
 
-    return formatData;
+    return { filamentData, userData };
+    
   } catch (err) {
     console.error(err);
   }
 }
+

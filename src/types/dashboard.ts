@@ -1,9 +1,9 @@
-export type DashboardConfig = {
+export type SideBarNavigationProps = {
   mainNav: {
     title: string;
     href: string;
+    icon?: React.ReactNode;
     disabled?: boolean;
-    showDataLength?: boolean;
   }[];
   accountDropdown: {
     title: string;

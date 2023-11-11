@@ -24,6 +24,8 @@ import {
   Check,
   Pencil,
   Archive,
+  CircleDot,
+  File,
 } from 'lucide-react';
 
 import {
@@ -91,7 +93,8 @@ export const Icons = {
   Info: Info,
   Star: Star,
   Check: Check,
-
+  Filament: CircleDot,
+  Files: File
 };
 
 export const ThemeIcons = {
@@ -125,6 +128,7 @@ export const AuthProviderIcons = (props: AuthProviderIconsProps) => {
 };
 
 export const MyAccount = {
+  Chevron: ChevronDown,
   User: User,
   Billing: CreditCard,
   Orders: Package,

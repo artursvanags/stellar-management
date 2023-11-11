@@ -1,65 +1,52 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-
+import { Icons } from '@/config/icons';
 import { Button } from '@/components/ui/button';
-import { LuDatabase, LuMoon } from 'react-icons/lu';
+import MyAccountDropdown from '@/components/dashboard/my-account/myAccountDropdown';
+import DefaultLogo from '@/config/logo';
+import { CheckActive } from '@/lib/utils';
+import { User } from '@prisma/client';
+import Filaments from '@/lib/database';
+import { SideBarNavigation as nav } from '@/config/dashboard';
 
-type LinkItem = {
-  href: string;
-  title: string;
-  icon: JSX.Element;
-};
+interface SideBarProps {
+  data: {
+    userData: User;
+    filamentData: (typeof Filaments)[];
+  };
+}
 
-const links: LinkItem[] = [
-  {
-    href: '/dashboard/filaments',
-    title: 'Filaments',
-    icon: <LuDatabase className="mr-2 text-lg" />,
-  },
-  {
-    href: '/dashboard/colors',
-    title: 'Colors',
-    icon: <LuMoon className="mr-2 text-lg" />,
-  },
-];
-
-const CheckActive = ({ href }: { href: string }) => {
-  const pathname = usePathname();
-  const isActive = pathname.startsWith(href);
-  return isActive;
-};
-
-const SideBar = () => {
+export default function SideBar({ data }: SideBarProps) {
   return (
-    <div className="primary-background">
-      <div className="space-y-4 py-2">
-        <div className="px-4">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-            Main Menu
-          </h2>
-          <ul className="space-y-1">
-            {links.map((link) => (
-              <Button
-                key={link.href}
-                asChild
-                variant={
-                  CheckActive({ href: link.href }) ? 'secondary' : 'ghost'
-                }
-                className="w-full justify-start"
-              >
-                <Link href={link.href}>
-                  {link.icon}
-                  {link.title}
-                </Link>
-              </Button>
-            ))}
-          </ul>
-        </div>
+    <div className="flex h-screen flex-col p-4">
+      <Link href={"/dashboard"} className="mb-4 p-2">
+        <DefaultLogo className="w-32" />
+      </Link>
+      <div className="pb-2 font-medium text-muted-foreground">Main Menu</div>
+      <nav className="flex flex-col gap-2">
+        {nav.mainNav.map((item, index) => (
+          <Button
+            key={index}
+            variant={CheckActive({ href: item.href }) ? 'secondary' : 'outline'}
+            className="w-full justify-start"
+            asChild
+          >
+            <Link href={item.href}>
+              {item.icon}
+              {item.title}
+              {index === 0 && <span className="ml-auto">
+                {data.filamentData.length > 0 && data.filamentData.length}
+              </span>}
+            </Link>
+          </Button>
+        ))}
+      </nav>
+
+      {/* Bottom */}
+      <div className="mt-auto">
+        <MyAccountDropdown user={data.userData} />
       </div>
     </div>
   );
-};
-
-export default SideBar;
+}

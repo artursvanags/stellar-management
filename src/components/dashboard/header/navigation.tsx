@@ -6,7 +6,6 @@ import { Icons } from '@/config/icons';
 import { DashboardNavigation as nav } from '@/config/dashboard';
 
 import { FilamentModalButton } from '@/components/modals/filamentModal';
-import MyAccountButton from '@/components/dashboard/my-account/myAccountButton';
 
 import { Filaments } from '@/types/database';
 
@@ -40,7 +39,6 @@ export default function Navigation({ data }: NavigationProps) {
 
       <div className="ml-auto flex flex-1 justify-end space-x-2">
         <FilamentModalButton />
-        <MyAccountButton />
       </div>
     </div>
   );
