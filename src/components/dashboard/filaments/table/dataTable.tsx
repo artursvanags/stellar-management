@@ -27,7 +27,6 @@ import {
 
 import { DataTableToolbar } from './dataTableToolbar';
 import { DataTablePagination } from './dataTablePagination';
-import { Filaments } from '@/types/database';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

@@ -4,6 +4,12 @@ export type SideBarNavigationProps = {
     href: string;
     icon?: React.ReactNode;
     disabled?: boolean;
+    subMenu?: {
+      title: string;
+      href: string;
+      icon?: React.ReactNode;
+      disabled?: boolean;
+    }[];
   }[];
   accountDropdown: {
     title: string;

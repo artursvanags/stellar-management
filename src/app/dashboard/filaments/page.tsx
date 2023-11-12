@@ -1,7 +1,7 @@
 import FilamentComponent from '@/components/dashboard/filaments/template/FilamentComponent';
 import { getData } from '@/lib/actions/getData';
 
-export default async function FilamentPage() {
+export default async function Page() {
   const data = await getData();
   if (!data?.filamentData) {
     return <div>Loading...</div>;

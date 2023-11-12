@@ -28,6 +28,7 @@ import {
   updateFilaments,
 } from '@/lib/actions/filamentActions';
 import { Filaments } from '@/types/database';
+import { FilamentModalButton } from '@/components/modals/filamentModal';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -186,6 +187,7 @@ export function DataTableToolbar<TData>({
             </DropdownMenu>
           </>
         )}
+        <FilamentModalButton />
         <DataTableViewOptions table={table} />
       </div>
     </>

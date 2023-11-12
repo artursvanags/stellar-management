@@ -1,12 +1,19 @@
 import { SideBarNavigationProps } from '@/types/dashboard';
-import { Icons, MyAccount } from './icons';
+import { Icons, MyAccount, SidebarIcons } from './icons';
 
 export const SideBarNavigation: SideBarNavigationProps = {
   mainNav: [
     {
-      icon: <Icons.Filament className="mr-3 h-4 w-4 text-muted-foreground" />,
+      icon: <SidebarIcons.Filaments className="mr-3 h-4 w-4 text-muted-foreground" />,
       title: 'Filaments',
       href: '/dashboard/filaments',
+      subMenu: [
+        {
+          icon: <SidebarIcons.Favorites className="mr-3 h-4 w-4 text-muted-foreground" />,
+          title: 'Favorites',
+          href: '/dashboard/filaments',
+        },
+      ],
     },
     {
       icon: <Icons.Files className="mr-3 h-4 w-4 text-muted-foreground" />,

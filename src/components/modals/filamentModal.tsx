@@ -3,9 +3,14 @@
 import { Button } from '@/components/ui/button';
 import FilamentForm from '../dashboard/filaments/components/FilamentForm';
 import { Modal } from '@/components/ui/modal';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-export function FilamentModalButton() {
+
+interface FilamentModalButtonProps {
+  props?:any;
+}
+
+export function FilamentModalButton(props: any) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -18,7 +23,7 @@ export function FilamentModalButton() {
 
   return (
     <>
-      <Button onClick={handleOpen} variant="outline">
+      <Button {...props} className={props.className} onClick={handleOpen} variant="outline">
         Add Filament
       </Button>
       <Modal

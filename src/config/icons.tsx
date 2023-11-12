@@ -26,6 +26,7 @@ import {
   Archive,
   CircleDot,
   File,
+  Heart,
 } from 'lucide-react';
 
 import {
@@ -35,48 +36,9 @@ import {
   IconBrandJavascript,
   IconBrandWordpress,
   IconBrandTailwind,
+  IconBrandGoogle,
+  IconBrandGithub,
 } from '@tabler/icons-react';
-import Image from 'next/image';
-import { useTheme } from 'next-themes';
-import { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
-
-// const DefaultLogo = (props: React.ComponentProps<'img'>) => {
-//   const { resolvedTheme } = useTheme();
-//   const [mounted, setMounted] = useState(false);
-//   let logoSrc;
-//   switch (resolvedTheme) {
-//     case 'dark':
-//       logoSrc = '/logo-white.svg';
-//       break;
-//     case 'light':
-//       logoSrc = '/logo-black.svg';
-//       break;
-//     default:
-//       logoSrc = '/logo-white.svg';
-//       break;
-//   }
-//   // useEffect only runs on the client, so now we can safely show the UI
-//   useEffect(() => {
-//     setMounted(true);
-//   }, []);
-
-//   if (!mounted) {
-//     return null;
-//   }
-
-//   return (
-//     <>
-//       <Image
-//         src={logoSrc}
-//         alt="Logo"
-//         width={100}
-//         height={100}
-//         className={props.className}
-//       />
-//     </>
-//   );
-// };
 
 export const Icons = {
   logo: User,
@@ -91,10 +53,10 @@ export const Icons = {
   HamburgerMenu: Menu,
   Trash: Trash,
   Info: Info,
-  Star: Star,
+  Heart: Heart,
   Check: Check,
   Filament: CircleDot,
-  Files: File
+  Files: File,
 };
 
 export const ThemeIcons = {
@@ -114,17 +76,15 @@ export const ToolStackIcons = {
 
 export const Spinner = Loader2;
 
-interface AuthProviderIconsProps extends React.HTMLAttributes<HTMLDivElement> {
-  icon: string;
-}
+export const AuthProviderIcons = {
+  Github: IconBrandGithub,
+  Google: IconBrandGoogle,
+};
 
-export const AuthProviderIcons = (props: AuthProviderIconsProps) => {
-  switch (props.icon) {
-    case 'GitHub':
-      return <Github className={cn('h-4 w-4', props.className)} />;
-    default:
-      return <Github className={cn('h-4 w-4', props.className)} />;
-  }
+export const SidebarIcons = {
+  Filaments: CircleDot,
+  Favorites: Heart,
+  Files: File,
 };
 
 export const MyAccount = {

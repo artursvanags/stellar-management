@@ -52,7 +52,7 @@ export const columns: ColumnDef<Filaments>[] = [
 
       return (
         <div className=" text-muted-foreground flex items-center">
-          {row.original.isFavorite && <Icons.Star className='mr-2 w-4 h-4' />} {showFirst} 
+          {row.original.isFavorite && <Icons.Heart className='mr-2 w-4 h-4' />} {showFirst} 
         </div>
       );
     },

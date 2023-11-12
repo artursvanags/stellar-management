@@ -10,7 +10,7 @@ export default function DashboardHeader() {
       </div>
       <div className="hidden lg:block">
         <div className="ml-auto flex flex-1 justify-end h-16 items-center">
-          <FilamentModalButton />
+          
         </div>
       </div>
     </header>

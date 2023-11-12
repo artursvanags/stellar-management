@@ -18,7 +18,7 @@ export function getURL(): string {
   return url;
 }
 
-export const CheckActive = ({ href }: { href: string }) => {
+export const CheckActive = (href :string) => {
   const pathname = usePathname();
   const isActive = pathname.startsWith(href);
   return isActive;

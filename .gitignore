@@ -35,6 +35,6 @@ yarn-error.log*
 next-env.d.ts
 
 #email dependencies
-email/node_modules
-email/.*
-/email/
+react-email/node_modules
+react-email/.*
+/react-email/
