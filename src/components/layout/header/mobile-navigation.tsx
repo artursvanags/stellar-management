@@ -41,7 +41,7 @@ export default function MobileNavigation({
               key={index}
               size="lg"
               className={cn('w-full justify-start')}
-              variant={CheckActive({ href: i.href }) ? 'secondary' : 'ghost'}
+              variant={CheckActive(i.href) ? 'secondary' : 'ghost'}
               onClick={handleSheetClose}
             >
               <Link href={i.href}>{i.title}</Link>
