@@ -35,7 +35,7 @@ export default function Navigation({ items, session }: NavigationInterface) {
             <Button
               key={index}
               asChild
-              variant={CheckActive({ href: i.href }) ? 'secondary' : 'ghost'}
+              variant={CheckActive(i.href) ? 'secondary' : 'ghost'}
             >
               <Link href={i.href}>{i.title}</Link>
             </Button>
