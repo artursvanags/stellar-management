@@ -10,7 +10,7 @@ export const sendVerificationRequest = async (
       from: process.env.EMAIL_FROM as string,
       to: params.identifier,
       subject: 'Verify your email address - Uniscopia Group',
-      react: Email({ url: params.url }),
+      react: <Email params={params} />,
     });
   } catch (error) {
     console.log({ error });

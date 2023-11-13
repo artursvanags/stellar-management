@@ -38,3 +38,4 @@ next-env.d.ts
 react-email/node_modules
 react-email/.*
 react-email/emails
+react-email/public

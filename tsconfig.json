@@ -31,7 +31,7 @@
     ".next/types/**/*.ts",
     "src/app/api/auth/[...nextauth]/route.ts",
     "src/middleware.ts",
-    "src/components/AuthProvider.js", "src/actions/filamentActions.ts",
+    "src/components/AuthProvider.js", "src/actions/filamentActions.ts", "react-email/emails/verification.tsx",
   ],
   "exclude": ["node_modules"]
 }
