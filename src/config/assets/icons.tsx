@@ -11,7 +11,6 @@ import {
   User,
   Plus,
   Menu,
-  Github,
   Loader2,
   Trash,
   CreditCard,

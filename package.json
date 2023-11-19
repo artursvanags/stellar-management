@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "prisma generate && next build --debug",
     "start": "next start",
     "lint": "next lint"
   },
@@ -28,8 +28,7 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-toast": "^1.1.4",
     "@radix-ui/react-tooltip": "^1.0.6",
-    "@supabase/auth-helpers-nextjs": "^0.8.1",
-    "@supabase/supabase-js": "^2.36.0",
+    "@react-email/components": "^0.0.11",
     "@tabler/icons-react": "^2.34.0",
     "@tailwindcss/typography": "^0.5.10",
     "@tanstack/react-table": "^8.10.1",
@@ -55,6 +54,7 @@
     "postcss": "8.4.30",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-email": "^1.9.5",
     "react-hook-form": "^7.47.0",
     "react-icons": "^4.11.0",
     "resend": "^2.0.0",

@@ -2,7 +2,7 @@
 import { DataTableViewOptions } from '@/components/dashboard/filaments/table/dataTableViewOptions';
 
 import { Cross2Icon } from '@radix-ui/react-icons';
-import { Icons } from '@/config/icons';
+import { Icons } from '@/config/assets/icons';
 import { Table } from '@tanstack/react-table';
 
 import {
@@ -23,10 +23,7 @@ import { useEffect, useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 
-import {
-  deleteFilaments,
-  updateFilaments,
-} from '@/lib/actions/filamentActions';
+import { deleteFilaments, updateFilaments } from '@/hooks/filamentActions';
 import { Filaments } from '@/types/database';
 import { FilamentModalButton } from '@/components/modals/filamentModal';
 
@@ -149,9 +146,11 @@ export function DataTableToolbar<TData>({
 
         {table.getSelectedRowModel().rows.length > 0 && (
           <>
-            <Button variant={'ghost'} onClick={()=>table?.resetRowSelection()}>
+            <Button
+              variant={'ghost'}
+              onClick={() => table?.resetRowSelection()}
+            >
               Clear selection
-
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

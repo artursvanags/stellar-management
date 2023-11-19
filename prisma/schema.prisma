@@ -24,9 +24,8 @@ model Account {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-
   @@unique([provider, providerAccountId])
-      @@index([userId])
+  @@index([userId])
 }
 
 model Session {
@@ -35,9 +34,9 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-      @@index([userId])
-}
 
+  @@index([userId])
+}
 
 model User {
   id            String     @id @default(uuid())
@@ -48,6 +47,21 @@ model User {
   accounts      Account[]
   sessions      Session[]
   filaments     Filament[]
+  billing       Billing?
+}
+
+model Billing {
+  id        String    @id @default(uuid())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String    @unique
+  country   String
+  address   String
+  address2  String?
+  city      String
+  state     String?
+  zip       String
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model VerificationToken {
@@ -64,7 +78,6 @@ model Manufacturer {
   createdAt DateTime?  @default(now())
   updatedAt DateTime?  @updatedAt
   filaments Filament[]
-
 }
 
 model Color {
@@ -72,7 +85,7 @@ model Color {
   name      String?    @unique
   createdAt DateTime?  @default(now())
   updatedAt DateTime?  @updatedAt
-  filaments Filament[] 
+  filaments Filament[]
 }
 
 model Material {
@@ -80,7 +93,7 @@ model Material {
   name      String?    @unique
   createdAt DateTime?  @default(now())
   updatedAt DateTime?  @updatedAt
-  filaments Filament[] 
+  filaments Filament[]
 }
 
 model Tag {

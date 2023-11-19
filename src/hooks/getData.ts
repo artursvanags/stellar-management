@@ -3,11 +3,19 @@ import prismadb from '@/lib/database';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/options';
 
+import { User, Billing } from '@prisma/client';
+import { Filaments } from '@/types/database';
+
+interface Data {
+  user: User | null;
+  filaments: Filaments[];
+  billing: Billing | null;
+}
+
 export async function validateSessionAndUser() {
   const session = await getServerSession(authOptions);
   if (!session) {
     console.log('Session not found');
-    return null;
   }
 
   const user = await prismadb.user.findUnique({
@@ -15,20 +23,16 @@ export async function validateSessionAndUser() {
   });
   if (!user) {
     console.log('Unauthorized');
-    return null;
   }
 
   return user;
 }
 
-export async function getData() {
+export async function getData(): Promise<Data> {
   try {
     const user = await validateSessionAndUser();
-    if (!user) {
-      return;
-    }
-
-    const data = await prismadb.filament.findMany({
+    
+    const filaments = await prismadb.filament.findMany({
       where: { userId: user?.id },
       include: {
         manufacturer: true,
@@ -38,12 +42,12 @@ export async function getData() {
       },
     });
 
-    const userData = await prismadb.user.findUnique({
-      where: { id: user?.id },
+    const billing = await prismadb.billing.findFirst({
+      where: { userId: user?.id },
     });
 
     // Restructure the data
-    const filamentData = data.map((item) => ({
+    const filamentData = filaments.map((item) => ({
       id: item.id,
       userId: item.userId,
       status: item.status,
@@ -59,10 +63,10 @@ export async function getData() {
       tags: item.tags.map((tag) => tag.name), // Assuming tags have a 'name' property
     }));
 
-    return { filamentData, userData };
-    
+    return { user, filaments: filamentData, billing };
   } catch (err) {
     console.error(err);
+    return { user: null, filaments: [], billing: null };
+
   }
 }
-

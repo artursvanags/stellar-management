@@ -16,11 +16,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Icons } from '@/config/icons';
+import { Icons } from '@/config/assets/icons';
 import { useToast } from '@/components/ui/use-toast';
 
 const FilamentForm = ({ closeModal }: { closeModal: () => void }) => {
-
   const ref = useRef<HTMLFormElement>(null);
 
   const { toast } = useToast();
@@ -28,7 +27,7 @@ const FilamentForm = ({ closeModal }: { closeModal: () => void }) => {
   console.log(useForm());
   const [copies, setCopies] = useState([0]);
 
- // const [formData, setFormData] = useState('');
+  // const [formData, setFormData] = useState('');
 
   const [weights, setWeights] = useState<{ [key: number]: number }>({});
   const [usedWeights, setUsedWeights] = useState<{ [key: number]: number }>({});

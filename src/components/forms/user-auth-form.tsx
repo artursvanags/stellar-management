@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 import { userAuthSchema } from '@/lib/validations/auth';
-import { AuthProviderIcons, Spinner } from '@/config/icons';
+import { AuthProviderIcons, Spinner } from '@/config/assets/icons';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
@@ -44,32 +44,38 @@ export function UserAuthForm() {
     },
   ];
   const [isLoading, setLoading] = useState(false);
-  const [isProvidersLoading, setProvidersLoading] = useState<string | null>(null);
+  const [isProvidersLoading, setProvidersLoading] = useState<string | null>(
+    null,
+  );
   const searchParams = useSearchParams();
 
   async function onSubmit(data: FormData) {
     setLoading(true);
-
-    const signInResult = await signIn('email', {
-      email: data.email.toLowerCase(),
-      redirect: false,
-      callbackUrl: searchParams?.get('from') || '/dashboard',
-    });
-
-    setLoading(false);
-
-    if (!signInResult?.ok) {
-      return toast({
-        title: 'Something went wrong.',
-        description: 'Your sign in request failed. Please try again.',
-        variant: 'destructive',
+    try {
+      const signInResult = await signIn('email', {
+        email: data.email.toLowerCase(),
+        redirect: false,
+        callbackUrl: searchParams?.get('from') || '/dashboard',
       });
-    }
 
-    return toast({
-      title: 'Check your email',
-      description: 'We sent you a login link. Be sure to check your spam too.',
-    });
+      if (!signInResult?.ok) {
+        return toast({
+          title: 'Something went wrong.',
+          description: 'Your sign in request failed. Please try again.',
+          variant: 'destructive',
+        });
+      }
+      setLoading(false);
+      return toast({
+        title: 'Check your email',
+        description:
+          'We sent you a login link. Be sure to check your spam too.',
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function onProviderSelect(id: string) {
@@ -110,27 +116,27 @@ export function UserAuthForm() {
       </Form>
 
       <div className="mt-4 flex flex-col gap-2 border-t">
-      <p className="text-sm justify-center flex pt-4 font-normal">
-            or sign in with
-          </p>
-          <div className='grid grid-cols-2 gap-4'>
-        {providers.map((provider, index) => (
-          <Button
-            key={index}
-            size={'xl'}
-            variant={'outline'}
-            className="w-full"
-            disabled={isLoading || isProvidersLoading === provider.id}
-            onClick={() => onProviderSelect(provider.id)}
-          >
-            {isProvidersLoading === provider.id ? (
-              <Spinner className="mr-2 animate-spin" />
-            ) : (
-              provider.icon
-            )}
-            {provider.name}
-          </Button>
-        ))}
+        <p className="flex justify-center pt-4 text-sm font-normal">
+          or sign in with
+        </p>
+        <div className="grid grid-cols-2 gap-4">
+          {providers.map((provider, index) => (
+            <Button
+              key={index}
+              size={'xl'}
+              variant={'outline'}
+              className="w-full"
+              disabled={isLoading || isProvidersLoading === provider.id}
+              onClick={() => onProviderSelect(provider.id)}
+            >
+              {isProvidersLoading === provider.id ? (
+                <Spinner className="mr-2 animate-spin" />
+              ) : (
+                provider.icon
+              )}
+              {provider.name}
+            </Button>
+          ))}
         </div>
       </div>
     </div>

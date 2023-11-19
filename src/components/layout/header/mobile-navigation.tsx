@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import { CheckActive, cn } from '@/lib/utils';
-import { Icons } from '@/config/icons';
+import { Icons } from '@/config/assets/icons';
 import { Button } from '@/components/ui/button';
 
 import {
@@ -13,7 +13,7 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 import ModeToggle from '@/components/global/ThemeToggleButton';
-import { NavigationInterface } from '@/types/navigation';
+import { NavigationInterface } from '@/types';
 
 export default function MobileNavigation({
   items,

@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import FilamentForm from '../dashboard/filaments/components/FilamentForm';
+import FilamentForm from '../forms/add-filament-form';
 import { Modal } from '@/components/ui/modal';
 import React, { useState } from 'react';
 

@@ -1,15 +1,12 @@
+import { getData } from '@/hooks/getData';
+
 import FilamentComponent from '@/components/dashboard/filaments/template/FilamentComponent';
-import { getData } from '@/lib/actions/getData';
 
-export default async function Page() {
-  const data = await getData();
-  if (!data?.filamentData) {
-    return <div>Loading...</div>;
-  }
-
+export default async function FilamentPage() {
+  const { filaments } = await getData();
   return (
-    <div className=" w-full py-10">
-      <FilamentComponent data={data.filamentData} />
+    <div className="w-full py-10">
+      <FilamentComponent data={filaments} />
     </div>
   );
 }

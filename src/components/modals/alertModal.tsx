@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { Modal } from '@/components/ui/modal';
 import { Button } from '@/components/ui/button';
-import { Icons, Spinner } from '@/config/icons';
+import { Spinner } from '@/config/assets/icons';
 
 interface AlertModalProps {
   description?: string;

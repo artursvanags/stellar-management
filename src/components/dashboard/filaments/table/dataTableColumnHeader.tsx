@@ -1,6 +1,6 @@
 import { Column } from '@tanstack/react-table';
 
-import { Icons } from '@/config/icons';
+import { Icons } from '@/config/assets/icons';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';

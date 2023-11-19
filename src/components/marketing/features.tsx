@@ -1,5 +1,5 @@
 'use client';
-import { ToolStackIcons } from '@/config/icons';
+import { ToolStackIcons } from '@/config/assets/icons';
 
 import {
   Tooltip,

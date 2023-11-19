@@ -14,7 +14,10 @@ export type SiteConfig = {
 export type NavItem = {
   title: string;
   href: string;
+  shortcut?: string;
+  icon?: React.ReactNode;
   disabled?: boolean;
+  subMenu?: NavItem[];
 };
 
 export interface NavigationInterface {
@@ -26,3 +29,11 @@ export type MarketingConfig = {
   mainNav: NavItem[];
 };
 
+export type SideBarConfig = {
+  mainNav: NavItem[];
+  accountDropdown: NavItem[];
+};
+
+export type SettingsSideBarConfig = {
+  mainNav: NavItem[];
+};

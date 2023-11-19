@@ -2,8 +2,8 @@
 import { CheckActive } from '@/lib/utils';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { NavigationInterface } from '@/types/navigation';
-import { Icons } from '@/config/icons';
+import { NavigationInterface } from '@/types';
+import { Icons } from '@/config/assets/icons';
 
 type AuthButtonProps = {
   href: string;

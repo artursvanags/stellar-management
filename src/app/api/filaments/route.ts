@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth/options';
 
 import prismadb from '@/lib/database';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);

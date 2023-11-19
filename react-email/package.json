@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "email dev -p 3001",
-    "export": "email export"
+    "export": "email export -pretty",
+    "help": "email help"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +26,6 @@
     "@react-email/section": "0.0.10",
     "@react-email/tailwind": "0.0.12",
     "@react-email/text": "0.0.6",
-    "react-email": "1.9.5"
+    "react-email": "^1.9.5"
   }
 }

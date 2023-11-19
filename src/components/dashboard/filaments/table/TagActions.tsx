@@ -6,8 +6,8 @@ import { TagModal } from '@/components/modals/tagModal';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
 
-import { deleteFilament, updateFilament } from '@/lib/actions/filamentActions';
-import { Icons } from '@/config/icons';
+import { deleteFilament, updateFilament } from '@/hooks/filamentActions';
+import { Icons } from '@/config/assets/icons';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 
@@ -47,7 +47,7 @@ export function TagActions({ tags }: TagActionProps) {
   }
   return (
     <div className="flex space-x-2">
-      <Badge variant="secondary" className="font-medium cursor-pointer">
+      <Badge variant="secondary" className="cursor-pointer font-medium">
         +{tags.length}
       </Badge>
     </div>

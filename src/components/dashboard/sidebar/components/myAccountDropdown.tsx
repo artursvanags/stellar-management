@@ -10,7 +10,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MyAccount, Spinner, ThemeIcons } from '@/config/icons';
+import { MyAccount, Spinner, ThemeIcons } from '@/config/assets/icons';
 import { SideBarNavigation as nav } from '@/config/dashboard';
 import { cn } from '@/lib/utils';
 import { signOut } from 'next-auth/react';
@@ -20,6 +20,7 @@ import { User } from '@prisma/client';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { Button, buttonVariants } from '@/components/ui/button';
+import Link from 'next/link';
 
 interface MyAccountDropdownProps {
   user: User | null | undefined;
@@ -102,14 +103,13 @@ export default function MyAccountDropdown({ user }: MyAccountDropdownProps) {
           <DropdownMenuSeparator />
           <div>
             {nav.accountDropdown.map((i, index) => (
-              <DropdownMenuItem
-                key={index} // You had an extra closing curly brace here
-                className="cursor-pointer"
-              >
-                {i.icon}
-                {i.title}
-                <DropdownMenuShortcut>{i.shortcut}</DropdownMenuShortcut>
-              </DropdownMenuItem>
+              <Link key={index} href={i.href}>
+                <DropdownMenuItem className="cursor-pointer">
+                  {i.icon}
+                  {i.title}
+                  <DropdownMenuShortcut>{i.shortcut}</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </Link>
             ))}
           </div>
           <DropdownMenuSeparator />
@@ -138,16 +138,16 @@ export default function MyAccountDropdown({ user }: MyAccountDropdownProps) {
             disabled={isLoading}
           >
             {isLoading ? (
-                <>
-                  <Spinner className="mr-3 h-4 w-4 animate-spin" />
-                  Signing you out...
-                </>
-              ) : (
-                <>
-                  <MyAccount.Logout className="mr-3 h-4 w-4" />
-                  Sign out
-                </>
-              )}
+              <>
+                <Spinner className="mr-3 h-4 w-4 animate-spin" />
+                Signing you out...
+              </>
+            ) : (
+              <>
+                <MyAccount.Logout className="mr-3 h-4 w-4" />
+                Sign out
+              </>
+            )}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

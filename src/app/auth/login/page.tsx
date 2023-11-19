@@ -1,14 +1,8 @@
-import { Metadata } from 'next';
-import LoginComponent from '@/components/auth/LoginComponent';
-
-export const metadata: Metadata = {
-  title: 'Login',
-  description: 'Login to your account',
-};
+import LoginComponent from '@/components/auth/components/LoginComponent';
 
 export default function LoginPage() {
   return (
-    <div className='flex w-screen h-screen justify-center'>
+    <div className="flex h-screen w-screen justify-center">
       <LoginComponent />
     </div>
   );

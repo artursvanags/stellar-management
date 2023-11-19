@@ -16,7 +16,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Icons } from '@/config/icons';
+import { Icons } from '@/config/assets/icons';
 import { Badge } from '@/components/ui/badge';
 
 export const columns: ColumnDef<Filaments>[] = [
@@ -51,8 +51,9 @@ export const columns: ColumnDef<Filaments>[] = [
       const showFirst = value.slice(0, 8);
 
       return (
-        <div className=" text-muted-foreground flex items-center">
-          {row.original.isFavorite && <Icons.Heart className='mr-2 w-4 h-4' />} {showFirst} 
+        <div className=" flex items-center text-muted-foreground">
+          {row.original.isFavorite && <Icons.Heart className="mr-2 h-4 w-4" />}{' '}
+          {showFirst}
         </div>
       );
     },

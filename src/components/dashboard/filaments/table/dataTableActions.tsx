@@ -23,8 +23,8 @@ import { AlertModal } from '@/components/modals/alertModal';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
 
-import { deleteFilament, updateFilament } from '@/lib/actions/filamentActions';
-import { ActionsIcons, Icons } from '@/config/icons';
+import { deleteFilament, updateFilament } from '@/hooks/filamentActions';
+import { ActionsIcons, Icons } from '@/config/assets/icons';
 
 interface CellActionProps {
   data: Filaments;
@@ -59,7 +59,7 @@ export function DataTableRowActions({ data }: CellActionProps) {
   };
 
   const toggleArchive = async () => {
-    const newStatus = data.status === "archived" ? "used" : "archived";
+    const newStatus = data.status === 'archived' ? 'used' : 'archived';
     try {
       await updateFilament(data.id, { status: newStatus });
     } catch (error) {
@@ -141,7 +141,11 @@ export function DataTableRowActions({ data }: CellActionProps) {
               </>
             )}
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={toggleArchive} disabled={data.status === "archived"}className="cursor-pointer">
+          <DropdownMenuItem
+            onClick={toggleArchive}
+            disabled={data.status === 'archived'}
+            className="cursor-pointer"
+          >
             <ActionsIcons.Archive className="mr-2 h-4 w-4" />
             Archive
           </DropdownMenuItem>

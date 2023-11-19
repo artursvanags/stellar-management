@@ -6,7 +6,7 @@ import EmailProvider from 'next-auth/providers/email';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 
 import prismadb from '@/lib/database';
-import { sendVerificationRequest } from '../email/template-hooks/verificationRequest';
+import { sendVerificationRequest } from '@/lib/email/verificationRequest';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prismadb),
