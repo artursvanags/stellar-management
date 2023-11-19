@@ -71,21 +71,23 @@ const BillingForm = ({ data }: BillingFormProps) => {
     },
   });
 
-  const onSubmit = form.handleSubmit(async (data: FormData) => {
+const onSubmit = form.handleSubmit(async (data: FormData) => {
     try {
-      setLoading(true);
-      await updateBilling(user.id, data as Partial<User>);
+        setLoading(true);
+        if (user !== null) {
+            await updateBilling(user.id, data as Partial<User>);
+        }
     } catch (error) {
-      console.error(error);
+        console.error(error);
     } finally {
-      setLoading(false);
-      toast({
-        title: 'Account updated!',
-        description: 'Your account has been updated.',
-      });
-      router.refresh();
+        setLoading(false);
+        toast({
+            title: 'Account updated!',
+            description: 'Your account has been updated.',
+        });
+        router.refresh();
     }
-  });
+});
 
   return (
     <Form {...form}>
@@ -160,23 +162,12 @@ const BillingForm = ({ data }: BillingFormProps) => {
           name={'country'}
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="country">Country</FormLabel>
-              <FormControl>
-                <Select>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue defaultValue={billing.country} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {countries.map((i, index) => (
-                      <SelectItem key={index} value={i.value}>
-                        {i.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <FormLabel htmlFor="country">Country</FormLabel>
+            <FormControl>
+              <Input placeholder="Country" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
           )}
         />
       </form>
