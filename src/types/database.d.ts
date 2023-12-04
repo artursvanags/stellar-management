@@ -1,3 +1,11 @@
+import type { DefaultUser } from 'next-auth'
+
+declare module 'next-auth' {
+  interface Session {
+    user?: DefaultUser & { id: string };
+  }
+}
+
 export type Filaments = {
     id: string;
     userId: string;

@@ -1,4 +1,5 @@
 'use client';
+
 import { useTheme } from 'next-themes';
 import { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image';

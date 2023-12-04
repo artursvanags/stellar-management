@@ -2,22 +2,23 @@ import '@/styles/index.css';
 
 import { Inter as FontSans } from 'next/font/google';
 import localFont from 'next/font/local';
+import { GeistSans } from 'geist/font/sans';
+import { GeistMono } from 'geist/font/mono';
 
 import { cn } from '@/lib/utils';
 import { siteConfig } from '@/config/site';
 
 import { Toaster } from '@/components/ui/toaster';
 import { TailwindIndicator } from '@/lib/tailwind-indicator';
-import { ThemeProvider } from '@/components/global/ThemeProvider';
+import { ThemeProvider } from '@/components/global/theme-provider';
 
 const fontSans = FontSans({
   subsets: ['latin'],
   variable: '--font-sans',
 });
 
-// Font files can be colocated inside of `pages`
 const fontHeading = localFont({
-  src: 'assets/fonts/CalSans-SemiBold.woff2',
+  src: '../assets/fonts/CalSans-SemiBold.woff2',
   variable: '--font-heading',
 });
 

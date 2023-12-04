@@ -45,7 +45,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
         <Button disabled={loading} variant="outline" onClick={onClose}>
           Cancel
         </Button>
-        <Button disabled={loading} variant="destructive" onClick={onConfirm}>
+        <Button type='submit' disabled={loading} variant="destructive" onClick={onConfirm}>
           {loading ? (
             <>
               <Spinner className="mr-2 h-4 w-4 animate-spin" /> Loading

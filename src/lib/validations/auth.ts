@@ -14,8 +14,8 @@ export const setupAuthSchema = z.object({
 export const billingAddressSchema = z.object({
   country: z.string().min(1, 'Country is required.'),
   address: z.string().min(1, 'Address is required.'),
-  address2: z.string().min(1, 'Address 2 is required.'),
   city: z.string().min(1, 'City is required.'),
-  state: z.string().min(1, 'State is required.'),
+  state: z.string(),
   zip: z.string().min(1, 'Zip is required.'),
+  phone: z.string().min(1, 'Phone is required.'),
 });

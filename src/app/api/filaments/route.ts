@@ -151,8 +151,8 @@ export async function POST(request: Request) {
     });
 
     return new NextResponse('Post successful!', { status: 200 });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
     return new NextResponse('Internal Error', { status: 500 });
   }
 }

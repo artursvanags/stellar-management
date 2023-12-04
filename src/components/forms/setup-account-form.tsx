@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 
 import { User } from '@prisma/client';
 import { setupAuthSchema } from '@/lib/validations/auth';
-import { updateUser } from '@/hooks/userActions';
+import { updateUser } from '@/lib/utils/user-actions';
 
 import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 
-import { EditCard } from '@/components/cards/editCard';
+import { EditCard } from '@/components/cards/edit-card';
 
 type FormData = z.infer<typeof setupAuthSchema>;
 

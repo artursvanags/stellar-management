@@ -14,6 +14,7 @@ export type SiteConfig = {
 export type NavItem = {
   title: string;
   href: string;
+  description?: string;
   shortcut?: string;
   icon?: React.ReactNode;
   disabled?: boolean;

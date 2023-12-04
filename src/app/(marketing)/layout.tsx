@@ -1,5 +1,5 @@
-import SiteFooter from '@/components/layout/footer';
-import SiteHeader from '@/components/layout/header';
+import SiteFooter from '@/components/marketing/layout/footer';
+import SiteHeader from '@/components/marketing/layout/header';
 
 interface MarketingLayoutProps {
   children: React.ReactNode;
