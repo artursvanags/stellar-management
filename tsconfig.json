@@ -32,7 +32,7 @@
     "src/app/api/auth/[...nextauth]/route.ts",
     "src/middleware.ts",
     "src/components/AuthProvider.js",
-    "src/hooks/filamentActions.ts",
+    "src/lib/utils/filament-actions.ts",
     "react-email/emails/verification.tsx"
   ],
   "exclude": ["node_modules"]
