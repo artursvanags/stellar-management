@@ -7,7 +7,7 @@ export type PageHeadingProps = {
   children?: React.ReactNode;
 };
 
-const PageHeading: React.FC<PageHeadingProps> = ({
+export const PageHeading: React.FC<PageHeadingProps> = ({
   title,
   description,
   className,
@@ -34,5 +34,3 @@ const PageHeading: React.FC<PageHeadingProps> = ({
     </section>
   );
 };
-
-export default PageHeading;
