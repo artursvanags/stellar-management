@@ -1,3 +1,4 @@
+'use client';
 import { cn } from '@/lib/utils';
 
 type SubHeadingProps = {
@@ -7,7 +8,7 @@ type SubHeadingProps = {
   className?: string;
 };
 
-const SubHeading: React.FC<SubHeadingProps> = ({
+const SectionInformation: React.FC<SubHeadingProps> = ({
   title,
   description,
   className,
@@ -21,4 +22,4 @@ const SubHeading: React.FC<SubHeadingProps> = ({
   </div>
 );
 
-export default SubHeading;
+export default SectionInformation;

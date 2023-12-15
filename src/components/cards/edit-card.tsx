@@ -60,14 +60,12 @@ export const EditCard: React.FC<EditCardProps> = ({
           type="submit"
           onClick={onConfirm}
           disabled={loading}
+          icon={
+            loading ? <Spinner className="mr-2 h-4 w-4 animate-spin" /> : null
+          }
+          loading={loading}
         >
-          {loading ? (
-            <>
-              <Spinner className="mr-2 h-4 w-4 animate-spin" /> Loading
-            </>
-          ) : (
-            'Update'
-          )}
+          Update
         </Button>
       </CardFooter>
     </Card>

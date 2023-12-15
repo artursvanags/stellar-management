@@ -4,13 +4,9 @@ import { Button } from '@/components/ui/button';
 import FilamentForm from '../forms/add-filament-form';
 import { Modal } from '@/components/ui/modal';
 import React, { useState } from 'react';
+import { Icons } from '@/config/assets/icons';
 
-
-interface FilamentModalButtonProps {
-  props?:any;
-}
-
-export function FilamentModalButton(props: any) {
+export const AddFilamentButton = (props: any) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -23,7 +19,12 @@ export function FilamentModalButton(props: any) {
 
   return (
     <>
-      <Button {...props} className={props.className} onClick={handleOpen} variant="outline">
+      <Button
+        size="lg"
+        icon={<Icons.plus className="mr-2 h-6 w-6" />}
+        onClick={handleOpen}
+        {...props}
+      >
         Add Filament
       </Button>
       <Modal
@@ -33,8 +34,8 @@ export function FilamentModalButton(props: any) {
         onClose={handleClose}
         className="overflow-auto sm:max-h-[80vh] sm:max-w-screen-xl"
       >
-        <FilamentForm closeModal={handleClose}/>
+        <FilamentForm closeModal={handleClose} />
       </Modal>
     </>
   );
-}
+};

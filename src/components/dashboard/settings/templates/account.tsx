@@ -6,10 +6,11 @@ import DeleteAccount from '@/components/dashboard/settings/components/delete-acc
 const AccountTemplate: React.FC = async () => {
   const { user } = await getData();
   if (!user) return null;
+
   return (
     <div className="space-y-6">
       <MyAccountForm data={user} />
-      <DeleteAccount user={user} />
+      <DeleteAccount data={user} />
     </div>
   );
 };

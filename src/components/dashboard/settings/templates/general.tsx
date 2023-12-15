@@ -1,12 +1,12 @@
 import { getData } from '@/lib/utils/get-data';
-import PlanOverview from '@/components/dashboard/settings/components/plan-overview';
+import GeneralSettingsForm from '@/components/dashboard/settings/components/general-settings-form';
 
 const GeneralSettingsTemplate: React.FC = async () => {
-  const data = await getData();
-  if (!data) return null;
+  const { userSettings } = await getData();
+  if (!userSettings) return null;
   return (
     <div className="space-y-6">
-      <PlanOverview data={data} />
+      <GeneralSettingsForm data={userSettings} />
     </div>
   );
 };

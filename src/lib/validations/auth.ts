@@ -19,3 +19,8 @@ export const billingAddressSchema = z.object({
   zip: z.string().min(1, 'Zip is required.'),
   phone: z.string().min(1, 'Phone is required.'),
 });
+
+export const userSettingsSchema = z.object({
+  weight_threshold: z.string(),
+  auto_archive: z.boolean(),
+});

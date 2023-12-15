@@ -1,20 +1,24 @@
 'use client';
+import axios from 'axios';
+
 import { useState } from 'react';
+import { User } from '@prisma/client';
+
+import { signOut } from 'next-auth/react';
 
 import { AlertModal } from '@/components/modals/alertModal';
 import { Button } from '@/components/ui/button';
-import { User } from '@prisma/client';
 import { Input } from '@/components/ui/input';
-import { deleteUser } from '@/lib/utils/user-actions';
-import { signOut } from 'next-auth/react';
 import { useToast } from '@/components/ui/use-toast';
 
+
+
 interface DeleteAccountProps {
-  user: User;
+  data: User;
 }
 
-const DeleteAccount: React.FC<DeleteAccountProps> = ({ user }) => {
-  const keyword = user.id.slice(0, 8);
+const DeleteAccount: React.FC<DeleteAccountProps> = ({ data: user }) => {
+  const keyword = user.email;
 
   const [open, openModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -25,13 +29,13 @@ const DeleteAccount: React.FC<DeleteAccountProps> = ({ user }) => {
     if (confirm !== keyword) {
       toast({
         title: 'Error',
-        description: `Type your first ID ${keyword} to confirm`,
+        description: `Please type ${keyword} exactly to confirm`,
       });
       return;
     }
     setLoading(true);
     try {
-      await deleteUser(user.id);
+      await axios.delete(`/api/account/${user.id}`);
     } catch (err) {
       console.log(err);
     } finally {
@@ -57,12 +61,12 @@ const DeleteAccount: React.FC<DeleteAccountProps> = ({ user }) => {
         <div className="space-y-3">
           <div className="flex max-h-48 flex-col overflow-auto rounded-sm bg-stone-100 p-4 font-mono text-xs dark:bg-stone-900 dark:text-amber-200">
             <span>
-              Type your first ID <span className="font-bold">{keyword}</span> to
-              confirm deletion of your account
+              Type <span className="font-bold">{keyword}</span> to confirm
+              deletion of your account.
             </span>
           </div>
           <Input
-            placeholder={`${keyword}`}
+            placeholder={`Type your email address to confirm`}
             type="text"
             onChange={(e) => setConfirm(e.target.value.trim())}
           />

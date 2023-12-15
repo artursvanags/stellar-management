@@ -1,12 +1,13 @@
-import { getData } from '@/lib/utils/get-data';
+import FilamentTemplate from '@/components/dashboard/filaments/templates/filament-component';
+import Heading from '@/components/global/heading';
 
-import FilamentComponent from '@/components/dashboard/filaments/templates/filament-component';
-
-export default async function FilamentPage() {
-  const { filaments } = await getData();
+const AllFilamentsPage = () => {
   return (
-    <div className="w-full py-10">
-      <FilamentComponent data={filaments} />
+    <div className="space-y-6">
+      <Heading title="Filaments" />
+      <FilamentTemplate />
     </div>
   );
-}
+};
+
+export default AllFilamentsPage;

@@ -31,6 +31,23 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
+    async signIn({ user }) {
+      // Check if user has user preferences, if not create them with default values
+      if (user) {
+        const userPreferences = await prismadb.userSettings.findUnique({
+          where: { userId: user.id },
+        });
+        if (!userPreferences) {
+          await prismadb.userSettings.create({
+            data: {
+              userId: user.id,
+            },
+          });
+        }
+      }
+      return true;
+    },
+
     async jwt({ user, token }) {
       //pass user ID to token if signed in
       if (user) {
@@ -43,11 +60,10 @@ export const authOptions: NextAuthOptions = {
       //pass user ID to session from token
       return {
         ...session,
-        user: {id: token.id, ...session.user },
+        user: { id: token.id, ...session.user },
       };
     },
-
   },
-  secret: process.env.NEXTAUTH_SECRET as string,
+  secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: 'jwt' },
 };

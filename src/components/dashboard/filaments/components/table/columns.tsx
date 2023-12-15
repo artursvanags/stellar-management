@@ -19,6 +19,8 @@ import {
 import { Icons } from '@/config/assets/icons';
 import { Badge } from '@/components/ui/badge';
 
+
+
 export const columns: ColumnDef<Filaments>[] = [
   {
     accessorKey: 'select',
@@ -99,7 +101,7 @@ export const columns: ColumnDef<Filaments>[] = [
         ((remainingWeight / netWeight) * 100).toFixed(2),
       );
       const color =
-        percentage < 50 && row.original.status !== 'archived'
+        remainingWeight < 50 && row.original.status !== 'archived'
           ? 'text-red-400 group-hover/weight:text-red-400'
           : 'text-muted-foreground/10 group-hover/weight:text-muted-foreground';
 

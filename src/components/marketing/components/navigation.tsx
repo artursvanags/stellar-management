@@ -1,4 +1,5 @@
 'use client';
+
 import { CheckActive } from '@/lib/utils';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
@@ -13,11 +14,8 @@ type AuthButtonProps = {
 
 function AuthButton({ href, title, icon }: AuthButtonProps) {
   return (
-    <Button variant={'outline'} asChild>
-      <Link href={href}>
-        {icon && icon}
-        {title}
-      </Link>
+    <Button variant={'outline'} icon={icon} asChild>
+      <Link href={href}>{title}</Link>
     </Button>
   );
 }
@@ -44,19 +42,11 @@ export default function Navigation({ items, session }: NavigationInterface) {
       </div>
 
       <div className="ml-auto flex flex-1 justify-end space-x-2">
-        {session ? (
-          <AuthButton
-            href="/dashboard"
-            title="Dashboard"
-            icon={<Icons.dashboard className="mr-2 h-4 w-4" />}
-          />
-        ) : (
-          <AuthButton
-            href="/auth/login"
-            title="Sign in"
-            icon={<Icons.login className="mr-2 h-4 w-4" />}
-          />
-        )}
+        <AuthButton
+          href="/dashboard"
+          title="Dashboard"
+          icon={<Icons.dashboard className="mr-2 h-4 w-4" />}
+        />
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
 import prismadb from '@/lib/database';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth/options';
+import { cache } from 'react';
 
 export const getUserId = async () => {
   const session = await getServerSession(authOptions);
-  
+
   if (!session) {
     throw new Error('Session or user not found');
   } else if (!session.user) {
@@ -12,9 +13,9 @@ export const getUserId = async () => {
   }
 
   return session.user.id;
-}
+};
 
-export const getData = async () => {
+export const data = async () => {
   const userId = await getUserId();
 
   try {
@@ -34,6 +35,10 @@ export const getData = async () => {
         color: true,
         tags: true,
       },
+    });
+
+    const userSettings = await prismadb.userSettings.findFirst({
+      where: { userId: user.id }, // Removed optional chaining
     });
 
     const billing = await prismadb.billing.findFirst({
@@ -57,9 +62,12 @@ export const getData = async () => {
       tags: item.tags.map((tag) => tag.name), // Assuming tags have a 'name' property
     }));
 
-    return { user, filaments: filamentData, billing };
+    return { user, filaments: filamentData, billing, userSettings };
   } catch (err) {
     console.error(err);
-    return { user: null, filaments: [], billing: null };
+    return { user: null, filaments: [], billing: null, userSettings: null };
   }
-}
+};
+
+export const getData = cache(data);
+

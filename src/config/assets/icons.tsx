@@ -11,7 +11,7 @@ import {
   User,
   Plus,
   Menu,
-  Loader2,
+  Loader,
   Trash,
   CreditCard,
   Package,
@@ -26,6 +26,7 @@ import {
   CircleDot,
   File,
   Heart,
+  Settings,
 } from 'lucide-react';
 
 import {
@@ -38,6 +39,16 @@ import {
   IconBrandGoogle,
   IconBrandGithub,
 } from '@tabler/icons-react';
+import { FaGoogle, FaGithub } from 'react-icons/fa';
+
+export const ToolStackIcons = {
+  Tailwind: IconBrandTailwind,
+  Nextjs: IconBrandNextjs,
+  Typescript: IconBrandTypescript,
+  Javascript: IconBrandJavascript,
+  Wordpress: IconBrandWordpress,
+  Graphql: IconBrandGraphql,
+};
 
 export const Icons = {
   logo: User,
@@ -64,20 +75,11 @@ export const ThemeIcons = {
   System: Laptop,
 };
 
-export const ToolStackIcons = {
-  Tailwind: IconBrandTailwind,
-  Nextjs: IconBrandNextjs,
-  Typescript: IconBrandTypescript,
-  Javascript: IconBrandJavascript,
-  Wordpress: IconBrandWordpress,
-  Graphql: IconBrandGraphql,
-};
-
-export const Spinner = Loader2;
+export const Spinner = Loader;
 
 export const AuthProviderIcons = {
-  Github: IconBrandGithub,
-  Google: IconBrandGoogle,
+  Github: FaGithub,
+  Google: FaGoogle,
 };
 
 export const SidebarIcons = {
@@ -90,7 +92,7 @@ export const MyAccount = {
   Chevron: ChevronDown,
   User: User,
   Billing: CreditCard,
-  Orders: Package,
+  Settings: Settings,
   Login: LogInIcon,
   Logout: LogOutIcon,
 };

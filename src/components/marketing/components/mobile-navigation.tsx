@@ -17,7 +17,6 @@ import { NavigationInterface } from '@/types';
 
 export default function MobileNavigation({
   items,
-  session,
 }: NavigationInterface) {
   // Define MainContent as a functional component
   const sheetCloseRef = useRef<HTMLButtonElement | null>(null);

@@ -1,25 +1,14 @@
-import { SiteConfig, NavItem } from '@/types';
+import { SiteConfig } from '@/types';
 
 export const siteConfig: SiteConfig = {
-  name: 'Vanamio',
-  description: 'An enchanced Portfolio for Web Development',
-  developer: 'Vanamio Labs',
+  name: 'Stelpine',
+  description: 'Take control of your 3D Printing ecosystem',
+  developer: 'Stelpine Labs',
   author: 'Arturs Vanags',
   url: process.env.NEXT_PUBLIC_SITE_URL as string,
   ogImage: '#',
   links: {
     facebook: '#',
   },
-  keywords: ['Vanamio', 'Web Development', 'NextJS', 'Blog', 'Ecommerce'],
+  keywords: ['Stelpine', '3D Printing', 'Audit', 'Filaments'],
 };
-
-export const NavigationConfig: NavItem[] = [
-  {
-    title: 'About Us',
-    href: '/about-us',
-  },
-  {
-    title: 'Contacts',
-    href: '/contacts',
-  },
-];

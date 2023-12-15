@@ -1,5 +1,11 @@
-import { FilamentModalButton } from '@/components/modals/filamentModal';
-export default function DashboardHeader() {
+'use client';
+
+interface DashboardHeaderProps {
+  title: string;
+  description?: string;
+}
+
+const DashboardHeader = ({ title, description }: DashboardHeaderProps) => {
   return (
     <header className="sticky top-0 z-50 lg:static">
       <div className="lg:hidden">
@@ -9,10 +15,13 @@ export default function DashboardHeader() {
         /> */}
       </div>
       <div className="hidden lg:block">
-        <div className="ml-auto flex flex-1 justify-end h-16 items-center">
-          
+        <div className="flex h-16 flex-col">
+          <h1 className="text-2xl font-semibold">{title}</h1>
+          <div className="text-muted-foreground ">{description}</div>
         </div>
       </div>
     </header>
   );
-}
+};
+
+export default DashboardHeader;

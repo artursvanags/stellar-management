@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Next.js',
+  title: 'Dashboard',
 };
 
 export default function DashboardPage() {

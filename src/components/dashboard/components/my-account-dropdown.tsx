@@ -28,6 +28,7 @@ interface MyAccountDropdownProps {
 }
 
 export default function MyAccountDropdown({ user }: MyAccountDropdownProps) {
+  
   const buttonRef = useRef<HTMLDivElement>(null);
   const [buttonWidth, setButtonWidth] = useState(0);
   const { setTheme, resolvedTheme } = useTheme();

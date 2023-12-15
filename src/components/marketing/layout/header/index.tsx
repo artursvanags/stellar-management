@@ -1,22 +1,15 @@
 import Navigation from '../../components/navigation';
 import { marketingNavigation } from '@/config/marketing';
 import MobileNavigation from '../../components/mobile-navigation';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/options';
 
-export default async function SiteHeader() {
-  const session = await getServerSession(authOptions);
-
+export default function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 lg:static">
       <div className="lg:hidden">
-        <MobileNavigation
-          items={marketingNavigation.mainNav}
-          session={session}
-        />
+        <MobileNavigation items={marketingNavigation.mainNav} />
       </div>
       <div className="container hidden lg:block">
-        <Navigation items={marketingNavigation.mainNav} session={session} />
+        <Navigation items={marketingNavigation.mainNav} />
       </div>
     </header>
   );

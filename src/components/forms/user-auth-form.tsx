@@ -19,37 +19,42 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 
 type FormData = z.infer<typeof userAuthSchema>;
 
+const providers = [
+  {
+    id: 'github',
+    name: 'GitHub',
+    icon: <AuthProviderIcons.Github className="mr-3 h-4 w-4" />,
+  },
+  {
+    id: 'google',
+    name: 'Google',
+    icon: <AuthProviderIcons.Google className="mr-3 h-4 w-4" />,
+  },
+];
+
 export function UserAuthForm() {
+  const [isLoading, setLoading] = useState(false);
+  const [isProvidersLoading, setProvidersLoading] = useState(false);
+  const [selectedProviderId, setSelectedProviderId] = useState('');
+  const [showEmailOption, setShowEmailOption] = useState(false);
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+
+  const searchParams = useSearchParams();
+
   const form = useForm<FormData>({
     resolver: zodResolver(userAuthSchema),
     defaultValues: {
       email: '',
     },
   });
-  const providers = [
-    {
-      id: 'github',
-      name: 'GitHub',
-      icon: <AuthProviderIcons.Github className="mr-3 h-4 w-4" />,
-    },
-    {
-      id: 'google',
-      name: 'Google',
-      icon: <AuthProviderIcons.Google className="mr-3 h-4 w-4" />,
-    },
-  ];
-  const [isLoading, setLoading] = useState(false);
-  const [isProvidersLoading, setProvidersLoading] = useState<string | null>(
-    null,
-  );
-  const searchParams = useSearchParams();
 
-  async function onSubmit(data: FormData) {
+  const onSubmit = form.handleSubmit(async (data: FormData) => {
     setLoading(true);
     try {
       const signInResult = await signIn('email', {
@@ -75,70 +80,84 @@ export function UserAuthForm() {
       console.log(error);
     } finally {
       setLoading(false);
+      setEmailSubmitted(true);
+    }
+  });
+
+  async function onProviderSelect(id: string) {
+    try {
+      setSelectedProviderId(id);
+      setProvidersLoading(true);
+      await signIn(id, {
+        callbackUrl: searchParams?.get('from') || '/dashboard',
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setProvidersLoading(false);
     }
   }
 
-  async function onProviderSelect(id: string) {
-    setProvidersLoading(id);
-    await signIn(id, {
-      callbackUrl: searchParams?.get('from') || '/dashboard',
-    });
-    setProvidersLoading(null);
-  }
-
   return (
-    <div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder="E-Mail Address" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button size={'xl'} disabled={isLoading} className="w-full">
-            {!isLoading ? (
-              'Send Link'
-            ) : (
-              <>
-                <Spinner className="mr-2 h-5 w-5 animate-spin" />
-                Sending...
-              </>
-            )}
-          </Button>
-        </form>
-      </Form>
+    <>
+      {!emailSubmitted ? (
+        <div>
+          <div className="mb-2 flex flex-col space-y-2 border-b pb-2">
+            {providers.map((provider) => (
+              <Button
+                key={provider.id}
+                className="font-normal"
+                disabled={isLoading || isProvidersLoading}
+                onClick={() => onProviderSelect(provider.id)}
+                icon={provider.icon}
+                loading={
+                  isProvidersLoading && provider.id === selectedProviderId
+                }
+              >
+                Continue with {provider.name}
+              </Button>
+            ))}
+          </div>
 
-      <div className="mt-4 flex flex-col gap-2 border-t">
-        <p className="flex justify-center pt-4 text-sm font-normal">
-          or sign in with
-        </p>
-        <div className="grid grid-cols-2 gap-4">
-          {providers.map((provider, index) => (
-            <Button
-              key={index}
-              size={'xl'}
-              variant={'outline'}
-              className="w-full"
-              disabled={isLoading || isProvidersLoading === provider.id}
-              onClick={() => onProviderSelect(provider.id)}
-            >
-              {isProvidersLoading === provider.id ? (
-                <Spinner className="mr-2 animate-spin" />
-              ) : (
-                provider.icon
+          <Form {...form}>
+            <form onSubmit={onSubmit} className="flex flex-col space-y-2">
+              {showEmailOption && (
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input placeholder="E-Mail Address" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               )}
-              {provider.name}
-            </Button>
-          ))}
+              <Button
+                variant="outline"
+                disabled={isLoading || isProvidersLoading}
+                {...(!showEmailOption && {
+                  type: 'button',
+                  onClick: (e) => {
+                    e.preventDefault();
+                    setShowEmailOption(true);
+                  },
+                })}
+                loading={isLoading}
+              >
+                {isLoading ? 'Sending...' : 'Continue with E-Mail'}
+              </Button>
+            </form>
+          </Form>
         </div>
-      </div>
-    </div>
+      ) : (
+        <div className="text-sm text-muted-foreground">
+          We have sent you a magic email link that expires in 24 hours. Please
+          check your inbox.
+        </div>
+      )}
+    </>
   );
 }

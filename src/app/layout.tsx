@@ -2,8 +2,6 @@ import '@/styles/index.css';
 
 import { Inter as FontSans } from 'next/font/google';
 import localFont from 'next/font/local';
-import { GeistSans } from 'geist/font/sans';
-import { GeistMono } from 'geist/font/mono';
 
 import { cn } from '@/lib/utils';
 import { siteConfig } from '@/config/site';
@@ -11,6 +9,7 @@ import { siteConfig } from '@/config/site';
 import { Toaster } from '@/components/ui/toaster';
 import { TailwindIndicator } from '@/lib/tailwind-indicator';
 import { ThemeProvider } from '@/components/global/theme-provider';
+import { Metadata } from 'next';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -26,13 +25,13 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-export const metadata = {
+export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
-    template: `%s | ${siteConfig.name}`,
+    template: `%s - ${siteConfig.name}`,
   },
   description: siteConfig.description,
-  keywords: [siteConfig.keywords],
+  keywords: siteConfig.keywords,
 
   authors: [
     {

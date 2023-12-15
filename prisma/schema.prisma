@@ -39,15 +39,26 @@ model Session {
 }
 
 model User {
-  id            String     @id @default(uuid())
+  id            String        @id @default(uuid())
   name          String?
-  email         String?    @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
+  role          Role          @default(USER)
+  subscription  Subscription  @default(FREE)
+  settings      UserSettings?
   accounts      Account[]
   sessions      Session[]
   filaments     Filament[]
   billing       Billing?
+}
+
+model UserSettings {
+  user             User      @relation(fields: [userId], references: [id])
+  userId           String    @unique
+  weight_threshold String    @default("50")
+  auto_archive     Boolean   @default(false)
+  updatedAt        DateTime? @updatedAt
 }
 
 model Billing {
@@ -125,4 +136,15 @@ model Filament {
   @@index([materialId])
   @@index([colorId])
   @@index([userId])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Subscription {
+  FREE
+  BASIC
+  PREMIUM
 }
