@@ -6,7 +6,15 @@ import { Modal } from '@/components/ui/modal';
 import React, { useState } from 'react';
 import { Icons } from '@/config/assets/icons';
 
-export const AddFilamentButton = (props: any) => {
+type AddFilamentButtonProps = {
+  className?: string;
+  props?: React.HTMLAttributes<HTMLDivElement>;
+};
+
+export const AddFilamentButton: React.FC<AddFilamentButtonProps> = ({
+  className,
+  ...props
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => {
@@ -24,6 +32,7 @@ export const AddFilamentButton = (props: any) => {
         icon={<Icons.plus className="mr-2 h-6 w-6" />}
         onClick={handleOpen}
         {...props}
+        className={className}
       >
         Add Filament
       </Button>
