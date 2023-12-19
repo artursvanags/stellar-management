@@ -1,7 +1,6 @@
 import '@/styles/index.css';
 
-import { Inter as FontSans } from 'next/font/google';
-import localFont from 'next/font/local';
+import { fontHeading, fontMono, fontSans } from '@/lib/fonts';
 
 import { cn } from '@/lib/utils';
 import { siteConfig } from '@/config/site';
@@ -10,16 +9,6 @@ import { Toaster } from '@/components/ui/toaster';
 import { TailwindIndicator } from '@/lib/tailwind-indicator';
 import { ThemeProvider } from '@/components/global/theme-provider';
 import { Metadata } from 'next';
-
-const fontSans = FontSans({
-  subsets: ['latin'],
-  variable: '--font-sans',
-});
-
-const fontHeading = localFont({
-  src: '../assets/fonts/CalSans-SemiBold.woff2',
-  variable: '--font-heading',
-});
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -49,6 +38,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
           fontSans.variable,
+          fontMono.variable,
           fontHeading.variable,
         )}
       >
