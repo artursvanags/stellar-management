@@ -28,7 +28,6 @@ export const AddFilamentButton: React.FC<AddFilamentButtonProps> = ({
   return (
     <>
       <Button
-        size="lg"
         icon={<Icons.plus className="mr-2 h-6 w-6" />}
         onClick={handleOpen}
         {...props}
