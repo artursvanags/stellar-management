@@ -1,29 +1,62 @@
-import { Filaments } from '@/types/database';
-import { AlertModal } from './alertModal';
+'use client';
+
+import { useEffect, useState } from 'react';
+
+import { Modal } from '@/components/ui/modal';
+import { Button } from '@/components/ui/button';
+import { Spinner } from '@/config/assets/icons';
 
 interface TagModalProps {
+  description?: string;
   isOpen: boolean;
   onClose: () => void;
-  onAction: () => void;
+  onConfirm: () => void;
   loading: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export const TagModal: React.FC<TagModalProps> = ({
   isOpen,
   onClose,
-  onAction,
+  onConfirm,
   loading,
   children,
+  description,
 }) => {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
+
   return (
-    <AlertModal
+    <Modal
+      title="Tags"
+      description={!description ? 'View or edit tags' : description}
       isOpen={isOpen}
       onClose={onClose}
-      onConfirm={onAction}
-      loading={loading}
     >
       {children}
-    </AlertModal>
+      <div className="flex w-full items-center justify-end space-x-2 pt-6">
+        <Button
+          type="submit"
+          disabled={loading}
+          variant="default"
+          onClick={onConfirm}
+        >
+          {loading ? (
+            <>
+              <Spinner className="mr-2 h-4 w-4 animate-spin" /> Loading
+            </>
+          ) : (
+            'Update'
+          )}
+        </Button>
+      </div>
+    </Modal>
   );
 };

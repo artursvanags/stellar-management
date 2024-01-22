@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 
 import { cn } from '@/lib/utils';
 import { NavItem } from '@/types';
+import { Icons } from '@/config/assets/icons';
 
 interface SideBarNavigationProps extends React.HTMLAttributes<HTMLElement> {
   items: NavItem[];
@@ -17,22 +18,25 @@ export default function SideBarNavigation({
 }: SideBarNavigationProps) {
   const path = usePathname();
   return (
-    <nav className={cn('', className)} {...props}>
+    <nav className={className} {...props}>
       <div className="flex flex-col gap-1">
         {items.map((item, index) => (
           <div key={index}>
             <Link href={item.disabled ? '/' : item.href}>
               <span
                 className={cn(
-                  'flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-orange/40 hover:text-orange-foreground',
+                  'flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-primary/10 hover:text-primary',
                   path === item.href
-                    ? 'bg-orange/20 text-orange-foreground'
+                    ? 'bg-primary text-primary-foreground'
                     : 'transparent',
                   item.disabled && 'cursor-not-allowed opacity-80',
                 )}
               >
                 {item.icon}
                 {item.title}
+                {path === item.href && (
+                  <Icons.arrowRight className="ml-auto h-5 w-5" />
+                )}
               </span>
             </Link>
             {item.subMenu &&

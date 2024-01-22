@@ -1,49 +1,46 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import FilamentForm from '../forms/add-filament-form';
+import { useEffect, useState } from 'react';
 import { Modal } from '@/components/ui/modal';
-import React, { useState } from 'react';
-import { Icons } from '@/config/assets/icons';
+import { DialogContentProps } from '@radix-ui/react-dialog';
 
-type AddFilamentButtonProps = {
-  className?: string;
-  props?: React.HTMLAttributes<HTMLDivElement>;
-};
+interface FilamentModalProps extends DialogContentProps{
+  title: string;
+  description?: string;
+  isOpen: boolean;
+  onClose: () => void;
+  loading?: boolean;
+  children?: React.ReactNode;
+}
 
-export const AddFilamentButton: React.FC<AddFilamentButtonProps> = ({
-  className,
+export const FilamentModal: React.FC<FilamentModalProps> = ({
+  isOpen,
+  onClose,
+  children,
+  description,
+  title,
   ...props
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
-  const handleOpen = () => {
-    setIsOpen(true);
-  };
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  if (!isMounted) {
+    return null;
+  }
 
   return (
-    <>
-      <Button
-        icon={<Icons.plus className="mr-2 h-6 w-6" />}
-        onClick={handleOpen}
-        {...props}
-        className={className}
-      >
-        Add Filament
-      </Button>
-      <Modal
-        title="Filament Form"
-        description="Add new filaments to your collrection."
-        isOpen={isOpen}
-        onClose={handleClose}
-        className="overflow-auto sm:max-h-[80vh] sm:max-w-screen-xl"
-      >
-        <FilamentForm closeModal={handleClose} />
-      </Modal>
-    </>
+    <Modal
+      title={title}
+      description={description ? description : 'Filament Form'}
+      isOpen={isOpen}
+      onClose={onClose}
+      className="lg:min-w-[1200px]"
+      {...props}
+    >
+      {children}
+    </Modal>
   );
 };

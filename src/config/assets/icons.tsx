@@ -1,6 +1,7 @@
 import {
   ChevronsUpDown,
   ChevronDown,
+  ChevronRight,
   Sun,
   Moon,
   Laptop,
@@ -27,6 +28,11 @@ import {
   File,
   Heart,
   Settings,
+  Dot,
+  Filter,
+  Tag,
+  MoreVertical,
+  Copy,
 } from 'lucide-react';
 
 import {
@@ -57,6 +63,7 @@ export const Icons = {
   plus: Plus,
   arrowUp: ArrowUp,
   arrowDown: ArrowDown,
+  arrowRight: ChevronRight,
   eyeOff: EyeOff,
   sort: ChevronsUpDown,
   sortAsc: ChevronDown,
@@ -67,6 +74,11 @@ export const Icons = {
   Check: Check,
   Filament: CircleDot,
   Files: File,
+  Dot: Dot,
+  Filter: Filter,
+  Tag: Tag,
+  MenuVertical: MoreVertical,
+  Copy: Copy,
 };
 
 export const ThemeIcons = {
