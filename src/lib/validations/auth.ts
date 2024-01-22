@@ -1,3 +1,4 @@
+import { Filaments } from '@/types/database';
 import * as z from 'zod';
 
 export const userAuthSchema = z.object({
@@ -23,4 +24,23 @@ export const billingAddressSchema = z.object({
 export const userSettingsSchema = z.object({
   weight_threshold: z.string(),
   auto_archive: z.boolean(),
+});
+
+export const tagsSchema = z.object({
+  tags: z.array(z.object({ id: z.string(), name: z.string() })),
+});
+
+export const filamentSchema = z.object({
+  filaments: z.array(
+    z.object({
+      manufacturer: z.string().max(30, 'Manufacturer must contain at most 30 characters.').min(1),
+      material: z.string().max(30, 'Material must contain at most 30 characters.').min(1),
+      diameter: z.string(),
+      color: z.string().max(30, 'Color must contain at most 30 characters.').min(1),
+      weight: z.string().max(10000, 'Weight must be less than 10000 grams.'),
+      remainingWeight: z.string().max(10000, 'Weight must be less than 10000 grams.'),
+      status: z.string(),
+      tags: z.array(z.string()),
+    })
+  ),
 });

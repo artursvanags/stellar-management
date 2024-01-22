@@ -1,9 +1,9 @@
 import { SendVerificationRequestParams } from 'next-auth/providers';
-import { resend } from '@/lib/resend';
+import { resend } from '@/lib/utils/resend';
 import { siteConfig } from '@/config/site';
 
 import VerificationEmail from '@/lib/email/templates/verification-email';
-import prismadb from '@/lib/database';
+import prismadb from '@/lib/utils/database';
 
 export const sendVerificationRequest = async (
   params: SendVerificationRequestParams,

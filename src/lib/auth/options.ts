@@ -5,7 +5,7 @@ import EmailProvider from 'next-auth/providers/email';
 
 import { PrismaAdapter } from '@auth/prisma-adapter';
 
-import prismadb from '@/lib/database';
+import prismadb from '@/lib/utils/database';
 import { sendVerificationRequest } from '@/lib/email/verificationRequest';
 
 export const authOptions: NextAuthOptions = {
@@ -29,25 +29,24 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: '/auth/login',
   },
+  events: {
+    async createUser(message) {
+      // Check if user has user preferences, if not create them with default values
+      const userPreferences = await prismadb.userSettings.findUnique({
+        where: { userId: message.user.id },
+      });
+  
+      if (!userPreferences) {
+        await prismadb.userSettings.create({
+          data: {
+            userId: message.user.id,
+          },
+        });
+      }
+    },
+  },
 
   callbacks: {
-    async signIn({ user }) {
-      // Check if user has user preferences, if not create them with default values
-      if (user) {
-        const userPreferences = await prismadb.userSettings.findUnique({
-          where: { userId: user.id },
-        });
-        if (!userPreferences) {
-          await prismadb.userSettings.create({
-            data: {
-              userId: user.id,
-            },
-          });
-        }
-      }
-      return true;
-    },
-
     async jwt({ user, token }) {
       //pass user ID to token if signed in
       if (user) {

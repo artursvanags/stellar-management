@@ -11,3 +11,7 @@ export const CheckActive = (href :string) => {
   const isActive = pathname.startsWith(href);
   return isActive;
 };
+
+export function getUpdateObject(name: string) {
+  return name ? { update: { name } } : undefined;
+  }
