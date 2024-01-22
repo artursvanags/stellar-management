@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import axios from 'axios';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { set, useFieldArray, useForm } from 'react-hook-form';
+import { ControllerRenderProps, useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 
@@ -134,39 +134,41 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
   const handleDuplicate = (index: number) =>
     append(form.getValues(`filaments.${index}`));
 
-  const handleWeightChange = (value: string, index: number, field: any) => {
-    let input = parseFloat(value);
-    if (input > MaxWeight) {
-      value = String(MaxWeight);
-    } else if (input < 0) {
-      value = '0';
+  const handleWeightChange = (value: string, index: number) => {
+    let inputValue = parseFloat(value);
+    let outputValue = String(inputValue);
+
+    if (inputValue >= MaxWeight) {
+      outputValue = String(MaxWeight);
+    } else if (inputValue < 0) {
+      outputValue = '0';
+    } else if (isNaN(inputValue)) {
+      outputValue = '';
     }
-    field.onChange(value);
-    handleRemainingWeightValue(value, index);
+
+    form.setValue(`filaments.${index}.weight`, outputValue);
+
+    form.setValue(`filaments.${index}.remainingWeight`, outputValue);
   };
 
-  const handleRemainingWeightValue = useCallback(
-    (value: string, index: number) => {
-      let input = parseFloat(value);
-      const originalWeight = parseFloat(
-        form.getValues(`filaments.${index}.weight`),
-      );
+  const handleRemainingWeightChange = (value: string, index: number) => {
+    const originalWeight = parseFloat(
+      form.getValues(`filaments.${index}.weight`),
+    );
+    let inputValue = parseFloat(value);
+    let outputValue = String(inputValue);
 
-      if (isNaN(input) || input < 0) {
-        input = NaN;
-      } else if (input > originalWeight) {
-        input = originalWeight;
-      } else if (input > MaxWeight) {
-        input = MaxWeight;
-      }
+    if (inputValue > originalWeight) {
+      outputValue = originalWeight.toString();
+    } else if (inputValue < 0 || isNaN(inputValue)) {
+      outputValue = '0';
+    }
 
-      form.setValue(`filaments.${index}.remainingWeight`, String(input));
-    },
-    [form],
-  );
+    form.setValue(`filaments.${index}.remainingWeight`, outputValue);
+  };
 
   useEffect(() => {
-    console.log('use effect is rendering')
+    console.log('use effect is rendering');
     if (initialRender.current) {
       initialRender.current = false;
     } else {
@@ -178,8 +180,6 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
   const handleRemoveAllCopies = () => {
     for (let i = fields.length - 1; i > 0; i--) handleRemoveCopy(i);
   };
-
-
 
   const onSubmit = form.handleSubmit(async (formData) => {
     setInteraction(true);
@@ -244,7 +244,7 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
                     control={form.control}
                     name={`filaments.${index}.manufacturer`}
                     render={({ field }) => (
-                      <FormItem className="col-span-2 flex items-center">
+                      <FormItem className="col-span-2 flex flex-col items-center">
                         <FormControl>
                           <div className="relative flex items-center">
                             <span className="absolute ml-2 rounded-md bg-muted px-1 text-sm text-muted-foreground">
@@ -335,12 +335,9 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
                               placeholder={fieldLabels.weight.placeholder}
                               type="number"
                               step="any"
+                              value={field.value || ''}
                               onChange={(e) => {
-                                handleWeightChange(
-                                  e.target.value,
-                                  index,
-                                  field,
-                                );
+                                handleWeightChange(e.target.value, index);
                               }}
                             />
                           </FormControl>
@@ -361,8 +358,9 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
                               }
                               type="number"
                               step="any"
+                              value={field.value || ''}
                               onChange={(e) => {
-                                handleRemainingWeightValue(
+                                handleRemainingWeightChange(
                                   e.target.value,
                                   index,
                                 );

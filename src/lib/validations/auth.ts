@@ -37,10 +37,10 @@ export const filamentSchema = z.object({
       material: z.string().max(30, 'Material must contain at most 30 characters.').min(1),
       diameter: z.string(),
       color: z.string().max(30, 'Color must contain at most 30 characters.').min(1),
-      weight: z.string().max(10000, 'Weight must be less than 10000 grams.'),
-      remainingWeight: z.string().max(10000, 'Weight must be less than 10000 grams.'),
+      weight: z.string().min(1),
+      remainingWeight: z.string().min(1),
       status: z.string(),
-      tags: z.array(z.string()),
+      tags: z.array(z.string()).optional(),
     })
   ),
 });
