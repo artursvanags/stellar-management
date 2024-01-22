@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/options';
 
-import prismadb from '@/lib/database';
+import prismadb from '@/lib/utils/database';
 
 export async function PATCH(
   request: Request,

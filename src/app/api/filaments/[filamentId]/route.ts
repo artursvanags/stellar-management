@@ -1,35 +1,79 @@
+import { checkUserSession } from '@/lib/utils/checkUserSession';
+
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/options';
 
-import prismadb from '@/lib/database';
+import prismadb from '@/lib/utils/database';
+import { getUpdateObject } from '@/lib/utils';
 
-export const dynamic = 'force-dynamic';
+
+export async function GET(
+  request: Request,
+  { params }: { params: { filamentId: string } },
+) {
+  try {
+    const { user, error } = await checkUserSession();  
+    if (error) {
+      return new NextResponse(error.message, { status: error.status });
+    }
+    
+    const data = await prismadb.filament.findUnique({
+      where: { 
+        userId: user?.id,
+        id: params.filamentId },
+      include: {
+        manufacturer: true,
+        material: true,
+        color: true,
+        tags: true,
+      },
+    });
+
+    if (!data) {
+      return new NextResponse('Data not found', { status: 404 });
+    }
+    
+    const formatData = {
+      id: data.id,
+      userId: data.userId,
+      status: data.status,
+      diameter: data.diameter,
+      manufacturer: data.manufacturer.name,
+      material: data.material.name,
+      color: data.color.name,
+      weight: data.weight,
+      remainingWeight: data.remainingWeight,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      tags: data.tags, 
+    };
+    
+    if (!data) {
+      return new NextResponse('Data not found', { status: 404 });
+    }
+
+    return new NextResponse(JSON.stringify(formatData, null, 2), {
+      status: 200,
+    });
+  } catch (err) {
+    console.error(err);
+    return new NextResponse('Internal Error', { status: 500 });
+  }
+}
 
 export async function PATCH(
   request: Request,
   { params }: { params: { filamentId: string } },
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Session not found' }, { status: 401 });
-    }
-
-    const user = await prismadb.user.findUnique({
-      where: { email: session?.user?.email! },
-    });
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { user, error } = await checkUserSession();  
+    if (error) {
+      return new NextResponse(error.message, { status: error.status });
     }
 
     const body = await request.json();
-
-    //Helper function to get update object from relationships e.g. manufacturer
-    function getUpdateObject(name: string | undefined) {
-      return name ? { update: { name } } : undefined;
-    }
-
+    console.log(body)
     await prismadb.filament.update({
       where: {
         id: params.filamentId,
@@ -39,7 +83,12 @@ export async function PATCH(
         manufacturer: getUpdateObject(body.manufacturer),
         material: getUpdateObject(body.material),
         color: getUpdateObject(body.color),
-        tags: getUpdateObject(body.tags),
+        tags: {
+          connectOrCreate: body.tags.map((tag: any) => ({
+            where: { id: tag.id },
+            create: { id: tag.id, name: tag.name },
+          })),
+        },
       },
     });
 
