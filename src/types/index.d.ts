@@ -30,11 +30,12 @@ export type MarketingConfig = {
   mainNav: NavItem[];
 };
 
-export type SideBarConfig = {
-  mainNav: NavItem[];
-  accountDropdown: NavItem[];
-};
+export type SideBarConfig = Record<string, NavItem[]>;
 
 export type SettingsSideBarConfig = {
   mainNav: NavItem[];
 };
+
+export interface SearchParams {
+  [key: string]: string | string[] | undefined
+}
