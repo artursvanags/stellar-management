@@ -1,9 +1,15 @@
-"use client";
+'use client';
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { DialogContentProps } from '@radix-ui/react-dialog';
 
-
-interface ModalProps {
+interface ModalProps extends DialogContentProps{
   title: string;
   description: string;
   isOpen: boolean;
@@ -12,27 +18,28 @@ interface ModalProps {
   className?: string;
 }
 
-export const Modal: React.FC<ModalProps> = (
-props,
-) => {
+export const Modal: React.FC<ModalProps> = ({
+  title,
+  description,
+  isOpen,
+  onClose,
+  children,
+  className,
+  ...DialogProps // This will contain all other props
+}) => {
   const onChange = (open: boolean) => {
     if (!open) {
-      props.onClose();
+      onClose();
     }
   };
-
-  return ( 
-    <Dialog open={props.isOpen} onOpenChange={onChange}>
-      <DialogContent className={`${props.className}`}>
+  return (
+    <Dialog open={isOpen} onOpenChange={onChange}>
+      <DialogContent className={className} {...DialogProps}>
         <DialogHeader>
-          <DialogTitle>{props.title}</DialogTitle>
-          <DialogDescription>
-            {props.description}
-          </DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
-        <div>
-          {props.children}
-        </div>
+        <div>{children}</div>
       </DialogContent>
     </Dialog>
   );
