@@ -1,9 +1,9 @@
 'use client';
 import { DataTableViewOptions } from '@/components/dashboard/filaments/components/table/dataTableViewOptions';
+import { DataTableFacetedFilter } from '@/components/dashboard/filaments/components/table/dataTableFilter';
 
-import { Cross2Icon } from '@radix-ui/react-icons';
 import { Icons } from '@/config/assets/icons';
-import { Table } from '@tanstack/react-table';
+import { Table, isRowSelected } from '@tanstack/react-table';
 
 import {
   DropdownMenu,
@@ -13,18 +13,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 import { DeleteAlertModal } from '@/components/modals/deleteAlertModal';
 
-import { useEffect, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 
 import { deleteFilaments, updateFilaments } from '@/lib/utils/filament-actions';
 import { Filaments } from '@/types/database';
+import { filamentStatus } from '../../constants';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -41,11 +42,15 @@ export function DataTableToolbar<TData>({
   const [loading, setLoading] = useState(false);
 
   const allFavorite = data.every((item) => item.isFavorite);
+  const selectedRows = table.getSelectedRowModel().rows;
+  const selectedRowIDs = selectedRows.map((row) => row.original);
 
   useEffect(() => {
-    const selectedRows = table.getSelectedRowModel().rows;
-    const selectedRowIDs = selectedRows.map((row) => row.original);
     setData(selectedRowIDs as Filaments[]);
+    console.log([
+      'Selected Rows:' + table.getSelectedRowModel().rows.length,
+      'Visible Rows:' + table.getRowModel().rows.length,
+    ]);
   }, [table, table.getSelectedRowModel().rows.length]);
 
   const onDelete = async () => {
@@ -123,37 +128,27 @@ export function DataTableToolbar<TData>({
         loading={loading}
       />
 
-      <div className="flex items-center justify-between gap-2">
-        {/* <div className="flex flex-1 items-center space-x-2">
-          <Input
-            placeholder="Filter tasks..."
-            value={table.getColumn('manufacturer')?.getFilterValue() as string}
-            onChange={(event) =>
-              table
-                .getColumn('manufacturer')
-                ?.setFilterValue(event.target.value)
-            }
-            className="h-10 w-[150px] lg:w-[250px]"
-          />
-          {isFiltered && (
-            <Button variant="ghost" onClick={() => table.resetColumnFilters()}>
-              Reset
-              <Cross2Icon className="ml-2 h-4 w-4" />
-            </Button>
-          )}
-        </div> */}
-
+      <div className="flex items-center gap-2 ">
         {table.getSelectedRowModel().rows.length > 0 && (
-          <>
+          <div className="flex items-center gap-2 ">
             <Button
-              variant={'ghost'}
+              variant={'outline'}
+              className="border border-dashed"
+              onClick={() => table.toggleAllRowsSelected()}
+              disabled={table?.getIsAllRowsSelected()}
+            >
+              Select all
+            </Button>
+            <Button
+              variant={'outline'}
+              className="border border-dashed"
               onClick={() => table?.resetRowSelection()}
             >
               Clear selection
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant={'ghost'} className=" border border-dashed">
+                <Button variant={'outline'} className="border border-dashed">
                   Bulk Action
                   <Icons.sortAsc className="ml-2 h-4 w-4" />
                 </Button>
@@ -183,8 +178,26 @@ export function DataTableToolbar<TData>({
                 </DropdownMenuLabel>
               </DropdownMenuContent>
             </DropdownMenu>
-          </>
+          </div>
         )}
+        {table.getSelectedRowModel().rows.length > 0  && (
+          <div className="flex-1 text-sm text-muted-foreground">
+            {table.getFilteredSelectedRowModel().rows.length} of{" "}
+            <span>
+              {table.getFilteredRowModel().rows.length} row(s) selected.
+            </span>
+          </div>
+        )}
+        <div className="ml-auto flex">
+          {table.getColumn('status') && (
+            <DataTableFacetedFilter
+              column={table.getColumn('status')}
+              title="Status"
+              options={filamentStatus}
+            />
+          )}
+        </div>
+
         <DataTableViewOptions table={table} />
       </div>
     </>

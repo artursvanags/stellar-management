@@ -1,20 +1,20 @@
-"use client"
+'use client';
 
-import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
-import { MixerHorizontalIcon } from "@radix-ui/react-icons"
-import { Table } from "@tanstack/react-table"
+import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
+import { MixerHorizontalIcon } from '@radix-ui/react-icons';
+import { Table } from '@tanstack/react-table';
 
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu"
+} from '@/components/ui/dropdown-menu';
 
 interface DataTableViewOptionsProps<TData> {
-  table: Table<TData>
+  table: Table<TData>;
 }
 
 export function DataTableViewOptions<TData>({
@@ -23,11 +23,7 @@ export function DataTableViewOptions<TData>({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-
-          className="ml-auto hidden lg:flex"
-        >
+        <Button variant="outline" className="hidden lg:flex">
           <MixerHorizontalIcon className="mr-2 h-4 w-4" />
           View
         </Button>
@@ -35,31 +31,40 @@ export function DataTableViewOptions<TData>({
       <DropdownMenuContent align="end" className="w-[150px]">
         <DropdownMenuLabel>View Presets</DropdownMenuLabel>
         <DropdownMenuCheckboxItem
-               key='default'
-               className="capitalize"
-               onCheckedChange={() => {
-                 table.getAllColumns().forEach((column) => {
-                   column.toggleVisibility(true);
-                 });
-               }}
-              >
-                Default view
-              </DropdownMenuCheckboxItem>
-              <DropdownMenuCheckboxItem
-               key='minimal'
-               className="capitalize"
-               onCheckedChange={() => {
-                 table.getAllColumns().forEach((column) => {
-                   if (['Manufacturer', 'material', 'color', 'weight', 'tags', 'actions'].includes(column.id)) {
-                     column.toggleVisibility(true);
-                   } else {
-                     column.toggleVisibility(false);
-                   }
-                 });
-               }}
-              >
-                Minimal
-              </DropdownMenuCheckboxItem>
+          key="default"
+          className="capitalize"
+          onCheckedChange={() => {
+            table.getAllColumns().forEach((column) => {
+              column.toggleVisibility(true);
+            });
+          }}
+        >
+          Default view
+        </DropdownMenuCheckboxItem>
+        <DropdownMenuCheckboxItem
+          key="minimal"
+          className="capitalize"
+          onCheckedChange={() => {
+            table.getAllColumns().forEach((column) => {
+              if (
+                [
+                  'Manufacturer',
+                  'material',
+                  'color',
+                  'weight',
+                  'tags',
+                  'actions',
+                ].includes(column.id)
+              ) {
+                column.toggleVisibility(true);
+              } else {
+                column.toggleVisibility(false);
+              }
+            });
+          }}
+        >
+          Minimal
+        </DropdownMenuCheckboxItem>
         <DropdownMenuSeparator />
         <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
         <DropdownMenuSeparator />
@@ -67,7 +72,7 @@ export function DataTableViewOptions<TData>({
           .getAllColumns()
           .filter(
             (column) =>
-              typeof column.accessorFn !== "undefined" && column.getCanHide()
+              typeof column.accessorFn !== 'undefined' && column.getCanHide(),
           )
           .map((column) => {
             return (
@@ -77,12 +82,11 @@ export function DataTableViewOptions<TData>({
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.id.replace(/([A-Z])/g, " $1").trim()}
-                
+                {column.id}
               </DropdownMenuCheckboxItem>
-            )
+            );
           })}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }

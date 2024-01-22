@@ -25,15 +25,12 @@ import { useToast } from '@/components/ui/use-toast';
 
 import { deleteFilament, updateFilament } from '@/lib/utils/filament-actions';
 import { ActionsIcons, Icons } from '@/config/assets/icons';
+import { filamentDiameter } from '../../constants';
+import Link from 'next/link';
 
 interface CellActionProps {
   data: Filaments;
 }
-
-const diameterToLabel = {
-  175: '1.75 mm',
-  285: '2.85 mm',
-};
 
 export function DataTableRowActions({ data }: CellActionProps) {
   const router = useRouter();
@@ -104,7 +101,10 @@ export function DataTableRowActions({ data }: CellActionProps) {
           <span>{data.id}</span>
           <span>
             {data.manufacturer} - {data.material} - {data.color} -{' '}
-            {diameterToLabel[data.diameter as keyof typeof diameterToLabel]}
+            {
+              filamentDiameter.find((item) => item.value === data.diameter)
+                ?.label
+            }
           </span>
 
           <span>
@@ -113,6 +113,7 @@ export function DataTableRowActions({ data }: CellActionProps) {
           </span>
         </div>
       </AlertModal>
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -124,7 +125,12 @@ export function DataTableRowActions({ data }: CellActionProps) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem className="cursor-pointer">
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => {
+              router.push(`filaments/${data.id}`);
+            }}
+          >
             <ActionsIcons.Edit className="mr-2 h-4 w-4" />
             Edit
           </DropdownMenuItem>

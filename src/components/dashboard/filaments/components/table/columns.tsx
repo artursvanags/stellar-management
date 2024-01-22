@@ -6,7 +6,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 import { DataTableColumnHeader } from '@/components/dashboard/filaments/components/table/dataTableColumnHeader';
 import { DataTableRowActions } from '@/components/dashboard/filaments/components/table/dataTableActions';
-import { TagActions } from '@/components/dashboard/filaments/components/table/TagActions';
 
 import { Filaments } from '@/types/database';
 
@@ -17,9 +16,9 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { Icons } from '@/config/assets/icons';
-import { Badge } from '@/components/ui/badge';
 
-
+import { TagColumn } from '@/components/dashboard/filaments/components/table/tag-column';
+import { StatusColumn } from '@/components/dashboard/filaments/components/table/status-column';
 
 export const columns: ColumnDef<Filaments>[] = [
   {
@@ -139,24 +138,9 @@ export const columns: ColumnDef<Filaments>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
     ),
-    cell: ({ row }) => {
-      const status = row.original.status;
-      return (
-        <Badge
-          variant={
-            status === 'new'
-              ? 'lime'
-              : status === 'used'
-              ? 'amber'
-              : status === 'archived'
-              ? 'stone'
-              : 'outline'
-          }
-          className="text-xs font-medium"
-        >
-          {status.slice(0, 1).toUpperCase() + status.slice(1)}
-        </Badge>
-      );
+    cell: ({ row }) => <StatusColumn status={row.original.status} />,
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
   },
   {
@@ -164,7 +148,13 @@ export const columns: ColumnDef<Filaments>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Tags" />
     ),
-    cell: ({ row }) => <TagActions tags={row.original.tags} />,
+    cell: ({ row }) => <TagColumn data={row.original} />,
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+    sortingFn: (rowA, rowB) => {
+      return rowA.original.tags.length - rowB.original.tags.length;
+    },
   },
   {
     accessorKey: 'createdAt',
