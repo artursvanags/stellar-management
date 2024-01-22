@@ -12,14 +12,14 @@ export default async function DashboardLayout({
   if (user && !user.name) return <SetupAccount {...user} />;
   return (
     <div className="flex max-h-screen min-h-screen">
-      <div className="hidden w-[280px] flex-none border-r bg-secondary/30 lg:block">
+      <div className="hidden w-[272px] flex-none border-r bg-secondary/30 lg:block">
         <SideBar />
       </div>
       <div className="flex flex-1 flex-col">
         {/* <header className="border-b">
           <DashboardHeader />
         </header> */}
-        <main className="flex-grow overflow-y-auto px-8">{children}</main>
+        <main className="flex-grow overflow-y-auto">{children}</main>
       </div>
     </div>
   );
