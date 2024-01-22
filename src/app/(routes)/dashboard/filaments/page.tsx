@@ -1,10 +1,19 @@
+import { AddFilamentButton } from '@/components/dashboard/components/add-filament-button';
 import FilamentTemplate from '@/components/dashboard/filaments/templates/filament-component';
-import Heading from '@/components/global/heading';
+import SectionHeader from '@/components/global/section-header';
+import { getData } from '@/lib/utils/get-data';
 
-const FilamentsPage = () => {
+const FilamentsPage = async () => {
+  const { user } = await getData();
+  if (!user) return null;
   return (
     <div className="space-y-6">
-      <Heading title="Filaments" />
+      <SectionHeader
+        title="Filaments"
+        description="View, update or delete your filaments."
+      >
+        <AddFilamentButton />
+      </SectionHeader>
       <FilamentTemplate />
     </div>
   );
