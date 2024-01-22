@@ -1,4 +1,4 @@
-export const filamentState = {
+export const filamentStatus = {
   new: {
     value: 'new',
     label: 'New',
@@ -16,11 +16,11 @@ export const filamentState = {
 
 export const filamentDiameter = {
   default: {
-    value: 175,
+    value: '175',
     label: '1.75 mm',
   },
   large: {
-    value: 285,
+    value: '285',
     label: '2.85 mm',
   },
 };
