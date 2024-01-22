@@ -83,59 +83,36 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Manufacturer {
-  id        String     @id @default(uuid())
-  name      String?    @unique
-  createdAt DateTime?  @default(now())
-  updatedAt DateTime?  @updatedAt
-  filaments Filament[]
-}
-
-model Color {
-  id        String     @id @default(uuid())
-  name      String?    @unique
-  createdAt DateTime?  @default(now())
-  updatedAt DateTime?  @updatedAt
-  filaments Filament[]
-}
-
-model Material {
-  id        String     @id @default(uuid())
-  name      String?    @unique
-  createdAt DateTime?  @default(now())
-  updatedAt DateTime?  @updatedAt
-  filaments Filament[]
-}
-
 model Tag {
   id        String     @id @default(uuid())
-  name      String?    @unique
+  name      String     @unique
   filaments Filament[]
 }
 
 model Filament {
-  id              String       @id @default(uuid())
-  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              String         @id @default(uuid())
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
-  status          String       @default("NEW")
-  diameter        Int
-  manufacturer    Manufacturer @relation(fields: [manufacturerId], references: [id], onDelete: Cascade)
-  manufacturerId  String
-  material        Material     @relation(fields: [materialId], references: [id])
-  materialId      String
-  color           Color        @relation(fields: [colorId], references: [id])
-  colorId         String
+  status          FilamentStatus @default(new)
+  diameter        String
+  manufacturer    String
+  material        String
+  color           String
   weight          Float
   remainingWeight Float
-  isFavorite      Boolean      @default(false)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime?    @updatedAt
+  isFavorite      Boolean        @default(false)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime?      @updatedAt
   tags            Tag[]
 
-  @@index([manufacturerId])
-  @@index([materialId])
-  @@index([colorId])
   @@index([userId])
+}
+
+enum FilamentStatus {
+  new
+  used
+  archived
+  in_use
 }
 
 enum Role {
