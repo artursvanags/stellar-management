@@ -25,7 +25,7 @@ import { useRouter } from 'next/navigation';
 
 import { deleteFilaments, updateFilaments } from '@/lib/utils/filament-actions';
 import { Filaments } from '@/types/database';
-import { filamentStatus } from '../../constants';
+import { filamentStatus } from '@/config/filament';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -65,7 +65,6 @@ export function DataTableToolbar<TData>({
     setLoading(false);
     router.refresh();
     toast({
-      variant: 'notice',
       description: `You have deleted ${data.length} filaments.`,
     });
   };
@@ -89,7 +88,6 @@ export function DataTableToolbar<TData>({
     setLoading(false);
     router.refresh();
     toast({
-      variant: 'notice',
       description: `You have archived ${data.length} filaments.`,
     });
   };
@@ -111,7 +109,6 @@ export function DataTableToolbar<TData>({
     setLoading(false);
     router.refresh();
     toast({
-      variant: 'notice',
       description: `You have favorited ${data.length} filaments.`,
     });
   };
@@ -193,7 +190,7 @@ export function DataTableToolbar<TData>({
             <DataTableFacetedFilter
               column={table.getColumn('status')}
               title="Status"
-              options={filamentStatus}
+              options={Object.values(filamentStatus)}
             />
           )}
         </div>

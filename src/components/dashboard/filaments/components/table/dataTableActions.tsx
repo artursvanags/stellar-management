@@ -25,7 +25,7 @@ import { useToast } from '@/components/ui/use-toast';
 
 import { deleteFilament, updateFilament } from '@/lib/utils/filament-actions';
 import { ActionsIcons, Icons } from '@/config/assets/icons';
-import { filamentDiameter } from '../../constants';
+import { filamentDiameter } from '@/config/filament';
 import Link from 'next/link';
 
 interface CellActionProps {
@@ -101,10 +101,7 @@ export function DataTableRowActions({ data }: CellActionProps) {
           <span>{data.id}</span>
           <span>
             {data.manufacturer} - {data.material} - {data.color} -{' '}
-            {
-              filamentDiameter.find((item) => item.value === data.diameter)
-                ?.label
-            }
+           
           </span>
 
           <span>
