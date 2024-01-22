@@ -64,6 +64,41 @@ module.exports = {
           gray: 'hsl(var(--badge-gray))',
           grayForeground: 'hsl(var(--badge-gray-foreground))',
         },
+        state: {
+          success: {
+            DEFAULT: 'hsl(var(--state-success))',
+            foreground: 'hsl(var(--state-success-foreground))',
+          },
+          warning: {
+            DEFAULT: 'hsl(var(--state-warning))',
+            foreground: 'hsl(var(--state-warning-foreground))',
+          },
+          error: {
+            DEFAULT: 'hsl(var(--state-error))',
+            foreground: 'hsl(var(--state-error-foreground))',
+          },
+          information: {
+            DEFAULT: 'hsl(var(--state-information))',
+            foreground: 'hsl(var(--state-information-foreground))',
+          },
+          away: {
+            DEFAULT: 'hsl(var(--state-away))',
+            foreground: 'hsl(var(--state-away-foreground))',
+          },
+          feature: {
+            DEFAULT: 'hsl(var(--state-feature))',
+            foreground: 'hsl(var(--state-feature-foreground))',
+          },
+          neutral: {
+            DEFAULT: 'hsl(var(--state-neutral))',
+            foreground: 'hsl(var(--state-neutral-foreground))',
+          },
+          verified: {
+            DEFAULT: 'hsl(var(--state-verified))',
+            foreground: 'hsl(var(--state-verified-foreground))',
+          },
+        },
+        
       },
       borderRadius: {
         lg: 'var(--radius)',
