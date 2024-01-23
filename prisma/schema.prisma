@@ -83,7 +83,7 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Tag {
+model Tags {
   id        String     @id @default(uuid())
   name      String     @unique
   filaments Filament[]
@@ -103,7 +103,7 @@ model Filament {
   isFavorite      Boolean        @default(false)
   createdAt       DateTime       @default(now())
   updatedAt       DateTime?      @updatedAt
-  tags            Tag[]
+  tags            Tags[]
 
   @@index([userId])
 }
