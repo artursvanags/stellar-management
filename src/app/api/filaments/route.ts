@@ -44,9 +44,27 @@ export async function POST(request: Request) {
 
     const body = await request.json();
 
-    await prismadb.filament.createMany({
-      data: body.map((item: any) => ({ ...item, userId: user?.id })),
+    const operations = body.map((item: any) => {
+      const filamentData = {
+        ...item,
+        userId: user?.id,
+      };
+    
+      if (item.tags && item.tags.length > 0) {
+        filamentData.tags = {
+          connectOrCreate: item.tags.map((tag: any) => ({
+            where: { name: tag },
+            create: { name: tag },
+          })),
+        };
+      }
+    
+      return prismadb.filament.create({
+        data: filamentData,
+      });
     });
+    
+    await prismadb.$transaction(operations);
     return new NextResponse('Post successful!', { status: 200 });
   } catch (error) {
     console.log(error);
@@ -114,7 +132,7 @@ export async function DELETE(request: Request) {
 
     // Delete tags that are no longer present in any other filaments
     const tagsToDelete = filaments.flatMap((filament) => filament.tags).map(tag => tag.id.toString());
-    await prismadb.tag.deleteMany({
+    await prismadb.tags.deleteMany({
       where: {
         id: {
           in: tagsToDelete,
