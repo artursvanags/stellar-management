@@ -2,8 +2,8 @@
 
 import { z } from 'zod';
 import axios from 'axios';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { ControllerRenderProps, useFieldArray, useForm } from 'react-hook-form';
+import { useEffect, useRef, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 
@@ -99,7 +99,6 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
       ],
     },
   });
-
   const { fields, append, remove } = useFieldArray({
     name: 'filaments',
     control: form.control,
@@ -130,10 +129,8 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
       form.setValue(`filaments.${index}.tags`, newTags);
     }
   };
-
   const handleDuplicate = (index: number) =>
     append(form.getValues(`filaments.${index}`));
-
   const handleWeightChange = (value: string, index: number) => {
     let inputValue = parseFloat(value);
     let outputValue = String(inputValue);
@@ -145,12 +142,9 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
     } else if (isNaN(inputValue)) {
       outputValue = '';
     }
-
     form.setValue(`filaments.${index}.weight`, outputValue);
-
     form.setValue(`filaments.${index}.remainingWeight`, outputValue);
   };
-
   const handleRemainingWeightChange = (value: string, index: number) => {
     const originalWeight = parseFloat(
       form.getValues(`filaments.${index}.weight`),
@@ -163,7 +157,6 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
     } else if (inputValue < 0 || isNaN(inputValue)) {
       outputValue = '0';
     }
-
     form.setValue(`filaments.${index}.remainingWeight`, outputValue);
   };
 
@@ -182,10 +175,19 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
   };
 
   const onSubmit = form.handleSubmit(async (formData) => {
+    const filaments = Object.values(formData['filaments']).map(filament => {
+      const { tags, ...rest } = filament;
+      return {
+        ...rest,
+        weight: parseFloat(filament.weight),
+        remainingWeight: parseFloat(filament.remainingWeight),
+        ...(tags ? { tags } : {}),
+      };
+    });
     setInteraction(true);
     setLoading(true);
     try {
-      await axios.post(`/api/filaments`, [...formData['filaments']]);
+      await axios.post(`/api/filaments`, filaments);
       toast({
         title: 'Success!',
         description: `You have successfully added ${
