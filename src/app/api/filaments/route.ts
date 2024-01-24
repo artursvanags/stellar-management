@@ -53,8 +53,8 @@ export async function POST(request: Request) {
       if (item.tags && item.tags.length > 0) {
         filamentData.tags = {
           connectOrCreate: item.tags.map((tag: any) => ({
-            where: { name: tag },
-            create: { name: tag },
+            where: tag,
+            create: tag,
           })),
         };
       }

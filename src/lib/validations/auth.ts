@@ -40,7 +40,12 @@ export const filamentSchema = z.object({
       weight: z.string().min(1),
       remainingWeight: z.string().min(1),
       status: z.string(),
-      tags: z.array(z.string()).optional(),
-    })
+      tags: z.array(
+        z.object({
+          id: z.string(),
+          name: z.string(),
+        }),
+      ),
+    }),
   ),
 });

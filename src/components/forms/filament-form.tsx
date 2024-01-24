@@ -41,6 +41,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Icons, Spinner } from '@/config/assets/icons';
+import { Tag, TagInput } from '@/components/ui/tag-input';
 
 interface FilamentFormProps {
   setInteraction: (disabled: boolean) => void;
@@ -115,36 +116,31 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
       tags: [],
     });
   };
-  const [tags, setTags] = useState<string[]>([]);
-  const handleTags = (
-    event: React.KeyboardEvent<HTMLInputElement>,
-    index: number,
-    field: any,
-  ) => {
-    if (event.key === 'Enter' || event.key === ',') {
-      event.preventDefault();
-      const value = event.currentTarget.value;
-      const newTags = [...tags, value];
-      setTags(newTags);
-      form.setValue(`filaments.${index}.tags`, newTags);
-    }
-  };
+  const [showTags, setShowTags] = useState<number | null>(null);
+
   const handleDuplicate = (index: number) =>
     append(form.getValues(`filaments.${index}`));
+
   const handleWeightChange = (value: string, index: number) => {
     let inputValue = parseFloat(value);
     let outputValue = String(inputValue);
 
     if (inputValue >= MaxWeight) {
       outputValue = String(MaxWeight);
+      toast({
+        title: 'Warning!',
+        description: `The maximum weight of a filament is ${MaxWeight} g. Please check your input.`,
+      });
     } else if (inputValue < 0) {
       outputValue = '0';
     } else if (isNaN(inputValue)) {
       outputValue = '';
     }
+
     form.setValue(`filaments.${index}.weight`, outputValue);
     form.setValue(`filaments.${index}.remainingWeight`, outputValue);
   };
+
   const handleRemainingWeightChange = (value: string, index: number) => {
     const originalWeight = parseFloat(
       form.getValues(`filaments.${index}.weight`),
@@ -175,13 +171,13 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
   };
 
   const onSubmit = form.handleSubmit(async (formData) => {
-    const filaments = Object.values(formData['filaments']).map(filament => {
+    const filaments = Object.values(formData['filaments']).map((filament) => {
       const { tags, ...rest } = filament;
       return {
         ...rest,
         weight: parseFloat(filament.weight),
         remainingWeight: parseFloat(filament.remainingWeight),
-        ...(tags ? { tags } : {}),
+        ...(tags ? { tags: tags.map((tag) => ({ name: tag.name })) } : {}),
       };
     });
     setInteraction(true);
@@ -236,11 +232,15 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
             </Label>
           </div>
           <ScrollArea className="absolute pr-4">
-            <div className="m-1 max-h-[70vh] space-y-2">
+            <div className="max-h-[70vh] space-y-2">
               {fields.map((field, index) => (
                 <div
                   key={field.id}
-                  className={`grid grid-cols-9 items-start gap-4`}
+                  id={index.toString()}
+                  className={`grid grid-cols-9 items-start gap-4 p-1 ${
+                    showTags === index &&
+                    ' rounded border border-dashed bg-primary-foreground/50'
+                  }`}
                 >
                   <FormField
                     control={form.control}
@@ -411,9 +411,19 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
                       type="button"
                       icon={<Icons.Tag className="h-4 w-4" />}
                       size={'icon'}
-                      variant="outline"
-                      className="flex-grow"
-                    />
+                      variant={showTags === index ? 'secondary' : 'outline'}
+                      className="relative flex-grow"
+                      onClick={() =>
+                        setShowTags(showTags === index ? null : index)
+                      }
+                    >
+                      {form.watch(`filaments.${index}.tags`) &&
+                        form.watch(`filaments.${index}.tags`).length > 0 && (
+                          <span className="absolute -right-1 -top-1 rounded bg-primary px-1 text-xs font-bold text-primary-foreground">
+                            {form.watch(`filaments.${index}.tags`).length}
+                          </span>
+                        )}
+                    </Button>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
@@ -441,36 +451,39 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  <div className="col-span-full space-y-2">
-                    <Label htmlFor="tags" className="text-left">
-                      {fieldLabels.tags.label}
-                    </Label>
-                    <FormField
-                      control={form.control}
-                      name={`filaments.${index}.tags`}
-                      render={({ field }) => (
-                        <FormItem className="w-full">
-                          <FormControl>
-                            <div className="tag-input">
-                              {tags.map((tag, tagIndex) => (
-                                <span key={tagIndex} className="tag">
-                                  {tag}
-                                </span>
-                              ))}
-                              <Input
+                  {showTags === index && (
+                    <div className="col-span-full">
+                      <Label htmlFor="tags" className="text-left">
+                        {fieldLabels.tags.label}
+                      </Label>
+
+                      <FormField
+                        control={form.control}
+                        name={`filaments.${index}.tags`}
+                        render={({ field }) => (
+                          <FormItem className="w-full">
+                            <FormControl>
+                              <TagInput
                                 {...field}
-                                placeholder={fieldLabels.tags.placeholder}
-                                onKeyDown={(event) =>
-                                  handleTags(event, index, field)
+                                placeholder="Enter a tag"
+                                tags={
+                                  form.getValues(`filaments.${index}.tags`) ||
+                                  []
                                 }
+                                setTags={(newTags) => {
+                                  form.setValue(
+                                    `filaments.${index}.tags`,
+                                    newTags as [Tag, ...Tag[]],
+                                  );
+                                }}
                               />
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
