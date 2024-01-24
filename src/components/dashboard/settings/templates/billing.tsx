@@ -1,4 +1,4 @@
-import { getData } from '@/lib/utils/get-data';
+import { getData } from '@/lib/actions/get-data';
 import PlanOverview from '@/components/dashboard/settings/components/plan-overview';
 
 const BillingTemplate: React.FC = async () => {

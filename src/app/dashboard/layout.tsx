@@ -1,6 +1,6 @@
 import SetupAccount from '@/components/auth/setup-account';
 import SideBar from '@/components/dashboard/layout/sidebar';
-import { getData } from '@/lib/utils/get-data';
+import { getData } from '@/lib/actions/get-data';
 
 export default async function DashboardLayout({
   children,

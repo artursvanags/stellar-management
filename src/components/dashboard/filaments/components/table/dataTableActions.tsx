@@ -23,7 +23,7 @@ import { AlertModal } from '@/components/modals/alertModal';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
 
-import { deleteFilament, updateFilament } from '@/lib/utils/filament-actions';
+import { deleteFilament, updateFilament } from '@/lib/actions/filament-actions';
 import { ActionsIcons, Icons } from '@/config/assets/icons';
 import { filamentDiameter } from '@/config/filament';
 import Link from 'next/link';
@@ -101,7 +101,6 @@ export function DataTableRowActions({ data }: CellActionProps) {
           <span>{data.id}</span>
           <span>
             {data.manufacturer} - {data.material} - {data.color} -{' '}
-           
           </span>
 
           <span>

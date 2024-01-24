@@ -157,7 +157,6 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
   };
 
   useEffect(() => {
-    console.log('use effect is rendering');
     if (initialRender.current) {
       initialRender.current = false;
     } else {
@@ -236,7 +235,6 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
               {fields.map((field, index) => (
                 <div
                   key={field.id}
-                  id={index.toString()}
                   className={`grid grid-cols-9 items-start gap-4 p-1 ${
                     showTags === index &&
                     ' rounded border border-dashed bg-primary-foreground/50'

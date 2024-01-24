@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { siteConfig } from '@/config/site';
 
 import { Toaster } from '@/components/ui/toaster';
-import { TailwindIndicator } from '@/lib/tailwind-indicator';
+import { TailwindIndicator } from '@/lib/helpers/tailwind-indicator';
 import { ThemeProvider } from '@/components/global/theme-provider';
 import { Metadata } from 'next';
 

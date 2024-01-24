@@ -23,7 +23,10 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 
-import { deleteFilaments, updateFilaments } from '@/lib/utils/filament-actions';
+import {
+  deleteFilaments,
+  updateFilaments,
+} from '@/lib/actions/filament-actions';
 import { Filaments } from '@/types/database';
 import { filamentStatus } from '@/config/filament';
 
@@ -177,9 +180,9 @@ export function DataTableToolbar<TData>({
             </DropdownMenu>
           </div>
         )}
-        {table.getSelectedRowModel().rows.length > 0  && (
+        {table.getSelectedRowModel().rows.length > 0 && (
           <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
+            {table.getFilteredSelectedRowModel().rows.length} of{' '}
             <span>
               {table.getFilteredRowModel().rows.length} row(s) selected.
             </span>

@@ -1,6 +1,6 @@
-import { getData } from '@/lib/utils/get-data';
+import { getData } from '@/lib/actions/get-data';
 
-import MyAccountForm from '@/components/forms/my-account-form';
+import MyAccountForm from '@/components/dashboard/settings/components/my-account-form';
 import DeleteAccount from '@/components/dashboard/settings/components/delete-account';
 
 const AccountTemplate: React.FC = async () => {

@@ -1,7 +1,7 @@
 import { columns } from '@/components/dashboard/filaments/components/table/columns';
 import { DataTable } from '@/components/dashboard/filaments/components/table/dataTable';
 
-import { getData } from '@/lib/utils/get-data';
+import { getData } from '@/lib/actions/get-data';
 
 export default async function FilamentTemplate() {
   const { filaments } = await getData();

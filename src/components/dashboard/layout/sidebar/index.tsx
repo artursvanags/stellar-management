@@ -5,7 +5,7 @@ import { SideBarNavigation as nav } from '@/config/dashboard';
 
 import MyAccountDropdown from '@/components/dashboard/components/my-account-dropdown';
 import SideBarNavigation from '@/components/navigation/sidebar-navigation';
-import { getData } from '@/lib/utils/get-data';
+import { getData } from '@/lib/actions/get-data';
 
 const SideBar = async () => {
   const { user } = await getData();
@@ -25,7 +25,7 @@ const SideBar = async () => {
         <SideBarNavigation items={nav.mainNav} className="flex flex-col" />
       </div>
       <div className="mt-auto">
-      <SideBarNavigation items={nav.bottomNav} className="flex flex-col" />
+        <SideBarNavigation items={nav.bottomNav} className="flex flex-col" />
         <MyAccountDropdown user={user} />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { getData } from '@/lib/utils/get-data';
+import { getData } from '@/lib/actions/get-data';
 import GeneralSettingsForm from '@/components/dashboard/settings/components/general-settings-form';
 
 const GeneralSettingsTemplate: React.FC = async () => {

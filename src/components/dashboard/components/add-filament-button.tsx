@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Icons } from '@/config/assets/icons';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
-import FilamentForm from '@/components/forms/filament-form';
+import FilamentForm from '@/components/dashboard/filaments/components/filament-form';
 
 export const AddFilamentButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
