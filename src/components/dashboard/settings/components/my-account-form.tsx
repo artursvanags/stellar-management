@@ -93,52 +93,6 @@ const MyAccountForm: React.FC = () => {
       <form onChange={onChange} onSubmit={onSubmit} className="space-y-4">
         <div className="flex flex-col space-y-4">
           <FormField
-            control={form.control}
-            name="weight_threshold"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Low Weight Threshold</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value.toString()}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a verified email to display" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {thresholdOptions.map((option) => (
-                      <SelectItem key={option} value={option.toString()}>
-                        {option.toString() ===
-                        settings.weight_threshold.toString() ? (
-                          <>
-                            {option}g<Badge className="ml-2">Current</Badge>
-                          </>
-                        ) : (
-                          <>
-                            {option}g
-                            {option === 50 && (
-                              <Badge className="ml-2" variant={'secondary'}>
-                                Default
-                              </Badge>
-                            )}
-                          </>
-                        )}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <FormDescription>
-                  Set your low weight threshold, in order to see a warning sign
-                  in your filaments.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
             name="id"
             render={() => (
               <FormItem>
