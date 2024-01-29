@@ -1,7 +1,7 @@
 'use client';
 import { Filaments } from '@/types/database';
 
-export async function addFilaments(data: Filaments) {
+export async function addFilaments(data: Filaments[]) {
   try {
     await fetch(`/api/filament/`, {
       method: 'DELETE',

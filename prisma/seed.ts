@@ -17,6 +17,7 @@ async function main() {
     await prisma.filament.createMany({
         data: filamentData.map(filament => ({
             ...filament,
+            diameter: filament.diameter.toString(),
             userId: user.id,
             status: FilamentStatus.new, // Replace FilamentStatus.Undefined with the appropriate value
         })),

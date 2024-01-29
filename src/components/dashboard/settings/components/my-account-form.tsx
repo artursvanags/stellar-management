@@ -1,13 +1,10 @@
 'use client';
 
 import * as z from 'zod';
-import axios from 'axios';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-
-import { User } from '@prisma/client';
 import { setupAuthSchema } from '@/lib/validations/auth';
 
 import { useToast } from '@/components/ui/use-toast';
@@ -21,16 +18,22 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/config/assets/icons';
+import { Badge } from '@/components/ui/badge';
+import { useUserData } from '@/lib/context/userContext';
 
 type FormData = z.infer<typeof setupAuthSchema>;
 
-interface FormProps {
-  data: User;
-}
-
-const MyAccountForm: React.FC<FormProps> = ({ data: user }) => {
+const MyAccountForm: React.FC = () => {
+  const { user, settings } = useUserData();
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
@@ -57,11 +60,23 @@ const MyAccountForm: React.FC<FormProps> = ({ data: user }) => {
   };
 
   const onSubmit = form.handleSubmit(async (formData: FormData) => {
+    setLoading(true);
     try {
-      setLoading(true);
-      await axios.patch(`/api/account/${user.id}`, formData);
+      const response = await fetch(`/api/account/${user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) {
+        throw new Error(`${response.status}`);
+      }
     } catch (error) {
-      console.error(error);
+      console.error(
+        'There has been a problem with your fetch operation:',
+        error,
+      );
     } finally {
       setIsDirty(false);
       setLoading(false);
@@ -77,6 +92,52 @@ const MyAccountForm: React.FC<FormProps> = ({ data: user }) => {
     <Form {...form}>
       <form onChange={onChange} onSubmit={onSubmit} className="space-y-4">
         <div className="flex flex-col space-y-4">
+          <FormField
+            control={form.control}
+            name="weight_threshold"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Low Weight Threshold</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value.toString()}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a verified email to display" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {thresholdOptions.map((option) => (
+                      <SelectItem key={option} value={option.toString()}>
+                        {option.toString() ===
+                        settings.weight_threshold.toString() ? (
+                          <>
+                            {option}g<Badge className="ml-2">Current</Badge>
+                          </>
+                        ) : (
+                          <>
+                            {option}g
+                            {option === 50 && (
+                              <Badge className="ml-2" variant={'secondary'}>
+                                Default
+                              </Badge>
+                            )}
+                          </>
+                        )}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <FormDescription>
+                  Set your low weight threshold, in order to see a warning sign
+                  in your filaments.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             name="id"
             render={() => (

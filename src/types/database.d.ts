@@ -1,4 +1,4 @@
-import { Tag } from '@prisma/client';
+import { Tags } from '@prisma/client';
 import type { DefaultUser } from 'next-auth'
 
 declare module 'next-auth' {
@@ -20,5 +20,5 @@ export type Filaments = {
     createdAt: Date;
     updatedAt: Date | null;
     isFavorite: boolean;
-    tags: Tag[];
+    tags: Tags[];
 }

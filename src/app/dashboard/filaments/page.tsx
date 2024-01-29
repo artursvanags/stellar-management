@@ -1,5 +1,5 @@
 import { AddFilamentButton } from '@/components/dashboard/components/add-filament-button';
-import FilamentTemplate from '@/components/dashboard/filaments/templates/filament-component';
+import FilamentTemplate from '@/components/dashboard/filaments/templates/filament-template';
 import SectionHeader from '@/components/global/section-header';
 
 const FilamentsPage = () => {

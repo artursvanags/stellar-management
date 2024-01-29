@@ -1,7 +1,6 @@
 'use client';
 
 import * as z from 'zod';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -45,11 +44,9 @@ export function TagColumn({ data }: TagColumnProps) {
   const [openTagModal, setTagModalOpen] = useState(false);
 
   useEffect(() => {
-    console.log(data.tags,   "DATA TAGS")
     setTags(data.tags);
     setInitialTags(data.tags);
   }, [data.tags]);
-
 
   const [loading, setLoading] = useState(false);
 
@@ -64,9 +61,21 @@ export function TagColumn({ data }: TagColumnProps) {
     }
     setLoading(true);
     try {
-      await axios.put(`/api/filaments/${data.id}`, formData);
-    } catch (err) {
-      throw new Error(String(err));
+      const response = await fetch(`/api/filaments/${data.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) {
+        throw new Error(`${response.status}`);
+      }
+    } catch (error) {
+      console.error(
+        'There has been a problem with your fetch operation:',
+        error,
+      );
     } finally {
       setTagModalOpen(false);
       setLoading(false);

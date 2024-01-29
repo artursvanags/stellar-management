@@ -5,12 +5,11 @@ import { SideBarNavigation as nav } from '@/config/dashboard';
 
 import MyAccountDropdown from '@/components/dashboard/components/my-account-dropdown';
 import SideBarNavigation from '@/components/navigation/sidebar-navigation';
-import { getData } from '@/lib/actions/get-data';
+
+import { getUser } from '@/lib/actions/get-data';
 
 const SideBar = async () => {
-  const { user } = await getData();
-  if (!user) return null;
-
+  const user = await getUser();
   return (
     <div className="flex h-screen flex-col gap-4 p-4">
       <div className="flex h-20 items-center border-b">

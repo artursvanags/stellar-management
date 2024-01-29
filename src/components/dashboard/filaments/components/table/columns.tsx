@@ -19,6 +19,8 @@ import { Icons } from '@/config/assets/icons';
 
 import { TagColumn } from '@/components/dashboard/filaments/components/table/tag-column';
 import { StatusColumn } from '@/components/dashboard/filaments/components/table/status-column';
+import { Tags } from '@prisma/client';
+import { useUserData } from '@/lib/context/userContext';
 
 export const columns: ColumnDef<Filaments>[] = [
   {
@@ -94,13 +96,15 @@ export const columns: ColumnDef<Filaments>[] = [
       <DataTableColumnHeader column={column} title="Remaining" />
     ),
     cell: ({ row }) => {
+      const { settings } = useUserData();
       const netWeight = row.original.weight;
       const remainingWeight = row.original.remainingWeight;
       const percentage = parseFloat(
         ((remainingWeight / netWeight) * 100).toFixed(2),
       );
       const color =
-        remainingWeight < 50 && row.original.status !== 'archived'
+        remainingWeight < parseFloat(settings.weight_threshold) &&
+        row.original.status !== 'archived'
           ? 'text-red-400 group-hover/weight:text-red-400'
           : 'text-muted-foreground/10 group-hover/weight:text-muted-foreground';
 
@@ -142,6 +146,19 @@ export const columns: ColumnDef<Filaments>[] = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
+    sortingFn: (rowA, rowB) => {
+      const statusA = rowA.original.status === 'archived';
+      const statusB = rowB.original.status === 'archived';
+      if (statusA !== statusB) {
+        return statusA ? 1 : -1;
+      } else {
+        // If both rows have the same status, sort by 'createdAt'
+        return (
+          new Date(rowB.original.createdAt).getTime() -
+          new Date(rowA.original.createdAt).getTime()
+        );
+      }
+    },
   },
   {
     accessorKey: 'tags',
@@ -150,7 +167,8 @@ export const columns: ColumnDef<Filaments>[] = [
     ),
     cell: ({ row }) => <TagColumn data={row.original} />,
     filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
+      const rowTags: Tags[] = row.getValue(id);
+      return rowTags.some((tag) => value.includes(tag.name));
     },
     sortingFn: (rowA, rowB) => {
       return rowA.original.tags.length - rowB.original.tags.length;
@@ -162,7 +180,10 @@ export const columns: ColumnDef<Filaments>[] = [
       <DataTableColumnHeader column={column} title="Date Created" />
     ),
     cell: ({ row }) => {
-      const date = new Date(row.original.createdAt).toLocaleDateString('de-DE');
+      const userData = useUserData();
+      const date = new Date(row.original.createdAt).toLocaleDateString(
+        userData.settings?.timezone_format,
+      );
       return <div>{date}</div>;
     },
   },

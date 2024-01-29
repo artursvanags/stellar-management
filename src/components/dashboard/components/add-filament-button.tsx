@@ -4,11 +4,11 @@ import { useState } from 'react';
 import { Icons } from '@/config/assets/icons';
 import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
-import FilamentForm from '@/components/dashboard/filaments/components/filament-form';
+import FilamentForm from '@/components/dashboard/filaments/components/add-filament-form';
 
 export const AddFilamentButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isInteractingOutside, setIsInteractingOutside] = useState(false);
+  const [isInInteraction, setInInteraction] = useState(false);
 
   const onCloseModal = () => {
     setIsModalOpen(false);
@@ -21,14 +21,16 @@ export const AddFilamentButton = () => {
         description="Add up to 25 filaments to your collection"
         isOpen={isModalOpen}
         onClose={onCloseModal}
-        className="max-h-screen lg:min-w-[1200px]"
+        className="max-h-screen md:min-w-full xl:min-w-[1200px]"
         onInteractOutside={
-          isInteractingOutside ? (e) => e.preventDefault() : undefined
+          isInInteraction ? (e) => e.preventDefault() : undefined
         }
+        onEscapeKeyDown={isInInteraction ? (e) => e.preventDefault() : undefined}
+        onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <FilamentForm
           setCloseModal={onCloseModal}
-          setInteraction={setIsInteractingOutside}
+          setInteraction={setInInteraction}
         />
       </Modal>
       <Button

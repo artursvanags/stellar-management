@@ -28,6 +28,8 @@ import {
 import { DataTableToolbar } from './dataTableToolbar';
 import { DataTablePagination } from './dataTablePagination';
 
+import { useUserData } from '@/lib/context/userContext';
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -43,9 +45,15 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-  const [sorting, setSorting] = React.useState<SortingState>([
-    { id: 'createdAt', desc: true },
-  ]);
+  const userData = useUserData();
+  const [sorting, setSorting] = React.useState<SortingState>(
+    userData.settings?.auto_sort_archive
+      ? [
+          { id: 'status', desc: false },
+          { id: 'createdAt', desc: true },
+        ]
+      : [{ id: 'createdAt', desc: true }],
+  );
 
   const table = useReactTable({
     data,
@@ -98,6 +106,11 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className={
+                    row.original.status === 'archived'
+                      ? 'bg-secondary/30 text-muted-foreground'
+                      : ''
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

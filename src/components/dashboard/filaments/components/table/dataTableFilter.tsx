@@ -32,13 +32,31 @@ interface DataTableFacetedFilter<TData, TValue> {
   }[]
 }
 
+function flattenCounts(valueMap: any) {
+  const flattenedCounts = new Map();
+
+  for (const [values, count] of valueMap.entries()) {
+    if (Array.isArray(values)) {
+      for (const value of values) {
+        const currentCount = flattenedCounts.get(value.name) || 0;
+        flattenedCounts.set(value.name, currentCount + count);
+      }
+    } else {
+      const currentCount = flattenedCounts.get(values) || 0;
+      flattenedCounts.set(values, currentCount + count);
+    }
+  }
+
+  return flattenedCounts;
+}
+
 export function DataTableFacetedFilter<TData, TValue>({
   column,
   title,
   options,
-}: DataTableFacetedFilter<TData, TValue>) {
-  const facets = column?.getFacetedUniqueValues()
-  const selectedValues = new Set(column?.getFilterValue() as string[])
+}: DataTableFacetedFilter<TData, TValue>) { 
+  const facets = flattenCounts(column?.getFacetedUniqueValues());
+  const selectedValues = new Set(column?.getFilterValue() as string[]);
 
   return (
     <Popover>

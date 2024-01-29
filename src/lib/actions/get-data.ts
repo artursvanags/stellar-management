@@ -1,31 +1,35 @@
+'use server';
+
 import prismadb from '@/lib/utils/database';
-import { getServerSession } from 'next-auth/next';
+import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/options';
-import { cache } from 'react';
 
-export const getUserId = async () => {
-  const session = await getServerSession(authOptions);
-
-  if (!session) {
-    throw new Error('Session or user not found');
-  } else if (!session.user) {
-    throw new Error('User not found');
-  }
-
-  return session.user.id;
-};
-
-export const data = async () => {
-  const userId = await getUserId();
-
+export async function getUser() {
   try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user || !session.user.email) {
+      throw new Error('Session not found');
+    }
+
     const user = await prismadb.user.findUnique({
-      where: { id: userId },
+      where: { email: session.user.email },
+      include: {
+        settings: true,
+      },
     });
 
     if (!user) {
       throw new Error('User not found');
     }
+    return user;
+  } catch (err) {
+    throw new Error('Unexpected error occurred: ' + err);
+  }
+}
+
+export const getFilaments = async () => {
+  try {
+    const user = await getUser();
 
     const filaments = await prismadb.filament.findMany({
       where: { userId: user.id },
@@ -34,20 +38,48 @@ export const data = async () => {
       },
     });
 
+    return filaments;
+  } catch (err) {
+    throw new Error('Unexpected error occoured:' + err);
+  }
+};
+
+export const getTags = async () => {
+  try {
+    const user = await getUser();
+
+    const tags = await prismadb.tags.findMany({
+      where: { userId: user.id },
+    });
+
+    return tags;
+  } catch (err) {
+    throw new Error('Unexpected error occoured:' + err);
+  }
+};
+
+export const getData = async () => {
+  try {
+    const user = await getUser();
+
     const userSettings = await prismadb.userSettings.findFirst({
       where: { userId: user.id },
     });
 
-    const billing = await prismadb.billing.findFirst({
+    const filaments = await prismadb.filament.findMany({
+      where: { userId: user.id },
+      include: {
+        tags: true,
+      },
+    });
+
+    const tags = await prismadb.tags.findMany({
       where: { userId: user.id },
     });
 
-    return { user, filaments, billing, userSettings };
+    return { user, settings: userSettings, filaments, tags };
   } catch (err) {
     console.error(err);
-    return { user: null, filaments: [], billing: null, userSettings: null };
+    return { user: null, filaments: [], tags: null };
   }
 };
-
-export const getData = cache(data);
-

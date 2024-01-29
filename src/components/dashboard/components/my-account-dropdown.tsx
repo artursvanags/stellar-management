@@ -28,7 +28,6 @@ interface MyAccountDropdownProps {
 }
 
 export default function MyAccountDropdown({ user }: MyAccountDropdownProps) {
-  
   const buttonRef = useRef<HTMLDivElement>(null);
   const [buttonWidth, setButtonWidth] = useState(0);
   const { setTheme, resolvedTheme } = useTheme();
@@ -74,16 +73,16 @@ export default function MyAccountDropdown({ user }: MyAccountDropdownProps) {
             )}
           >
             <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.image || ''} />
+              <AvatarImage src={user.image || ''} />
               <AvatarFallback>
-                {user?.name?.split(' ').map((i) => i.slice(0, 1))}
+                {user.name?.split(' ').map((i) => i.slice(0, 1))}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col text-xs">
               <span className=" font-normal text-muted-foreground">
                 My Account
               </span>
-              <span>{user?.name}</span>
+              <span>{user.name}</span>
             </div>
             <MyAccount.Chevron className="ml-auto h-4 w-4" />
           </div>

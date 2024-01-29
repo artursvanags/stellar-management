@@ -1,8 +1,5 @@
 'use client';
-import axios from 'axios';
-
 import { useState } from 'react';
-import { User } from '@prisma/client';
 
 import { signOut } from 'next-auth/react';
 
@@ -10,14 +7,10 @@ import { AlertModal } from '@/components/modals/alertModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
+import { useUserData } from '@/lib/context/userContext';
 
-
-
-interface DeleteAccountProps {
-  data: User;
-}
-
-const DeleteAccount: React.FC<DeleteAccountProps> = ({ data: user }) => {
+const DeleteAccount: React.FC = () => {
+  const { user } = useUserData();
   const keyword = user.email;
 
   const [open, openModal] = useState(false);
@@ -34,10 +27,22 @@ const DeleteAccount: React.FC<DeleteAccountProps> = ({ data: user }) => {
       return;
     }
     setLoading(true);
+
     try {
-      await axios.delete(`/api/account/${user.id}`);
-    } catch (err) {
-      console.log(err);
+      const response = await fetch(`/api/account/${user.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`${response.status}`);
+      }
+    } catch (error) {
+      console.error(
+        'There has been a problem with your fetch operation:',
+        error,
+      );
     } finally {
       await signOut({
         callbackUrl: `${window.location.origin}/`,

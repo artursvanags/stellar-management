@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { checkUserSession } from '@/lib/utils/checkUserSession';
 
 import prismadb from '@/lib/utils/database';
-import { any } from 'zod';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,8 +52,8 @@ export async function POST(request: Request) {
       if (item.tags && item.tags.length > 0) {
         filamentData.tags = {
           connectOrCreate: item.tags.map((tag: any) => ({
-            where: tag,
-            create: tag,
+            where: { name: tag.name, userId: user?.id },
+            create: { name: tag.name, userId: user?.id },
           })),
         };
       }

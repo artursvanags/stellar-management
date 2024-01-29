@@ -1,7 +1,7 @@
 import SectionInformation from '@/components/global/section-information';
 import GeneralSettingsTemplate from '@/components/dashboard/settings/templates/general';
 
-const GeneralSettingsPage = () => {
+const GeneralSettingsPage = () => { 
   return (
     <div className="space-y-6">
       <SectionInformation

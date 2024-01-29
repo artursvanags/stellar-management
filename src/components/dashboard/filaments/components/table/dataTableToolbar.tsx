@@ -18,7 +18,7 @@ import { Input } from '@/components/ui/input';
 
 import { DeleteAlertModal } from '@/components/modals/deleteAlertModal';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
@@ -50,10 +50,6 @@ export function DataTableToolbar<TData>({
 
   useEffect(() => {
     setData(selectedRowIDs as Filaments[]);
-    console.log([
-      'Selected Rows:' + table.getSelectedRowModel().rows.length,
-      'Visible Rows:' + table.getRowModel().rows.length,
-    ]);
   }, [table, table.getSelectedRowModel().rows.length]);
 
   const onDelete = async () => {
@@ -188,7 +184,7 @@ export function DataTableToolbar<TData>({
             </span>
           </div>
         )}
-        <div className="ml-auto flex">
+        <div className="ml-auto flex gap-2">
           {table.getColumn('status') && (
             <DataTableFacetedFilter
               column={table.getColumn('status')}
@@ -196,6 +192,7 @@ export function DataTableToolbar<TData>({
               options={Object.values(filamentStatus)}
             />
           )}
+          
         </div>
 
         <DataTableViewOptions table={table} />

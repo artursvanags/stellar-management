@@ -1,7 +1,6 @@
 'use client';
 
 import { z } from 'zod';
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -36,6 +35,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 import { Button } from '@/components/ui/button';
@@ -54,23 +60,34 @@ const fieldLabels = {
   manufacturer: {
     label: 'Manufacturer',
     placeholder: 'Prusa',
+    tooltip: 'The manufacturer of the filament',
   },
   material: {
     label: 'Material',
     placeholder: 'PLA',
+    tooltip: 'The material of the filament',
   },
   color: {
     label: 'Color',
     placeholder: 'Galaxy Black',
+    tooltip: 'The color of the filament',
   },
   diameter: {
     label: 'Diameter (mm)',
     placeholder: '1.75',
+    tooltip: 'The diameter of the filament',
   },
   weight: {
     label: 'Weight (g)',
     placeholder: 'Net weight',
     remainingPlaceholder: 'Remaining',
+    tooltip:
+      'The manufacturer weight of the filament ( not including the spool ) ',
+  },
+  remaininghWeight: {
+    label: 'Remaining Weight (g)',
+    placeholder: 'Remaining',
+    tooltip: 'The remaining weight of the filament. ',
   },
   status: {
     label: 'Status',
@@ -94,6 +111,9 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
     defaultValues: {
       filaments: [
         {
+          manufacturer: '',
+          material: '',
+          color: '',
           diameter: filamentDiameter.default.value,
           status: filamentStatus.new.value,
         },
@@ -170,7 +190,7 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
   };
 
   const onSubmit = form.handleSubmit(async (formData) => {
-    const filaments = Object.values(formData['filaments']).map((filament) => {
+    const filaments = Object.values(formData.filaments).map((filament) => {
       const { tags, ...rest } = filament;
       return {
         ...rest,
@@ -182,7 +202,22 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
     setInteraction(true);
     setLoading(true);
     try {
-      await axios.post(`/api/filaments`, filaments);
+      const response = await fetch(`/api/filaments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(filaments),
+      });
+      if (!response.ok) {
+        throw new Error(`${response.status}`);
+      }
+    } catch (error) {
+      console.error(
+        'There has been a problem with your fetch operation:',
+        error,
+      );
+    } finally {
       toast({
         title: 'Success!',
         description: `You have successfully added ${
@@ -191,53 +226,49 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
             : `new ${fields.length} filaments`
         } to your collection.`,
       });
-    } catch (error) {
-      console.error(
-        'There has been a problem with your fetch operation:',
-        error,
-      );
+      setCloseModal();
+      setInteraction(false);
+      setLoading(false);
+      router.refresh();
     }
-    setCloseModal();
-    setInteraction(false);
-    setLoading(false);
-    router.refresh();
   });
 
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="flex flex-col gap-4 py-4">
-        <div className="flex flex-col gap-2">
-          <div className="grid grid-cols-9 items-center gap-4 px-1 pr-3">
+      <form onSubmit={onSubmit} className="flex flex-col py-2">
+        <div className="m-1 grid grid-cols-9 items-center gap-4 pb-2">
+          <TooltipProvider>
             <Label htmlFor="manufacturer" className="col-span-2 text-left">
               {fieldLabels.manufacturer.label}
             </Label>
-            <Label htmlFor="material" className="text-left">
-              {fieldLabels.material.label}
-            </Label>
-            <Label htmlFor="color" className="text-left">
-              {fieldLabels.color.label}
-            </Label>
-            <Label htmlFor="diameter" className="text-left">
-              {fieldLabels.diameter.label}
-            </Label>
-            <Label htmlFor="weight" className="col-span-2 text-left">
-              {fieldLabels.weight.label}
-            </Label>
-            <Label htmlFor="status" className="text-left">
-              {fieldLabels.status.label}
-            </Label>
-            <Label htmlFor="tags" className="text-left">
-              {fieldLabels.tags.label}
-            </Label>
-          </div>
-          <ScrollArea className="absolute pr-4">
-            <div className="max-h-[70vh] space-y-2">
+            <Label htmlFor="material">{fieldLabels.material.label}</Label>
+            <Label htmlFor="color">{fieldLabels.color.label}</Label>
+            <Label htmlFor="diameter">{fieldLabels.diameter.label}</Label>
+            <div className="col-span-2 ">
+              <Tooltip>
+                <TooltipTrigger>
+                  <Label htmlFor="weight" className="group flex cursor-pointer">
+                    {fieldLabels.weight.label}
+                    <Icons.Info className="ml-2 h-4 w-4 text-muted-foreground transition-colors group-hover:text-primary" />
+                  </Label>
+                </TooltipTrigger>
+                <TooltipContent>{fieldLabels.weight.tooltip}</TooltipContent>
+              </Tooltip>
+            </div>
+
+            <Label htmlFor="status">{fieldLabels.status.label}</Label>
+            <Label htmlFor="tags">{fieldLabels.tags.label}</Label>
+          </TooltipProvider>
+        </div>
+
+        <ScrollArea type="always">
+          <div className="max-h-[70vh]">
+            <div className="m-1 space-y-2">
               {fields.map((field, index) => (
                 <div
                   key={field.id}
-                  className={`grid grid-cols-9 items-start gap-4 p-1 ${
-                    showTags === index &&
-                    ' rounded border border-dashed bg-primary-foreground/50'
+                  className={`grid grid-cols-9 items-start gap-4 ${
+                    showTags === index && 'rounded bg-primary-foreground/50 p-2'
                   }`}
                 >
                   <FormField
@@ -246,7 +277,7 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
                     render={({ field }) => (
                       <FormItem className="col-span-2 flex flex-col items-center">
                         <FormControl>
-                          <div className="relative flex items-center">
+                          <div className="relative flex w-full items-center">
                             <span className="absolute ml-2 rounded-md bg-muted px-1 text-sm text-muted-foreground">
                               #{index + 1}
                             </span>
@@ -485,9 +516,10 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
                 </div>
               ))}
             </div>
-          </ScrollArea>
-        </div>
-        <div className="flex gap-2">
+          </div>
+        </ScrollArea>
+
+        <div className="flex gap-2 pt-4">
           <Button
             icon={<Icons.plus className="mr-2 h-5 w-5" />}
             type="button"

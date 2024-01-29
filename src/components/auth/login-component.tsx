@@ -1,6 +1,6 @@
 'use client';
 
-import { UserAuthForm } from '@/components/forms/user-auth-form';
+import { UserAuthForm } from '@/components/auth/user-auth-form';
 import { siteConfig } from '@/config/site';
 import Logo from '@/config/assets/logo';
 

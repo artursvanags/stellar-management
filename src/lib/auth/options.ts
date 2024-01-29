@@ -7,6 +7,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 
 import prismadb from '@/lib/utils/database';
 import { sendVerificationRequest } from '@/lib/email/verificationRequest';
+import { createUserSettings } from './create-user-settings';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prismadb),
@@ -31,18 +32,7 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     async createUser(message) {
-      // Check if user has user preferences, if not create them with default values
-      const userPreferences = await prismadb.userSettings.findUnique({
-        where: { userId: message.user.id },
-      });
-  
-      if (!userPreferences) {
-        await prismadb.userSettings.create({
-          data: {
-            userId: message.user.id,
-          },
-        });
-      }
+      await createUserSettings(message);
     },
   },
 

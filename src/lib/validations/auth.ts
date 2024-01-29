@@ -24,6 +24,7 @@ export const billingAddressSchema = z.object({
 export const userSettingsSchema = z.object({
   weight_threshold: z.string(),
   auto_archive: z.boolean(),
+  auto_sort_archive: z.boolean(),
 });
 
 export const tagsSchema = z.object({
