@@ -10,7 +10,7 @@ export async function checkUserSession() {
     if (!session || !session.user || !session.user.email) {
       return {
         user: null,
-        error: { message: 'Session not found', status: 401 },
+        error: "Session not found",
       };
     }
 
