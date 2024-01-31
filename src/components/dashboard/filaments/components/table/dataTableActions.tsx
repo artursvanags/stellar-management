@@ -1,20 +1,13 @@
 'use client';
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { Row, RowSelection } from '@tanstack/react-table';
 
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Filaments } from '@/types/database';
@@ -23,10 +16,7 @@ import { AlertModal } from '@/components/modals/alertModal';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
 
-import { deleteFilament, updateFilament } from '@/lib/actions/filament-actions';
-import { ActionsIcons, Icons } from '@/config/assets/icons';
-import { filamentDiameter } from '@/config/filament';
-import Link from 'next/link';
+import { ActionsIcons } from '@/config/assets/icons';
 
 interface CellActionProps {
   data: Filaments;
@@ -42,7 +32,12 @@ export function DataTableRowActions({ data }: CellActionProps) {
   const onDelete = async () => {
     setLoading(true);
     try {
-      await deleteFilament(data.id);
+      await fetch(`/api/filaments/${data.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
     } catch (error) {
       console.error(error);
     }
@@ -55,10 +50,18 @@ export function DataTableRowActions({ data }: CellActionProps) {
     });
   };
 
-  const toggleArchive = async () => {
+  const setArchive = async () => {
     const newStatus = data.status === 'archived' ? 'used' : 'archived';
     try {
-      await updateFilament(data.id, { status: newStatus });
+      await fetch(`/api/filaments/${data.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: newStatus,
+        }),
+      });
     } catch (error) {
       console.error(error);
     }
@@ -74,7 +77,15 @@ export function DataTableRowActions({ data }: CellActionProps) {
 
   const toggleFavorite = async () => {
     try {
-      await updateFilament(data.id, { isFavorite: !data.isFavorite });
+      await fetch(`/api/filaments/${data.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          isFavorite: !data.isFavorite,
+        }),
+      });
     } catch (error) {
       console.error(error);
     }
@@ -144,7 +155,7 @@ export function DataTableRowActions({ data }: CellActionProps) {
             )}
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={toggleArchive}
+            onClick={setArchive}
             disabled={data.status === 'archived'}
             className="cursor-pointer"
           >
