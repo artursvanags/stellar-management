@@ -3,7 +3,7 @@ import { DataTableViewOptions } from '@/components/dashboard/filaments/component
 import { DataTableFacetedFilter } from '@/components/dashboard/filaments/components/table/dataTableFilter';
 
 import { Icons } from '@/config/assets/icons';
-import { Table, isRowSelected } from '@tanstack/react-table';
+import { Table } from '@tanstack/react-table';
 
 import {
   DropdownMenu,
@@ -14,19 +14,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 
 import { DeleteAlertModal } from '@/components/modals/deleteAlertModal';
 
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 
-import {
-  deleteFilaments,
-  updateFilaments,
-} from '@/lib/actions/filament-actions';
 import { Filaments } from '@/types/database';
 import { filamentStatus } from '@/config/filament';
 
@@ -55,7 +50,13 @@ export function DataTableToolbar<TData>({
   const onDelete = async () => {
     setLoading(true);
     try {
-      await deleteFilaments(data);
+      await fetch(`/api/filaments/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data.map((item) => item.id)),
+      });
     } catch (error) {
       console.error(error);
     }
@@ -71,12 +72,16 @@ export function DataTableToolbar<TData>({
   const onArchive = async () => {
     setLoading(true);
     try {
-      await updateFilaments(
-        data.map((item) => ({
-          id: item.id,
-          status: 'archived',
-        })),
-      );
+      await fetch(`/api/filaments/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ids: data.map((item) => item.id),
+          data: {status: filamentStatus.archived},
+        }),
+      });
     } catch (error) {
       console.error(error);
     }
@@ -93,12 +98,16 @@ export function DataTableToolbar<TData>({
 
   const toggleFavorite = async () => {
     try {
-      await updateFilaments(
-        data.map((item) => ({
-          id: item.id,
-          isFavorite: !allFavorite,
-        })),
-      );
+      await fetch(`/api/filaments/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ids: data.map((item) => item.id),
+          data: {isFavorite: !allFavorite},
+        }),
+      });
     } catch (error) {
       console.error(error);
     }
@@ -192,7 +201,6 @@ export function DataTableToolbar<TData>({
               options={Object.values(filamentStatus)}
             />
           )}
-          
         </div>
 
         <DataTableViewOptions table={table} />
