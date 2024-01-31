@@ -4,7 +4,6 @@ import { ToolStackIcons } from '@/config/assets/icons';
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
@@ -46,14 +45,12 @@ export default function Features() {
           Toolstack
         </h2>
         <div className="mx-auto flex gap-4 py-8 sm:grid-cols-3">
-          <TooltipProvider delayDuration={0}>
-            {ToolStack.map((i, index) => (
-              <Tooltip key={index}>
-                <TooltipTrigger>{i.icon}</TooltipTrigger>
-                <TooltipContent>{i.tool}</TooltipContent>
-              </Tooltip>
-            ))}
-          </TooltipProvider>
+          {ToolStack.map((i, index) => (
+            <Tooltip key={index}>
+              <TooltipTrigger>{i.icon}</TooltipTrigger>
+              <TooltipContent>{i.tool}</TooltipContent>
+            </Tooltip>
+          ))}
         </div>
       </div>
     </section>

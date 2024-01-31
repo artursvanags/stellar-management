@@ -9,6 +9,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { TailwindIndicator } from '@/lib/helpers/tailwind-indicator';
 import { ThemeProvider } from '@/components/global/theme-provider';
 import { Metadata } from 'next';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -43,7 +44,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <main className="relative">{children}</main>
+          <TooltipProvider delayDuration={100}>
+            <main className="relative">{children}</main>
+          </TooltipProvider>
           <TailwindIndicator />
         </ThemeProvider>
         <Toaster />
