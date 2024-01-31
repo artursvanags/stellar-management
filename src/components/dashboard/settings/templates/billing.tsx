@@ -1,8 +1,8 @@
-import { getData } from '@/lib/actions/get-data';
+import { getMultipleFilaments } from '@/lib/actions/get-data-actions';
 import PlanOverview from '@/components/dashboard/settings/components/plan-overview';
 
 const BillingTemplate: React.FC = async () => {
-  const data = await getData();
+  const data = await getMultipleFilaments();
   if (!data) return null;
   return (
     <div className="space-y-6">
