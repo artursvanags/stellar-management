@@ -1,5 +1,5 @@
 import SideBar from '@/components/dashboard/layout/sidebar';
-import { getUser } from '@/lib/actions/get-data';
+import { getUser } from '@/lib/actions/get-data-actions';
 import { UserDataProvider } from '@/lib/context/userContext';
 
 export default async function DashboardLayout({
