@@ -1,17 +1,17 @@
 'use client';
 import React, { createContext, useContext } from 'react';
 import { UserSettings, User } from '@prisma/client';
+import { getUser } from '../actions/get-data-actions';
 
-interface UserData extends User {
-  settings: UserSettings | null;
-}
+type UserData = Awaited<ReturnType<typeof getUser>>;
+
 const UserDataContext = createContext<{
   user: User;
   settings: UserSettings;
 } | null>(null);
 
 interface UserSettingsProviderProps {
-  data: UserData;
+  data: UserData | null;
   children?: React.ReactNode;
 }
 
@@ -19,8 +19,11 @@ export const UserDataProvider = ({
   children,
   data,
 }: UserSettingsProviderProps) => {
+  if (!data) {
+    throw new Error('UserDataProvider requires a valid data object');
+  }
   let { settings, ...user } = data;
-  if (settings === null) {
+  if (!settings) {
     settings = {} as UserSettings;
   }
   return (
