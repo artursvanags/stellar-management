@@ -34,10 +34,19 @@ export const tagsSchema = z.object({
 export const filamentSchema = z.object({
   filaments: z.array(
     z.object({
-      manufacturer: z.string().max(30, 'Manufacturer must contain at most 30 characters.').min(1),
-      material: z.string().max(30, 'Material must contain at most 30 characters.').min(1),
+      manufacturer: z
+        .string()
+        .max(30, 'Manufacturer must contain at most 30 characters.')
+        .min(1),
+      material: z
+        .string()
+        .max(30, 'Material must contain at most 30 characters.')
+        .min(1),
       diameter: z.string(),
-      color: z.string().max(30, 'Color must contain at most 30 characters.').min(1),
+      color: z
+        .string()
+        .max(30, 'Color must contain at most 30 characters.')
+        .min(1),
       weight: z.string().min(1),
       remainingWeight: z.string().min(1),
       status: z.string(),
@@ -46,7 +55,7 @@ export const filamentSchema = z.object({
           id: z.string(),
           name: z.string(),
         }),
-      ),
+      ).optional(),
     }),
   ),
 });
