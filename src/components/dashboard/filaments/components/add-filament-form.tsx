@@ -38,7 +38,6 @@ import {
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 
@@ -48,6 +47,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Icons, Spinner } from '@/config/assets/icons';
 import { Tag, TagInput } from '@/components/ui/tag-input';
+import { createMultipleFilaments } from '@/lib/actions/mutate-data-actions';
 
 interface FilamentFormProps {
   setInteraction: (disabled: boolean) => void;
@@ -189,16 +189,29 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
     for (let i = fields.length - 1; i > 0; i--) handleRemoveCopy(i);
   };
 
-  const onSubmit = form.handleSubmit(async (formData) => {
-    const filaments = Object.values(formData.filaments).map((filament) => {
+  const prepareFormData = (data: FormData) => {
+    const prepareData = data.filaments.map((filament) => {
       const { tags, ...rest } = filament;
+      const { weight, remainingWeight } = rest;
+      if (tags && tags.length > 0)
+        return {
+          ...rest,
+          weight: parseFloat(weight),
+          remainingWeight: parseFloat(remainingWeight),
+          ...(tags ? { tags: tags.map((tag) => ({ name: tag.name })) } : {}),
+        };
       return {
         ...rest,
-        weight: parseFloat(filament.weight),
-        remainingWeight: parseFloat(filament.remainingWeight),
-        ...(tags ? { tags: tags.map((tag) => ({ name: tag.name })) } : {}),
+        weight: parseFloat(weight),
+        remainingWeight: parseFloat(remainingWeight),
       };
     });
+    return prepareData;
+  };
+
+  const onSubmit = form.handleSubmit(async (formData) => {
+    const data = prepareFormData(formData);
+
     setInteraction(true);
     setLoading(true);
     try {
@@ -207,7 +220,7 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(filaments),
+        body: JSON.stringify(data),
       });
       if (!response.ok) {
         throw new Error(`${response.status}`);
@@ -226,7 +239,7 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
             : `new ${fields.length} filaments`
         } to your collection.`,
       });
-      setCloseModal();
+      //setCloseModal();
       setInteraction(false);
       setLoading(false);
       router.refresh();
@@ -237,28 +250,26 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
     <Form {...form}>
       <form onSubmit={onSubmit} className="flex flex-col py-2">
         <div className="m-1 grid grid-cols-9 items-center gap-4 pb-2">
-          <TooltipProvider>
-            <Label htmlFor="manufacturer" className="col-span-2 text-left">
-              {fieldLabels.manufacturer.label}
-            </Label>
-            <Label htmlFor="material">{fieldLabels.material.label}</Label>
-            <Label htmlFor="color">{fieldLabels.color.label}</Label>
-            <Label htmlFor="diameter">{fieldLabels.diameter.label}</Label>
-            <div className="col-span-2 ">
-              <Tooltip>
-                <TooltipTrigger>
-                  <Label htmlFor="weight" className="group flex cursor-pointer">
-                    {fieldLabels.weight.label}
-                    <Icons.Info className="ml-2 h-4 w-4 text-muted-foreground transition-colors group-hover:text-primary" />
-                  </Label>
-                </TooltipTrigger>
-                <TooltipContent>{fieldLabels.weight.tooltip}</TooltipContent>
-              </Tooltip>
-            </div>
+          <Label htmlFor="manufacturer" className="col-span-2 text-left">
+            {fieldLabels.manufacturer.label}
+          </Label>
+          <Label htmlFor="material">{fieldLabels.material.label}</Label>
+          <Label htmlFor="color">{fieldLabels.color.label}</Label>
+          <Label htmlFor="diameter">{fieldLabels.diameter.label}</Label>
+          <div className="col-span-2 ">
+            <Tooltip>
+              <TooltipTrigger>
+                <Label htmlFor="weight" className="group flex cursor-pointer">
+                  {fieldLabels.weight.label}
+                  <Icons.Info className="ml-2 h-4 w-4 text-muted-foreground transition-colors group-hover:text-primary" />
+                </Label>
+              </TooltipTrigger>
+              <TooltipContent>{fieldLabels.weight.tooltip}</TooltipContent>
+            </Tooltip>
+          </div>
 
-            <Label htmlFor="status">{fieldLabels.status.label}</Label>
-            <Label htmlFor="tags">{fieldLabels.tags.label}</Label>
-          </TooltipProvider>
+          <Label htmlFor="status">{fieldLabels.status.label}</Label>
+          <Label htmlFor="tags">{fieldLabels.tags.label}</Label>
         </div>
 
         <ScrollArea type="always">
@@ -446,12 +457,11 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
                         setShowTags(showTags === index ? null : index)
                       }
                     >
-                      {form.watch(`filaments.${index}.tags`) &&
-                        form.watch(`filaments.${index}.tags`).length > 0 && (
-                          <span className="absolute -right-1 -top-1 rounded bg-primary px-1 text-xs font-bold text-primary-foreground">
-                            {form.watch(`filaments.${index}.tags`).length}
-                          </span>
-                        )}
+                      {form.watch(`filaments.${index}.tags`)?.length ? (
+                        <span className="absolute -right-1 -top-1 rounded bg-primary px-1 text-xs font-bold text-primary-foreground">
+                          {form.watch(`filaments.${index}.tags`)?.length ?? 0}
+                        </span>
+                      ) : null}
                     </Button>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
