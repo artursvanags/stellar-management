@@ -99,15 +99,16 @@ export const columns: ColumnDef<Filaments>[] = [
       const { settings } = useUserData();
       const netWeight = row.original.weight;
       const remainingWeight = row.original.remainingWeight;
+      const weightThreshold = settings
+        ? parseFloat(settings.weight_threshold)
+        : 0;
       const percentage = parseFloat(
         ((remainingWeight / netWeight) * 100).toFixed(2),
       );
       const color =
-        remainingWeight < parseFloat(settings.weight_threshold) &&
-        row.original.status !== 'archived'
+        remainingWeight < weightThreshold && row.original.status !== 'archived'
           ? 'text-red-400 group-hover/weight:text-red-400'
           : 'text-muted-foreground/10 group-hover/weight:text-muted-foreground';
-
       return (
         <div className="group/weight">
           <TooltipProvider delayDuration={200}>
