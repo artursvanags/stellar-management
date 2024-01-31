@@ -50,8 +50,6 @@ model User {
   accounts      Account[]
   sessions      Session[]
   filaments     Filament[]
-  tags          Tags[]
-  billing       Billing?
 }
 
 model UserSettings {
@@ -64,20 +62,6 @@ model UserSettings {
   updatedAt         DateTime? @updatedAt
 }
 
-model Billing {
-  id        String    @id @default(uuid())
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String    @unique
-  phone     String
-  country   String
-  address   String
-  city      String
-  zip       String
-  state     String
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
-}
-
 model VerificationToken {
   identifier String
   token      String   @unique
@@ -87,29 +71,27 @@ model VerificationToken {
 }
 
 model Tags {
-  id        String     @id @default(uuid())
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-  name      String     @unique
+  id        String           @id @default(uuid())
+  name      String
   filaments Filament[]
 
-  @@index([userId])
+  @@unique([name])
 }
 
 model Filament {
-  id              String         @id @default(uuid())
-  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              String           @id @default(uuid())
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
-  status          FilamentStatus @default(new)
+  status          FilamentStatus   @default(new)
   diameter        String
   manufacturer    String
   material        String
   color           String
   weight          Float
   remainingWeight Float
-  isFavorite      Boolean        @default(false)
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime?      @updatedAt
+  isFavorite      Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime?        @updatedAt
   tags            Tags[]
 
   @@index([userId])
