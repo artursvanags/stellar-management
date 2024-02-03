@@ -70,10 +70,24 @@ export const createMultipleFilaments = async (
   await prismadb.$transaction(operations);
 };
 
-export const updateFilament = async (id: string, data: Partial<Filament>) => {
+export const updateFilament = async (
+  id: string,
+  data: Partial<FilamentWithTags>,
+) => {
+  const { tags, ...rest } = data;
+  const filamentData = {
+    ...rest,
+    tags: {
+      connectOrCreate: tags?.map((tag) => ({
+        where: { name: tag.name },
+        create: { name: tag.name },
+      })),
+    },
+  };
+
   await prismadb.filament.update({
     where: { id: id },
-    data: data,
+    data: filamentData,
   });
 };
 
