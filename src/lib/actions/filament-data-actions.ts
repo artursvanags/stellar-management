@@ -74,16 +74,51 @@ export const updateFilament = async (
   id: string,
   data: Partial<FilamentWithTags>,
 ) => {
+  const getCurrentFilamentData = await prismadb.filament.findFirst({
+    where: { id: id },
+    include: { tags: true },
+  });
+
+  const tagsToDelete = getCurrentFilamentData?.tags.filter(
+    (tag) => !data.tags?.some((newTag) => newTag.name === tag.name),
+  );
+
   const { tags, ...rest } = data;
   const filamentData = {
     ...rest,
     tags: {
       connectOrCreate: tags?.map((tag) => ({
         where: { name: tag.name },
-        create: { name: tag.name },
+        create: { name: tag.name }
       })),
     },
   };
+
+  // Delete tags that are no longer associated with the filament
+  if (tagsToDelete) {
+    for (const tag of tagsToDelete) {
+      const tagFilaments = await prismadb.tags
+        .findFirst({
+          where: { id: tag.id },
+        })
+        ?.filaments();
+
+      if (tagFilaments && tagFilaments.length === 1) {
+        // If the tag has no more relationships with other filaments, delete it
+        await prismadb.tags.delete({ where: { id: tag.id } });
+      } else {
+        // Remove the association between the tag and the current filament
+        await prismadb.filament.update({
+          where: { id: id },
+          data: {
+            tags: {
+              disconnect: { id: tag.id },
+            },
+          },
+        });
+      }
+    }
+  }
 
   await prismadb.filament.update({
     where: { id: id },
