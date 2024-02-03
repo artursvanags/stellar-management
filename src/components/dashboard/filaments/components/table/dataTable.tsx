@@ -45,12 +45,9 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-  const userData = useUserData();
-  const [sorting, setSorting] = React.useState<SortingState>(
-    userData.settings?.auto_sort_archive
-      ? [
-          { id: 'status', desc: false },
-          { id: 'createdAt', desc: true },
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: 'status', desc: false },
+    { id: 'createdAt', desc: true },
         ]
       : [{ id: 'createdAt', desc: true }],
   );
