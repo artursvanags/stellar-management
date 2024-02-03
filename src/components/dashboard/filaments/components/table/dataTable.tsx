@@ -107,9 +107,13 @@ export function DataTable<TData, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
                   className={
+                    //@ts-ignore
                     row.original.status === 'archived'
-                      ? 'bg-secondary/30 text-muted-foreground'
-                      : ''
+                      ? 'bg-secondary/20 text-muted-foreground'
+                      : //@ts-ignore
+                        row.original.status === 'in_use'
+                        ? 'bg-orange-200/20 dark:bg-orange-950/50 dark:text-orange-500'
+                        : ''
                   }
                 >
                   {row.getVisibleCells().map((cell) => (
