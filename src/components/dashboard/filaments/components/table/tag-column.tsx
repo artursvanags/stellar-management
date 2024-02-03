@@ -62,7 +62,7 @@ export function TagColumn({ data }: TagColumnProps) {
     setLoading(true);
     try {
       const response = await fetch(`/api/filaments/${data.id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -132,7 +132,7 @@ export function TagColumn({ data }: TagColumnProps) {
           onClick={() => setTagModalOpen(true)}
         >
           <Icons.Tag className="mr-1 h-3 w-3" />
-          {tags.length > 3 ? <>{tags.length}+</> : <>{tags.length}</>}
+          {tags.length > 3 ? <>3+</> : <>{tags.length}</>}
         </Badge>
       ) : (
         <Badge
