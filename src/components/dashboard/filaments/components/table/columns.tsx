@@ -150,8 +150,15 @@ export const columns: ColumnDef<Filaments>[] = [
     sortingFn: (rowA, rowB) => {
       const statusA = rowA.original.status === 'archived';
       const statusB = rowB.original.status === 'archived';
-      if (statusA !== statusB) {
+      const statusC = rowA.original.status === 'in_use';
+      const statusD = rowB.original.status === 'in_use';
+      const { settings } = useUserData();
+      const autoArchiveSort = settings?.auto_sort_archive;
+
+      if (autoArchiveSort && statusA !== statusB) {
         return statusA ? 1 : -1;
+      } else if (statusC !== statusD) { // sort by in_use status 
+        return statusC ? -1 : 1;
       } else {
         // If both rows have the same status, sort by 'createdAt'
         return (
