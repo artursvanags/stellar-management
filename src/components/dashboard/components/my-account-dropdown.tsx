@@ -17,22 +17,22 @@ import { cn } from '@/lib/utils';
 import { signOut } from 'next-auth/react';
 import { Switch } from '@/components/ui/switch';
 
-import { User } from '@prisma/client';
 import { useLayoutEffect, useRef, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
+import { useUserData } from '@/lib/context/userContext';
 
-interface MyAccountDropdownProps {
-  user: User;
-}
+const MyAccountDropdown = () => {
+  const { user } = useUserData()
+  const { setTheme, resolvedTheme } = useTheme();
 
-export default function MyAccountDropdown({ user }: MyAccountDropdownProps) {
   const buttonRef = useRef<HTMLDivElement>(null);
   const [buttonWidth, setButtonWidth] = useState(0);
-  const { setTheme, resolvedTheme } = useTheme();
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  
   // Use useLayoutEffect to measure the button width after DOM updates
   useLayoutEffect(() => {
     if (buttonRef.current) {
@@ -155,3 +155,4 @@ export default function MyAccountDropdown({ user }: MyAccountDropdownProps) {
     </>
   );
 }
+export default MyAccountDropdown;
