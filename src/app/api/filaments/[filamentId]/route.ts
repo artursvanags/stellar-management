@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
-import { getFilament, getUser } from '@/lib/actions/user-data-actions';
+import { getUser } from '@/lib/actions/user-data-actions';
+import { getFilament } from '@/lib/actions/filament-data-actions';
 import {
   deleteFilament,
   updateFilament,
