@@ -28,8 +28,6 @@ import {
 import { DataTableToolbar } from './dataTableToolbar';
 import { DataTablePagination } from './dataTablePagination';
 
-import { useUserData } from '@/lib/context/userContext';
-
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -48,9 +46,7 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'status', desc: false },
     { id: 'createdAt', desc: true },
-        ]
-      : [{ id: 'createdAt', desc: true }],
-  );
+  ]);
 
   const table = useReactTable({
     data,
