@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link';
 
 import Logo from '@/config/assets/logo';
@@ -6,10 +7,8 @@ import { SideBarNavigation as nav } from '@/config/dashboard';
 import MyAccountDropdown from '@/components/dashboard/components/my-account-dropdown';
 import SideBarNavigation from '@/components/navigation/sidebar-navigation';
 
-import { getUser } from '@/lib/actions/user-data-actions';
 
-const SideBar = async () => {
-  const user = await getUser();
+const SideBar = () => {
   return (
     <div className="flex h-screen flex-col gap-4 p-4">
       <div className="flex h-20 items-center border-b">
@@ -25,7 +24,7 @@ const SideBar = async () => {
       </div>
       <div className="mt-auto">
         <SideBarNavigation items={nav.bottomNav} className="flex flex-col" />
-        <MyAccountDropdown user={user} />
+        <MyAccountDropdown />
       </div>
     </div>
   );
