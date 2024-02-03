@@ -6,7 +6,7 @@ import { SideBarNavigation as nav } from '@/config/dashboard';
 import MyAccountDropdown from '@/components/dashboard/components/my-account-dropdown';
 import SideBarNavigation from '@/components/navigation/sidebar-navigation';
 
-import { getUser } from '@/lib/actions/get-data-actions';
+import { getUser } from '@/lib/actions/user-data-actions';
 
 const SideBar = async () => {
   const user = await getUser();

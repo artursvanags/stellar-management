@@ -47,7 +47,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Icons, Spinner } from '@/config/assets/icons';
 import { Tag, TagInput } from '@/components/ui/tag-input';
-import { createMultipleFilaments } from '@/lib/actions/mutate-data-actions';
+import { createMultipleFilaments } from '@/lib/actions/filament-data-actions';
 
 interface FilamentFormProps {
   setInteraction: (disabled: boolean) => void;

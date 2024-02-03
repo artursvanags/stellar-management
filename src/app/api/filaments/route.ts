@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { getUser } from '@/lib/actions/get-data-actions';
+import { getUser } from '@/lib/actions/user-data-actions';
 import {
   createMultipleFilaments,
   deleteMultipleFilaments,
   updateMultipleFilaments,
-} from '@/lib/actions/mutate-data-actions';
+} from '@/lib/actions/filament-data-actions';
 
 export async function POST(request: Request) {
   try {

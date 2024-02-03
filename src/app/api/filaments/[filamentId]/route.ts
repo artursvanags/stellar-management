@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 
-import { getFilament, getUser } from '@/lib/actions/get-data-actions';
+import { getFilament, getUser } from '@/lib/actions/user-data-actions';
 import {
   deleteFilament,
   updateFilament,
-} from '@/lib/actions/mutate-data-actions';
+} from '@/lib/actions/filament-data-actions';
 
 export async function PATCH(
   request: Request,

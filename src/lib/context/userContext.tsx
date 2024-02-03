@@ -1,7 +1,7 @@
 'use client';
 import React, { createContext, useContext } from 'react';
 import { UserSettings, User } from '@prisma/client';
-import { getUser } from '../actions/get-data-actions';
+import { getUser } from '@/lib/actions/user-data-actions';
 
 type UserData = Awaited<ReturnType<typeof getUser>>;
 

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 
 import { User } from '@prisma/client';
 import { setupAuthSchema } from '@/lib/validations/auth';
-import { updateUser } from '@/lib/actions/user-actions';
+import { updateUser } from '@/lib/actions/user-data-actions';
 
 import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
