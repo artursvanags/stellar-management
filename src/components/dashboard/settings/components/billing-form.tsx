@@ -12,7 +12,7 @@ import {
   addBilling,
   deleteBilling,
   updateBilling,
-} from '@/lib/actions/user-actions';
+} from '@/lib/actions/user-data-actions';
 
 import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';

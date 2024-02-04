@@ -28,12 +28,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/config/assets/icons';
 import { Badge } from '@/components/ui/badge';
-import { useUserData } from '@/lib/context/userContext';
+import { UseUserData } from '@/lib/context/userContext';
 
 type FormData = z.infer<typeof setupAuthSchema>;
 
 const MyAccountForm: React.FC = () => {
-  const { user, settings } = useUserData();
+  const { user, settings } = UseUserData();
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();

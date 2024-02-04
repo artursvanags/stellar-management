@@ -1,5 +1,5 @@
 import * as React from "react"
-import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons"
+import { CheckIcon} from "@radix-ui/react-icons"
 import { Column } from "@tanstack/react-table"
 
 import { cn } from "@/lib/utils"
@@ -33,6 +33,7 @@ interface DataTableFacetedFilter<TData, TValue> {
 }
 
 function flattenCounts(valueMap: any) {
+
   const flattenedCounts = new Map();
 
   for (const [values, count] of valueMap.entries()) {
@@ -49,7 +50,7 @@ function flattenCounts(valueMap: any) {
 
   return flattenedCounts;
 }
-
+console.log(flattenCounts)
 export function DataTableFacetedFilter<TData, TValue>({
   column,
   title,

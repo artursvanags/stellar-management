@@ -21,10 +21,10 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
-import { useUserData } from '@/lib/context/userContext';
+import { UseUserData } from '@/lib/context/userContext';
 
 const MyAccountDropdown = () => {
-  const { user } = useUserData()
+  const { user } = UseUserData();
   const { setTheme, resolvedTheme } = useTheme();
 
   const buttonRef = useRef<HTMLDivElement>(null);
@@ -32,7 +32,7 @@ const MyAccountDropdown = () => {
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  
+
   // Use useLayoutEffect to measure the button width after DOM updates
   useLayoutEffect(() => {
     if (buttonRef.current) {
@@ -154,5 +154,5 @@ const MyAccountDropdown = () => {
       </DropdownMenu>
     </>
   );
-}
+};
 export default MyAccountDropdown;

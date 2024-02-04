@@ -1,10 +1,9 @@
 'use server';
-
 import prismadb from '@/lib/utils/database';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/options';
+import { getUser } from './user-data-actions';
 
 export const getUserTags = async () => {
+
   try {
     const user = await getUser();
     if (!user) throw new Error('User not found');

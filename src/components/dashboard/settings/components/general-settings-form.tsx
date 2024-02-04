@@ -30,14 +30,14 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/config/assets/icons';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { useUserData } from '@/lib/context/userContext';
+import { UseUserData } from '@/lib/context/userContext';
 
 type FormData = z.infer<typeof userSettingsSchema>;
 
 const thresholdOptions = [10, 25, 50, 75, 100];
 
 const GeneralSettingsForm: React.FC = () => {
-  const { user, settings } = useUserData();
+  const { user, settings } = UseUserData();
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();

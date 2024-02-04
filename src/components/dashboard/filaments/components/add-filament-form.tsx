@@ -182,7 +182,7 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
     } else {
       fields.length > 1 ? setInteraction(true) : setInteraction(false);
     }
-  }, [fields.length]);
+  }, [fields.length, setInteraction]);
 
   const handleRemoveCopy = (index: number) => remove(index);
   const handleRemoveAllCopies = () => {

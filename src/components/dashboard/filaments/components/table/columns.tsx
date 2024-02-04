@@ -20,7 +20,7 @@ import { Icons } from '@/config/assets/icons';
 import { TagColumn } from '@/components/dashboard/filaments/components/table/tag-column';
 import { StatusColumn } from '@/components/dashboard/filaments/components/table/status-column';
 import { Tags } from '@prisma/client';
-import { useUserData } from '@/lib/context/userContext';
+import { UseUserData } from '@/lib/context/userContext';
 
 export const columns: ColumnDef<Filaments>[] = [
   {
@@ -96,7 +96,7 @@ export const columns: ColumnDef<Filaments>[] = [
       <DataTableColumnHeader column={column} title="Remaining" />
     ),
     cell: ({ row }) => {
-      const { settings } = useUserData();
+      const { settings } = UseUserData();
       const netWeight = row.original.weight;
       const remainingWeight = row.original.remainingWeight;
       const weightThreshold = settings
@@ -152,12 +152,13 @@ export const columns: ColumnDef<Filaments>[] = [
       const statusB = rowB.original.status === 'archived';
       const statusC = rowA.original.status === 'in_use';
       const statusD = rowB.original.status === 'in_use';
-      const { settings } = useUserData();
+      const { settings } = UseUserData();
       const autoArchiveSort = settings?.auto_sort_archive;
 
       if (autoArchiveSort && statusA !== statusB) {
         return statusA ? 1 : -1;
-      } else if (statusC !== statusD) { // sort by in_use status 
+      } else if (statusC !== statusD) {
+        // sort by in_use status
         return statusC ? -1 : 1;
       } else {
         // If both rows have the same status, sort by 'createdAt'
@@ -188,7 +189,7 @@ export const columns: ColumnDef<Filaments>[] = [
       <DataTableColumnHeader column={column} title="Date Created" />
     ),
     cell: ({ row }) => {
-      const userData = useUserData();
+      const userData = UseUserData();
       const date = new Date(row.original.createdAt).toLocaleDateString(
         userData.settings?.timezone_format,
       );

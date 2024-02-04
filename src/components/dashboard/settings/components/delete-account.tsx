@@ -7,10 +7,10 @@ import { AlertModal } from '@/components/modals/alertModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { useUserData } from '@/lib/context/userContext';
+import { UseUserData } from '@/lib/context/userContext';
 
 const DeleteAccount: React.FC = () => {
-  const { user } = useUserData();
+  const { user } = UseUserData();
   const keyword = user.email;
 
   const [open, openModal] = useState(false);

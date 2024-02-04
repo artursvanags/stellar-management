@@ -24,6 +24,8 @@ import { useRouter } from 'next/navigation';
 
 import { Filaments } from '@/types/database';
 import { filamentStatus } from '@/config/filament';
+import { getUserTags } from '@/lib/actions/tags-data-actions';
+
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -34,7 +36,15 @@ export function DataTableToolbar<TData>({
 }: DataTableToolbarProps<TData>) {
   const router = useRouter();
   const { toast } = useToast();
+  const [tags, setTags] = useState<Filaments['tags']>();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const tagsData = await getUserTags();
+      setTags(tagsData);
+    };
+    fetchData();
+  }, []);
   const [data, setData] = useState<Filaments[]>([]);
   const [openAlertModal, setAlertModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -79,7 +89,7 @@ export function DataTableToolbar<TData>({
         },
         body: JSON.stringify({
           ids: data.map((item) => item.id),
-          data: {status: filamentStatus.archived},
+          data: { status: filamentStatus.archived },
         }),
       });
     } catch (error) {
@@ -105,7 +115,7 @@ export function DataTableToolbar<TData>({
         },
         body: JSON.stringify({
           ids: data.map((item) => item.id),
-          data: {isFavorite: !allFavorite},
+          data: { isFavorite: !allFavorite },
         }),
       });
     } catch (error) {
@@ -199,6 +209,22 @@ export function DataTableToolbar<TData>({
               column={table.getColumn('status')}
               title="Status"
               options={Object.values(filamentStatus)}
+            />
+          )}
+          {table.getColumn('tags') && (
+            <DataTableFacetedFilter
+              column={table.getColumn('tags')}
+              title="Tags"
+              options={
+                tags
+                  ? tags.map((tag) => ({
+                      label: tag.name,
+                      value: tag.name,
+                    }))
+                  : tags
+                    ? [{ label: 'Loading...', value: 'Loading...' }]
+                    : []
+              }
             />
           )}
         </div>

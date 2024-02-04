@@ -33,10 +33,10 @@ export const UserDataProvider = ({
   );
 };
 
-export const useUserData = () => {
+export const UseUserData = () => {
   const context = useContext(UserDataContext);
   if (context === null) {
-    throw new Error('useUserData must be used within a UserDataProvider');
+    throw new Error('UseUserData must be used within a UserDataProvider');
   }
   return context;
 };
