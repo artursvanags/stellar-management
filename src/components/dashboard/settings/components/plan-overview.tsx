@@ -4,13 +4,11 @@ import { Progress } from '@/components/ui/progress';
 import { Filaments } from '@/types/database';
 
 interface PlanOverviewProps {
-  data: {
-    filaments: Filaments[];
-  };
+  data: Filaments[];
 }
 
 const PlanOverview: React.FC<PlanOverviewProps> = ({ data }) => {
-  const count = data.filaments.length;
+  const count = data.length;
   const limit = 100;
   const percentage = Math.round((count / limit) * 100);
 

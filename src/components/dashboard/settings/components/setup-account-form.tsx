@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 
 import { User } from '@prisma/client';
 import { setupAuthSchema } from '@/lib/validations/auth';
-import { updateUser } from '@/lib/actions/user-data-actions';
 
 import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
@@ -44,7 +43,13 @@ const SetupAccountForm = ({ user }: SetupAccountFormProps) => {
   const onSubmit = form.handleSubmit(async (data: FormData) => {
     try {
       setLoading(true);
-      await updateUser(user.id, data);
+      await fetch(`/api/account/${user.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
     } catch (error) {
       console.error(error);
     } finally {

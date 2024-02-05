@@ -1,4 +1,4 @@
-import { getMultipleFilaments } from '@/lib/actions/get-data-actions';
+import { getMultipleFilaments } from '@/lib/actions/filament-data-actions';
 import PlanOverview from '@/components/dashboard/settings/components/plan-overview';
 
 const BillingTemplate: React.FC = async () => {
