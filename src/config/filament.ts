@@ -11,6 +11,10 @@ export const filamentStatus = {
     value: 'archived',
     label: 'Archived',
   },
+  in_use: {
+    value: 'in_use',
+    label: 'In Use',
+  },
 };
 
 
