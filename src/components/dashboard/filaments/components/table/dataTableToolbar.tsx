@@ -50,8 +50,9 @@ export function DataTableToolbar<TData>({
   const [loading, setLoading] = useState(false);
 
   const allFavorite = data.every((item) => item.isFavorite);
-  const selectedRows = table.getSelectedRowModel().rows;
-  const selectedRowIDs = selectedRows.map((row) => row.original);
+
+  const selectedRowModel = table.getSelectedRowModel();
+  const selectedRowIDs = selectedRowModel.rows.map((row) => row.original);
 
   useEffect(() => {
     setData(selectedRowIDs as Filaments[]);
