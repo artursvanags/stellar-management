@@ -239,7 +239,7 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
             : `new ${fields.length} filaments`
         } to your collection.`,
       });
-      //setCloseModal();
+      setCloseModal();
       setInteraction(false);
       setLoading(false);
       router.refresh();
@@ -279,7 +279,7 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
                 <div
                   key={field.id}
                   className={`grid grid-cols-9 items-start gap-4 ${
-                    showTags === index && 'rounded bg-primary-foreground/50 p-2'
+                    showTags === index && 'rounded bg-primary-foreground/5 p-2'
                   }`}
                 >
                   <FormField
@@ -431,14 +431,16 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {Object.values(filamentStatus).map((state) => (
-                                <SelectItem
-                                  key={state.value}
-                                  value={state.value.toString()}
-                                >
-                                  {state.label}
-                                </SelectItem>
-                              ))}
+                              {Object.values(filamentStatus)
+                                .filter((state) => state.value !== 'in_use')
+                                .map((state) => (
+                                  <SelectItem
+                                    key={state.value}
+                                    value={state.value.toString()}
+                                  >
+                                    {state.label}
+                                  </SelectItem>
+                                ))}
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -451,14 +453,16 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
                       type="button"
                       icon={<Icons.Tag className="h-4 w-4" />}
                       size={'icon'}
-                      variant={showTags === index ? 'secondary' : 'outline'}
-                      className="relative flex-grow"
+                      variant={'outline'}
+                      className={`relative flex-grow ${
+                        showTags === index && ' border-dashed'
+                      }`}
                       onClick={() =>
                         setShowTags(showTags === index ? null : index)
                       }
                     >
                       {form.watch(`filaments.${index}.tags`)?.length ? (
-                        <span className="absolute -right-1 -top-1 rounded bg-primary px-1 text-xs font-bold text-primary-foreground">
+                        <span className="absolute -right-1 -top-1 rounded border bg-secondary px-1 text-xs font-bold text-white">
                           {form.watch(`filaments.${index}.tags`)?.length ?? 0}
                         </span>
                       ) : null}
