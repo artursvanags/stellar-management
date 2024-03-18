@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { Modal } from '@/components/ui/modal';
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/config/assets/icons';
+import { Spinner } from '@/assets/icons';
 
 interface TagModalProps {
   description?: string;
@@ -15,14 +15,7 @@ interface TagModalProps {
   children?: React.ReactNode;
 }
 
-export const TagModal: React.FC<TagModalProps> = ({
-  isOpen,
-  onClose,
-  onConfirm,
-  loading,
-  children,
-  description,
-}) => {
+export const TagModal: React.FC<TagModalProps> = ({ isOpen, onClose, onConfirm, loading, children, description }) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -42,12 +35,7 @@ export const TagModal: React.FC<TagModalProps> = ({
     >
       {children}
       <div className="flex w-full items-center justify-end space-x-2 pt-6">
-        <Button
-          type="submit"
-          disabled={loading}
-          variant="default"
-          onClick={onConfirm}
-        >
+        <Button type="submit" disabled={loading} variant="default" onClick={onConfirm}>
           {loading ? (
             <>
               <Spinner className="mr-2 h-4 w-4 animate-spin" /> Loading

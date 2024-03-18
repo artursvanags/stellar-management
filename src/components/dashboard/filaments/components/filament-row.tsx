@@ -2,26 +2,12 @@
 
 import { useState } from 'react';
 
-import { filamentDiameter, filamentStatus } from '@/config/filament';
+import { filamentDiameter, filamentStatus } from '@/config/constants';
 
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +19,7 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { Icons } from '@/config/assets/icons';
+import { Icons } from '@/assets/icons';
 import { Tag, TagInput } from '@/components/ui/tag-input';
 
 // TO-DO - Move to config
@@ -62,8 +48,7 @@ const fieldLabels = {
     label: 'Weight (g)',
     placeholder: 'Net weight',
     remainingPlaceholder: 'Remaining',
-    tooltip:
-      'The manufacturer weight of the filament ( not including the spool ) ',
+    tooltip: 'The manufacturer weight of the filament ( not including the spool ) ',
   },
   remaininghWeight: {
     label: 'Remaining Weight (g)',
@@ -93,8 +78,7 @@ const FilamentRow = ({ index, form, remove, append }: FilamentRowProps) => {
   const [showTags, setShowTags] = useState<number | null>(null);
   const { toast } = useToast();
 
-  const handleDuplicate = (index: number) =>
-    append(form.getValues(`filaments.${index}`));
+  const handleDuplicate = (index: number) => append(form.getValues(`filaments.${index}`));
   const handleWeightChange = (value: string, index: number) => {
     let inputValue = parseFloat(value);
     let outputValue = String(inputValue);
@@ -115,9 +99,7 @@ const FilamentRow = ({ index, form, remove, append }: FilamentRowProps) => {
     form.setValue(`filaments.${index}.remainingWeight`, outputValue);
   };
   const handleRemainingWeightChange = (value: string, index: number) => {
-    const originalWeight = parseFloat(
-      form.getValues(`filaments.${index}.weight`),
-    );
+    const originalWeight = parseFloat(form.getValues(`filaments.${index}.weight`));
     let inputValue = parseFloat(value);
     let outputValue = String(inputValue);
 
@@ -130,9 +112,7 @@ const FilamentRow = ({ index, form, remove, append }: FilamentRowProps) => {
   };
   return (
     <div
-      className={`grid grid-cols-9 items-start gap-4 ${
-        showTags === index && 'rounded bg-primary-foreground/5 p-2'
-      }`}
+      className={`grid grid-cols-9 items-start gap-4 ${showTags === index && 'rounded bg-primary-foreground/5 p-2'}`}
     >
       <FormField
         control={form.control}
@@ -144,11 +124,7 @@ const FilamentRow = ({ index, form, remove, append }: FilamentRowProps) => {
                 <span className="absolute ml-2 rounded-md bg-muted px-1 text-sm text-muted-foreground">
                   #{index + 1}
                 </span>
-                <Input
-                  {...field}
-                  placeholder={fieldLabels.manufacturer.placeholder}
-                  className="pl-10"
-                />
+                <Input {...field} placeholder={fieldLabels.manufacturer.placeholder} className="pl-10" />
               </div>
             </FormControl>
             <FormMessage />
@@ -161,10 +137,7 @@ const FilamentRow = ({ index, form, remove, append }: FilamentRowProps) => {
         render={({ field }) => (
           <FormItem>
             <FormControl>
-              <Input
-                {...field}
-                placeholder={fieldLabels.material.placeholder}
-              />
+              <Input {...field} placeholder={fieldLabels.material.placeholder} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -195,11 +168,7 @@ const FilamentRow = ({ index, form, remove, append }: FilamentRowProps) => {
               </FormControl>
               <SelectContent>
                 {Object.values(filamentDiameter).map((diameter) => (
-                  <SelectItem
-                    defaultValue={field.value}
-                    key={diameter.value}
-                    value={diameter.value.toString()}
-                  >
+                  <SelectItem defaultValue={field.value} key={diameter.value} value={diameter.value.toString()}>
                     {diameter.label}
                   </SelectItem>
                 ))}
@@ -269,10 +238,7 @@ const FilamentRow = ({ index, form, remove, append }: FilamentRowProps) => {
                   {Object.values(filamentStatus)
                     .filter((state) => state.value !== 'in_use')
                     .map((state) => (
-                      <SelectItem
-                        key={state.value}
-                        value={state.value.toString()}
-                      >
+                      <SelectItem key={state.value} value={state.value.toString()}>
                         {state.label}
                       </SelectItem>
                     ))}
@@ -289,9 +255,7 @@ const FilamentRow = ({ index, form, remove, append }: FilamentRowProps) => {
           icon={<Icons.Tag className="h-4 w-4" />}
           size={'icon'}
           variant={'outline'}
-          className={`relative flex-grow ${
-            showTags === index && ' border-dashed'
-          }`}
+          className={`relative flex-grow ${showTags === index && ' border-dashed'}`}
           onClick={() => setShowTags(showTags === index ? null : index)}
         >
           {form.watch(`filaments.${index}.tags`)?.length ? (
@@ -302,11 +266,7 @@ const FilamentRow = ({ index, form, remove, append }: FilamentRowProps) => {
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              icon={<Icons.MenuVertical className="h-4 w-4" />}
-              size={'icon'}
-              variant="ghost"
-            />
+            <Button icon={<Icons.MenuVertical className="h-4 w-4" />} size={'icon'} variant="ghost" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => handleDuplicate(index)}>
@@ -314,10 +274,7 @@ const FilamentRow = ({ index, form, remove, append }: FilamentRowProps) => {
               Duplicate
             </DropdownMenuItem>
             {index > 0 && (
-              <DropdownMenuItem
-                className="text-red-500"
-                onClick={() => remove(index)}
-              >
+              <DropdownMenuItem className="text-red-500" onClick={() => remove(index)}>
                 <Icons.Trash className="mr-2 h-4 w-4" />
                 Remove
               </DropdownMenuItem>
@@ -342,10 +299,7 @@ const FilamentRow = ({ index, form, remove, append }: FilamentRowProps) => {
                     placeholder="Enter a tag"
                     tags={form.getValues(`filaments.${index}.tags`) || []}
                     setTags={(newTags) => {
-                      form.setValue(
-                        `filaments.${index}.tags`,
-                        newTags as [Tag, ...Tag[]],
-                      );
+                      form.setValue(`filaments.${index}.tags`, newTags as [Tag, ...Tag[]]);
                     }}
                   />
                 </FormControl>

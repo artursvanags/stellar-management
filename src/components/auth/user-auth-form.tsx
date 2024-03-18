@@ -8,20 +8,13 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 import { userAuthSchema } from '@/lib/validations/auth';
-import { AuthProviderIcons, Spinner } from '@/config/assets/icons';
+import { AuthProviderIcons, Spinner } from '@/assets/icons';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { toast } from '@/components/ui/use-toast';
 
 import { Input } from '@/components/ui/input';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 type FormData = z.infer<typeof userAuthSchema>;
 
@@ -73,8 +66,7 @@ export function UserAuthForm() {
       setLoading(false);
       return toast({
         title: 'Check your email',
-        description:
-          'We sent you a login link. Be sure to check your spam too.',
+        description: 'We sent you a login link. Be sure to check your spam too.',
       });
     } catch (error) {
       console.log(error);
@@ -110,9 +102,7 @@ export function UserAuthForm() {
                 disabled={isLoading || isProvidersLoading}
                 onClick={() => onProviderSelect(provider.id)}
                 icon={provider.icon}
-                loading={
-                  isProvidersLoading && provider.id === selectedProviderId
-                }
+                loading={isProvidersLoading && provider.id === selectedProviderId}
               >
                 Continue with {provider.name}
               </Button>
@@ -154,8 +144,7 @@ export function UserAuthForm() {
         </div>
       ) : (
         <div className="text-sm text-muted-foreground">
-          We have sent you a magic email link that expires in 24 hours. Please
-          check your inbox.
+          We have sent you a magic email link that expires in 24 hours. Please check your inbox.
         </div>
       )}
     </>

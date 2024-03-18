@@ -8,19 +8,11 @@ import { useRouter } from 'next/navigation';
 
 import { TagModal } from '@/components/modals/tagModal';
 import { useToast } from '@/components/ui/use-toast';
-import { Icons } from '@/config/assets/icons';
+import { Icons } from '@/assets/icons';
 import { Badge } from '@/components/ui/badge';
 import { Tag, TagInput } from '@/components/ui/tag-input';
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 import { tagsSchema } from '@/lib/validations/auth';
 import { FilamentDTO } from '@/types/database';
@@ -72,10 +64,7 @@ export function TagColumn({ data }: TagColumnProps) {
         throw new Error(`${response.status}`);
       }
     } catch (error) {
-      console.error(
-        'There has been a problem with your fetch operation:',
-        error,
-      );
+      console.error('There has been a problem with your fetch operation:', error);
     } finally {
       setTagModalOpen(false);
       setLoading(false);
@@ -89,12 +78,7 @@ export function TagColumn({ data }: TagColumnProps) {
 
   return (
     <div className="group/tags">
-      <TagModal
-        isOpen={openTagModal}
-        onConfirm={() => onSubmit()}
-        loading={loading}
-        onClose={() => onClose()}
-      >
+      <TagModal isOpen={openTagModal} onConfirm={() => onSubmit()} loading={loading} onClose={() => onClose()}>
         <Form {...form}>
           <form onSubmit={onSubmit}>
             <FormField
@@ -114,9 +98,7 @@ export function TagColumn({ data }: TagColumnProps) {
                       }}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Enter up to 8 tags to this filament.
-                  </FormDescription>
+                  <FormDescription>Enter up to 8 tags to this filament.</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

@@ -1,7 +1,7 @@
 import { Separator } from '@/components/ui/separator';
 
 import DashboardNavigation from '@/components/navigation/dashboard-navigation';
-import { SettingsSideBarNavigation as nav } from '@/config/settings';
+import { SettingsSideBarNavigation as nav } from '@/config/navigation';
 
 interface SettingsLayoutProps {
   children: React.ReactNode;

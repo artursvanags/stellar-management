@@ -1,4 +1,4 @@
-import { EmptyStateIcons } from '@/config/assets/icons';
+import { EmptyStateIcons } from '@/assets/icons';
 import { AddFilamentButton } from '@/components/dashboard/components/add-filament-button';
 
 const EmptyFilamentState = () => {

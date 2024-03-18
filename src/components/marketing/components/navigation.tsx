@@ -4,7 +4,7 @@ import { CheckActive } from '@/lib/utils';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { NavigationInterface } from '@/types';
-import { Icons } from '@/config/assets/icons';
+import { Icons } from '@/assets/icons';
 
 type AuthButtonProps = {
   href: string;
@@ -30,11 +30,7 @@ export default function Navigation({ items, session }: NavigationInterface) {
 
         <nav className="mr-auto flex flex-1 space-x-3 text-sm font-medium">
           {items.map((i, index) => (
-            <Button
-              key={index}
-              asChild
-              variant={CheckActive(i.href) ? 'secondary' : 'ghost'}
-            >
+            <Button key={index} asChild variant={CheckActive(i.href) ? 'secondary' : 'ghost'}>
               <Link href={i.href}>{i.title}</Link>
             </Button>
           ))}
@@ -42,11 +38,7 @@ export default function Navigation({ items, session }: NavigationInterface) {
       </div>
 
       <div className="ml-auto flex flex-1 justify-end space-x-2">
-        <AuthButton
-          href="/dashboard"
-          title="Dashboard"
-          icon={<Icons.dashboard className="mr-2 h-4 w-4" />}
-        />
+        <AuthButton href="/dashboard" title="Dashboard" icon={<Icons.dashboard className="mr-2 h-4 w-4" />} />
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { Modal } from '@/components/ui/modal';
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/config/assets/icons';
+import { Spinner } from '@/assets/icons';
 
 interface AlertModalProps {
   description?: string;
@@ -45,7 +45,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
         <Button disabled={loading} variant="outline" onClick={onClose}>
           Cancel
         </Button>
-        <Button type='submit' disabled={loading} variant="destructive" onClick={onConfirm}>
+        <Button type="submit" disabled={loading} variant="destructive" onClick={onConfirm}>
           {loading ? (
             <>
               <Spinner className="mr-2 h-4 w-4 animate-spin" /> Loading

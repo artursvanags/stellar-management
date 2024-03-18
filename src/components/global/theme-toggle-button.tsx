@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useTheme } from 'next-themes';
 
-import { ThemeIcons } from '@/config/assets/icons';
+import { ThemeIcons } from '@/assets/icons';
 
 import { Button } from '@/components/ui/button';
 import {

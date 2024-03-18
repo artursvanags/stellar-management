@@ -1,11 +1,7 @@
 'use client';
-import { ToolStackIcons } from '@/config/assets/icons';
+import { ToolStackIcons } from '@/assets/icons';
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function Features() {
   const ToolStack = [
@@ -36,14 +32,9 @@ export default function Features() {
   ];
 
   return (
-    <section
-      id="toolstack"
-      className="border-t py-8 dark:bg-transparent md:py-12 lg:py-24"
-    >
+    <section id="toolstack" className="border-t py-8 dark:bg-transparent md:py-12 lg:py-24">
       <div className="container">
-        <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
-          Toolstack
-        </h2>
+        <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl">Toolstack</h2>
         <div className="mx-auto flex gap-4 py-8 sm:grid-cols-3">
           {ToolStack.map((i, index) => (
             <Tooltip key={index}>

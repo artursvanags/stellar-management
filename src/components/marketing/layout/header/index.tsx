@@ -1,5 +1,5 @@
 import Navigation from '../../components/navigation';
-import { marketingNavigation } from '@/config/marketing';
+import { marketingNavigation } from '@/config/navigation';
 import MobileNavigation from '../../components/mobile-navigation';
 
 export default function SiteHeader() {

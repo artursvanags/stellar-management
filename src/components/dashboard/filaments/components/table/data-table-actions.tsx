@@ -7,7 +7,7 @@ import { updateFilamentAction } from '@/components/dashboard/filaments/actions/u
 import { FilamentDTO } from '@/types/database';
 
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
-import { ActionsIcons } from '@/config/assets/icons';
+import { ActionsIcons } from '@/assets/icons';
 
 import { useToast } from '@/components/ui/use-toast';
 
@@ -20,7 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { filamentStatus } from '@/config/filament';
+import { filamentStatus } from '@/config/constants';
 
 interface CellActionProps {
   data: FilamentDTO;
@@ -103,7 +103,7 @@ export function DataTableRowActions({ data }: CellActionProps) {
         onClose={() => setAlertModalOpen(false)}
         onConfirm={onDelete}
         loading={loading}
-        description={"You are about to delete this filament."}
+        description={'You are about to delete this filament.'}
       >
         <div className="flex max-h-48 flex-col overflow-auto rounded-sm bg-stone-100 p-4 font-mono text-xs dark:bg-stone-900 dark:text-amber-200">
           <span>{data.id}</span>

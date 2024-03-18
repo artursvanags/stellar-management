@@ -2,16 +2,9 @@
 
 import { useEffect, useState } from 'react';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '../ui/button';
-import { Spinner } from '@/config/assets/icons';
+import { Spinner } from '@/assets/icons';
 
 interface EditCardProps {
   title: string;
@@ -60,9 +53,7 @@ export const EditCard: React.FC<EditCardProps> = ({
           type="submit"
           onClick={onConfirm}
           disabled={loading}
-          icon={
-            loading ? <Spinner className="mr-2 h-4 w-4 animate-spin" /> : null
-          }
+          icon={loading ? <Spinner className="mr-2 h-4 w-4 animate-spin" /> : null}
           loading={loading}
         >
           Update

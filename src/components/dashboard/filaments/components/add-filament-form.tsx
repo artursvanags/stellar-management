@@ -6,24 +6,20 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 
-import { filamentDiameter, filamentStatus } from '@/config/filament';
+import { filamentDiameter, filamentStatus } from '@/config/constants';
 import { filamentSchema } from '@/lib/validations/auth';
 
 import { Label } from '@/components/ui/label';
 
 import { Form } from '@/components/ui/form';
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { Icons, Spinner } from '@/config/assets/icons';
+import { Icons, Spinner } from '@/assets/icons';
 import FilamentRow from './filament-row';
 
 interface FilamentFormProps {
@@ -58,8 +54,7 @@ const fieldLabels = {
     label: 'Weight (g)',
     placeholder: 'Net weight',
     remainingPlaceholder: 'Remaining',
-    tooltip:
-      'The manufacturer weight of the filament ( not including the spool ) ',
+    tooltip: 'The manufacturer weight of the filament ( not including the spool ) ',
   },
   remaininghWeight: {
     label: 'Remaining Weight (g)',
@@ -156,17 +151,12 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
         throw new Error(`${response.status}`);
       }
     } catch (error) {
-      console.error(
-        'There has been a problem with your fetch operation:',
-        error,
-      );
+      console.error('There has been a problem with your fetch operation:', error);
     } finally {
       toast({
         title: 'Success!',
         description: `You have successfully added ${
-          fields.length < 2
-            ? 'a new filament'
-            : `new ${fields.length} filaments`
+          fields.length < 2 ? 'a new filament' : `new ${fields.length} filaments`
         } to your collection.`,
       });
       setCloseModal();
@@ -205,13 +195,7 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
         <ScrollArea type="hover">
           <div className="m-1 max-h-[70dvh] space-y-2">
             {fields.map((field, index) => (
-              <FilamentRow
-                key={field.id}
-                index={index}
-                form={form}
-                remove={remove}
-                append={append}
-              />
+              <FilamentRow key={field.id} index={index} form={form} remove={remove} append={append} />
             ))}
           </div>
         </ScrollArea>
@@ -249,11 +233,7 @@ const FilamentForm = ({ setInteraction, setCloseModal }: FilamentFormProps) => {
                 <Spinner className="mr-2 h-4 w-4 animate-spin" /> Adding...
               </>
             ) : (
-              <>
-                {fields.length < 2
-                  ? 'Add a filament'
-                  : `Add ${fields.length} filaments`}
-              </>
+              <>{fields.length < 2 ? 'Add a filament' : `Add ${fields.length} filaments`}</>
             )}
           </Button>
         </div>

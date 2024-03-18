@@ -11,8 +11,8 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MyAccount, Spinner, ThemeIcons } from '@/config/assets/icons';
-import { SideBarNavigation as nav } from '@/config/dashboard';
+import { MyAccount, Spinner, ThemeIcons } from '@/assets/icons';
+import { SideBarNavigation as nav } from '@/config/navigation';
 import { cn } from '@/lib/utils';
 import { signOut } from 'next-auth/react';
 import { Switch } from '@/components/ui/switch';

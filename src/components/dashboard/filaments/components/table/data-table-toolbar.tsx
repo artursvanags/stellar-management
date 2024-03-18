@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { DataTableViewOptions } from '@/components/dashboard/filaments/components/table/data-table-viewoptions';
 import { DataTableFacetedFilter } from '@/components/dashboard/filaments/components/table/data-table-filter';
 
-import { ActionsIcons, Icons } from '@/config/assets/icons';
+import { ActionsIcons, Icons } from '@/assets/icons';
 import { Table } from '@tanstack/react-table';
 
 import {
@@ -19,10 +19,9 @@ import { Button } from '@/components/ui/button';
 
 import { DeleteAlertModal } from '@/components/modals/deleteAlertModal';
 
-
 import { useToast } from '@/components/ui/use-toast';
 
-import { filamentStatus } from '@/config/filament';
+import { filamentStatus } from '@/config/constants';
 
 import { deleteMultipleFilamentAction } from '../../actions/delete-filament-action';
 import { FilamentDTO } from '@/types/database';
@@ -90,7 +89,7 @@ export function DataTableToolbar<TData>({ table }: DataTableToolbarProps<TData>)
 
   const onArchive = async () => {
     const filamentIds = selectedRowData.map((item: FilamentDTO) => item.id);
-    const archive = { status: filamentStatus.archived.value};
+    const archive = { status: filamentStatus.archived.value };
 
     try {
       setLoading(true);

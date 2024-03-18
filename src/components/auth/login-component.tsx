@@ -2,7 +2,7 @@
 
 import { UserAuthForm } from '@/components/auth/user-auth-form';
 import { siteConfig } from '@/config/site';
-import {Logo} from '@/config/assets/logo';
+import { Logo } from '@/assets/logo';
 
 export default function LoginComponent() {
   return (
@@ -13,9 +13,7 @@ export default function LoginComponent() {
           <div className="flex flex-col items-center">
             <Logo className="w-24 pb-4" />
             <h1 className="font-heading text-xl">Sign in</h1>
-            <p className="text-sm font-normal text-muted-foreground">
-              Sign in to your {siteConfig.name} account
-            </p>
+            <p className="text-sm font-normal text-muted-foreground">Sign in to your {siteConfig.name} account</p>
           </div>
         </div>
         <div className="flex flex-col px-4 py-8 sm:px-16">

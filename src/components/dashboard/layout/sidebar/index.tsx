@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import React from 'react';
 
-import { LogoIcon } from '@/config/assets/logo';
-import { SideBarNavigation as nav } from '@/config/dashboard';
-import { SidebarIcons } from '@/config/assets/icons';
+import { LogoIcon } from '@/assets/logo';
+import { SideBarNavigation as nav } from '@/config/navigation';
+import { SidebarIcons } from '@/assets/icons';
 
 import MyAccountDropdown from '@/components/dashboard/components/my-account-dropdown';
 import DashboardNavigation from '@/components/navigation/dashboard-navigation';
@@ -23,7 +23,7 @@ const SideBar = ({ setSidebarCollapsed, isCollapsed, className, props }: SideBar
   return (
     <div className={className} {...props}>
       <Button
-        onClick={() => (setSidebarCollapsed(!isCollapsed))}
+        onClick={() => setSidebarCollapsed(!isCollapsed)}
         className="absolute -right-10 top-2 h-8 w-8 rounded-md text-muted-foreground"
         size="icon"
         variant={'ghost'}
@@ -31,7 +31,6 @@ const SideBar = ({ setSidebarCollapsed, isCollapsed, className, props }: SideBar
       >
         {!isCollapsed ? (
           <SidebarIcons.SidebarOpen className="h-6 w-6" />
-          
         ) : (
           <SidebarIcons.SidebarClose className="h-6 w-6" />
         )}

@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Spinner } from '@/config/assets/icons';
+import { Spinner } from '@/assets/icons';
 import { Badge } from '@/components/ui/badge';
 import { UseUserData } from '@/lib/context/userContext';
 

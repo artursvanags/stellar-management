@@ -10,7 +10,7 @@ import { DataTableRowActions } from '@/components/dashboard/filaments/components
 import { FilamentDTO } from '@/types/database';
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Icons } from '@/config/assets/icons';
+import { Icons } from '@/assets/icons';
 
 import { TagColumn } from '@/components/dashboard/filaments/components/table/columns/tag-column';
 import { StatusColumn } from '@/components/dashboard/filaments/components/table/columns/status-column';

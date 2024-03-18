@@ -3,21 +3,14 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import { CheckActive, cn } from '@/lib/utils';
-import { Icons } from '@/config/assets/icons';
+import { Icons } from '@/assets/icons';
 import { Button } from '@/components/ui/button';
 
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetClose,
-} from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import ModeToggle from '@/components/global/theme-toggle-button';
 import { NavigationInterface } from '@/types';
 
-export default function MobileNavigation({
-  items,
-}: NavigationInterface) {
+export default function MobileNavigation({ items }: NavigationInterface) {
   // Define MainContent as a functional component
   const sheetCloseRef = useRef<HTMLButtonElement | null>(null);
 
@@ -30,9 +23,7 @@ export default function MobileNavigation({
   const MainContent = () => {
     return (
       <div>
-        <p className="border-b pb-2 font-heading text-4xl lg:text-5xl">
-          Main Menu
-        </p>
+        <p className="border-b pb-2 font-heading text-4xl lg:text-5xl">Main Menu</p>
         <nav className=" space-y-2">
           {items.map((i, index) => (
             <Button
