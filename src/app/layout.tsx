@@ -1,15 +1,12 @@
 import '@/styles/index.css';
 
+import { Metadata } from 'next';
 import { fontHeading, fontMono, fontSans } from '@/lib/fonts';
-
 import { cn } from '@/lib/utils';
+
 import { siteConfig } from '@/config/site';
 
-import { Toaster } from '@/components/ui/toaster';
-import { TailwindIndicator } from '@/lib/helpers/tailwind-indicator';
-import { ThemeProvider } from '@/components/global/theme-provider';
-import { Metadata } from 'next';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import Providers from '@/lib/context/providers';
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -34,7 +31,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
@@ -43,13 +40,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
           fontHeading.variable,
         )}
       >
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <TooltipProvider delayDuration={100}>
-            <main className="relative">{children}</main>
-          </TooltipProvider>
-          <TailwindIndicator />
-        </ThemeProvider>
-        <Toaster />
+        <Providers>
+          <main className="relative">{children}</main>
+        </Providers>
       </body>
     </html>
   );

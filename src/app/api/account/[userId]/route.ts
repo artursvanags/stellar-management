@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth/options';
 
 import prismadb from '@/lib/utils/database';
+import { getUser } from '@/lib/actions/user-data-actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,16 +10,9 @@ export async function PATCH(
   { params }: { params: { userId: string } },
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Session not found' }, { status: 401 });
-    }
-
-    const user = await prismadb.user.findUnique({
-      where: { email: session?.user?.email! },
-    });
+    const user = await getUser();
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return new NextResponse('Unauthorized', { status: 404 });
     }
 
     const body = await request.json();
@@ -29,9 +21,10 @@ export async function PATCH(
       data: body,
     });
 
-    return new NextResponse('Update successful!', { status: 200 });
+    return new NextResponse('Post successful!', { status: 200 });
   } catch (error) {
-    return new NextResponse(`Internal error - ${error}`, { status: 500 });
+    console.log('[POST-ERROR]', error);
+    return new NextResponse(`Internal error`, { status: 500 });
   }
 }
 
@@ -40,16 +33,9 @@ export async function DELETE(
   { params }: { params: { userId: string } },
 ) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: 'Session not found' }, { status: 401 });
-    }
-
-    const user = await prismadb.user.findUnique({
-      where: { email: session?.user?.email! },
-    });
+    const user = await getUser();
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return new NextResponse('Unauthorized', { status: 404 });
     }
 
     await prismadb.user.delete({
@@ -58,6 +44,7 @@ export async function DELETE(
 
     return new NextResponse('Delete successful!', { status: 200 });
   } catch (error) {
-    return new NextResponse(`Internal error - ${error}`, { status: 500 });
+    console.log('[DELETE-ERROR]', error);
+    return new NextResponse(`Internal error`, { status: 500 });
   }
 }

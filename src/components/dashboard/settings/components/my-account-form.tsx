@@ -9,22 +9,8 @@ import { setupAuthSchema } from '@/lib/validations/auth';
 
 import { useToast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/config/assets/icons';
 import { Badge } from '@/components/ui/badge';
@@ -33,7 +19,7 @@ import { UseUserData } from '@/lib/context/userContext';
 type FormData = z.infer<typeof setupAuthSchema>;
 
 const MyAccountForm: React.FC = () => {
-  const { user, settings } = UseUserData();
+  const userData = UseUserData();
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
@@ -41,7 +27,7 @@ const MyAccountForm: React.FC = () => {
   const form = useForm<FormData>({
     resolver: zodResolver(setupAuthSchema),
     defaultValues: {
-      name: user.name || '',
+      name: userData?.name || '',
     },
   });
 
@@ -52,7 +38,7 @@ const MyAccountForm: React.FC = () => {
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(user.id);
+    navigator.clipboard.writeText(userData?.id || '');
     toast({
       title: 'Success!',
       description: `You have copied your ID to clipboard.`,
@@ -62,7 +48,7 @@ const MyAccountForm: React.FC = () => {
   const onSubmit = form.handleSubmit(async (formData: FormData) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/account/${user.id}`, {
+      const response = await fetch(`/api/account/${userData?.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -73,10 +59,7 @@ const MyAccountForm: React.FC = () => {
         throw new Error(`${response.status}`);
       }
     } catch (error) {
-      console.error(
-        'There has been a problem with your fetch operation:',
-        error,
-      );
+      console.error('There has been a problem with your fetch operation:', error);
     } finally {
       setIsDirty(false);
       setLoading(false);
@@ -97,15 +80,9 @@ const MyAccountForm: React.FC = () => {
             render={() => (
               <FormItem>
                 <FormLabel htmlFor="id">Your ID</FormLabel>
-                <Input
-                  readOnly
-                  placeholder={user.id}
-                  className="cursor-pointer"
-                  onClick={copyToClipboard}
-                />
+                <Input readOnly placeholder={userData?.id} className="cursor-pointer" onClick={copyToClipboard} />
                 <FormDescription>
-                  This is your unique ID, that we use to identify you. It cannot
-                  be changed.
+                  This is your unique ID, that we use to identify you. It cannot be changed.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -121,8 +98,7 @@ const MyAccountForm: React.FC = () => {
                   <Input placeholder="Display Name" {...field} />
                 </FormControl>
                 <FormDescription>
-                  This is your public display name. It can be your real name or
-                  a pseudonym.
+                  This is your public display name. It can be your real name or a pseudonym.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

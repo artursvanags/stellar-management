@@ -1,10 +1,10 @@
 'use client';
 
 import { Progress } from '@/components/ui/progress';
-import { Filaments } from '@/types/database';
+import { FilamentDTO } from '@/types/database';
 
 interface PlanOverviewProps {
-  data: Filaments[];
+  data: FilamentDTO[];
 }
 
 const PlanOverview: React.FC<PlanOverviewProps> = ({ data }) => {

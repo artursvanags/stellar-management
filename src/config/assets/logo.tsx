@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 
-export default function Logo({ className }: { className?: string }) {
+export function Logo({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -24,3 +24,30 @@ export default function Logo({ className }: { className?: string }) {
     </svg>
   );
 }
+
+export function LogoIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 209.42 224.86"
+      className={cn('h-auto w-10', className)}
+    >
+       <path
+        fill="currentColor"
+        shapeRendering="geometricPrecision"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M104.71 25.34c5.16 0 10.25 1.36 14.72 3.95l49.92 28.82c9.08 5.24 14.73 15.02 14.73 25.5v57.64c0 10.49-5.64 20.26-14.73 25.5l-49.92 28.82c-4.47 2.58-9.56 3.95-14.72 3.95s-10.25-1.36-14.73-3.95l-49.92-28.82c-9.08-5.24-14.73-15.02-14.73-25.5V83.61c0-10.49 5.64-20.26 14.73-25.5l49.92-28.82c4.47-2.58 9.56-3.95 14.73-3.95m0-25.34c-9.46 0-18.92 2.45-27.39 7.34L27.4 36.16A54.788 54.788 0 0 0 0 83.61v57.64a54.8 54.8 0 0 0 27.39 47.45l49.92 28.82c8.48 4.89 17.94 7.34 27.39 7.34s18.92-2.45 27.39-7.34l49.92-28.82a54.787 54.787 0 0 0 27.39-47.45V83.61a54.8 54.8 0 0 0-27.39-47.45L132.09 7.34A54.81 54.81 0 0 0 104.7 0Z"
+       
+      />
+      <path
+       fill="currentColor"
+       shapeRendering="geometricPrecision"
+       fillRule="evenodd"
+       clipRule="evenodd"
+        d="M166.27 110.53 146.69 104a53.055 53.055 0 0 1-33.56-33.56l-6.53-19.58c-.61-1.83-3.19-1.83-3.8 0l-6.53 19.58A53.055 53.055 0 0 1 62.71 104l-19.58 6.53c-1.83.61-1.83 3.19 0 3.8l19.58 6.53a53.055 53.055 0 0 1 33.56 33.56L102.8 174c.61 1.83 3.19 1.83 3.8 0l6.53-19.58a53.055 53.055 0 0 1 33.56-33.56l19.58-6.53c1.83-.61 1.83-3.19 0-3.8Z"
+      />
+    </svg>
+  );
+}
+

@@ -7,19 +7,19 @@ export const SettingsSideBarNavigation: SettingsSideBarConfig = {
       title: 'General',
       description: 'Manage your general settings.',
       href: '/dashboard/settings',
-      icon: <MyAccount.Settings className="mr-2 h-4 w-4" />,
+      icon: MyAccount.Settings,
     },
     {
       title: 'Billing',
       description: 'Manage your billing information.',
       href: '/dashboard/settings/billing',
-      icon: <MyAccount.Billing className="mr-2 h-4 w-4" />,
+      icon: MyAccount.Billing,
     },
     {
       title: 'Account',
       description: 'Manage your account settings.',
       href: '/dashboard/settings/account',
-      icon: <MyAccount.User className="mr-2 h-4 w-4" />,
+      icon: MyAccount.User,
     },
   ],
 };

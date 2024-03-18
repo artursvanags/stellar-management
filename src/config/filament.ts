@@ -1,4 +1,12 @@
-export const filamentStatus = {
+
+export type FilamentStatusType = 'new' | 'used' | 'archived' | 'in_use';
+
+export interface FilamentStatusOption {
+  value: FilamentStatusType;
+  label: string;
+}
+
+export const filamentStatus: Record<FilamentStatusType, FilamentStatusOption> = {
   new: {
     value: 'new',
     label: 'New',

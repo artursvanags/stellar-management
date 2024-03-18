@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 
-import { User } from '@prisma/client';
 import { setupAuthSchema } from '@/lib/validations/auth';
 
 import { useToast } from '@/components/ui/use-toast';
@@ -21,14 +20,16 @@ import {
 } from '@/components/ui/form';
 
 import { EditCard } from '@/components/cards/edit-card';
+import { UserData } from '@/types/database';
 
 type FormData = z.infer<typeof setupAuthSchema>;
 
 interface SetupAccountFormProps {
-  user: User;
+  user: UserData | null;
 }
 
 const SetupAccountForm = ({ user }: SetupAccountFormProps) => {
+
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
@@ -39,7 +40,7 @@ const SetupAccountForm = ({ user }: SetupAccountFormProps) => {
       name: '',
     },
   });
-
+  if (!user) return null;
   const onSubmit = form.handleSubmit(async (data: FormData) => {
     try {
       setLoading(true);

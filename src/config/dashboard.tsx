@@ -4,14 +4,12 @@ import { Icons, MyAccount, SidebarIcons } from './assets/icons';
 export const SideBarNavigation: SideBarConfig = {
   mainNav: [
     {
-      icon: <Icons.Files className="mr-3 h-4 w-4" />,
+      icon: Icons.Files,
       title: 'Dashboard',
       href: '/dashboard',
     },
     {
-      icon: (
-        <SidebarIcons.Filaments className="mr-3 h-4 w-4" />
-      ),
+      icon: Icons.Filament,
       title: 'Filaments',
       href: '/dashboard/filaments',
     },
@@ -19,19 +17,19 @@ export const SideBarNavigation: SideBarConfig = {
   ],
   bottomNav: [
     {
-      icon: <Icons.Trash className="mr-3 h-4 w-4" />,
+      icon: Icons.Trash,
       title: 'About Us',
       href: '/dashboard/about-us',
     },
   ],
   accountDropdown: [
     {
-      icon: <MyAccount.User className="mr-3 h-4 w-4" />,
-      title: 'Settings',
-      href: '/dashboard/settings',
+      icon: MyAccount.User,
+      title: 'Account',
+      href: '/dashboard/settings/account',
     },
     {
-      icon: <MyAccount.Billing className="mr-3 h-4 w-4" />,
+      icon: MyAccount.Billing,
       title: 'Billing',
       href: '/dashboard/settings/billing',
     },

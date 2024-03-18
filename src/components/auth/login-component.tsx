@@ -2,7 +2,7 @@
 
 import { UserAuthForm } from '@/components/auth/user-auth-form';
 import { siteConfig } from '@/config/site';
-import Logo from '@/config/assets/logo';
+import {Logo} from '@/config/assets/logo';
 
 export default function LoginComponent() {
   return (

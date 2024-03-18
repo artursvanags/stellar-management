@@ -4,11 +4,8 @@ import SectionHeader from '@/components/global/section-header';
 
 const FilamentsPage = () => {
   return (
-    <div className="space-y-6">
-      <SectionHeader
-        title="Filaments"
-        description="View, update or delete your filaments."
-      >
+    <div className="flex h-screen flex-col gap-4 px-6 py-4">
+      <SectionHeader title="Filaments" description="View, update or delete your filaments.">
         <AddFilamentButton />
       </SectionHeader>
       <FilamentTemplate />

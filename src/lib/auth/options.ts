@@ -3,7 +3,7 @@ import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 import EmailProvider from 'next-auth/providers/email';
 
-import { PrismaAdapter } from '@auth/prisma-adapter';
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
 
 import prismadb from '@/lib/utils/database';
 import { sendVerificationRequest } from '@/lib/email/verificationRequest';
@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
 
-  callbacks: {
+  callbacks: { 
     async jwt({ user, token }) {
       //pass user ID to token if signed in
       if (user) {

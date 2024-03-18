@@ -1,4 +1,3 @@
-import { Filaments } from '@/types/database';
 import * as z from 'zod';
 
 export const userAuthSchema = z.object({

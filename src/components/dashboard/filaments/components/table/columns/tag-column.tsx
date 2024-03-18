@@ -23,10 +23,10 @@ import {
 } from '@/components/ui/form';
 
 import { tagsSchema } from '@/lib/validations/auth';
-import { Filaments } from '@/types/database';
+import { FilamentDTO } from '@/types/database';
 
 interface TagColumnProps {
-  data: Filaments;
+  data: FilamentDTO;
 }
 
 type FormData = z.infer<typeof tagsSchema>;

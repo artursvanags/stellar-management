@@ -1,3 +1,5 @@
+import { LucideIcon } from "lucide-react";
+
 export type SiteConfig = {
   name: string;
   description: string;
@@ -16,7 +18,7 @@ export type NavItem = {
   href: string;
   description?: string;
   shortcut?: string;
-  icon?: React.ReactNode;
+  icon?: LucideIcon;
   disabled?: boolean;
   subMenu?: NavItem[];
 };
@@ -37,5 +39,5 @@ export type SettingsSideBarConfig = {
 };
 
 export interface SearchParams {
-  [key: string]: string | string[] | undefined
+  [key: string]: string | string[] | undefined;
 }

@@ -23,8 +23,8 @@ import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import { UseUserData } from '@/lib/context/userContext';
 
-const MyAccountDropdown = () => {
-  const { user } = UseUserData();
+const MyAccountDropdown = ({ isCollapsed }: { isCollapsed: boolean }) => {
+  const userData = UseUserData();
   const { setTheme, resolvedTheme } = useTheme();
 
   const buttonRef = useRef<HTMLDivElement>(null);
@@ -38,7 +38,7 @@ const MyAccountDropdown = () => {
     if (buttonRef.current) {
       setButtonWidth(buttonRef.current.offsetWidth);
     }
-  }, [user]); // Dependency on user, since the button width could change based on the user name
+  }, [buttonRef]); // Dependency on user, since the button width could change based on the user name
 
   // Define toggle function to switch between light and dark mode
   const toggleTheme = () => {
@@ -61,43 +61,41 @@ const MyAccountDropdown = () => {
       setLoading(false);
     }
   }
+  if (!userData) return null;
   return (
     <>
       <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
         <DropdownMenuTrigger asChild>
           <div
             ref={buttonRef}
-            className={cn(
-              buttonVariants({ variant: 'ghost' }),
-              ' h-12 w-full cursor-pointer gap-2 p-2 ',
-            )}
+            className={cn(buttonVariants({ variant: 'ghost' }), ' h-10 w-full cursor-pointer gap-2 p-2 ')}
           >
-            <Avatar className="h-8 w-8">
-              <AvatarImage src={user.image || ''} />
-              <AvatarFallback>
-                {user.name?.split(' ').map((i) => i.slice(0, 1))}
-              </AvatarFallback>
+            <Avatar className=" h-8 w-8 rounded-sm">
+              <AvatarImage src={userData.image || ''} />
+              <AvatarFallback>{userData.name?.split(' ').map((i) => i.slice(0, 1))}</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col text-xs">
-              <span className=" font-normal text-muted-foreground">
-                My Account
-              </span>
-              <span>{user.name}</span>
-            </div>
-            <MyAccount.Chevron className="ml-auto h-4 w-4" />
+            {!isCollapsed && (
+              <>
+                <div className="flex flex-col text-xs">
+                  <span className=" font-normal text-muted-foreground">My Account</span>
+                  <span>{userData.name}</span>
+                </div>
+                <MyAccount.Chevron className="ml-auto h-4 w-4" />
+              </>
+            )}
           </div>
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
           className="min-w-full"
           style={{ minWidth: `${buttonWidth}px` }} // Ensures dropdown width aligns with the button
-          align="center"
+          align={`${isCollapsed ? 'end' : 'center'}`}
+          side={isCollapsed ? 'left' : undefined}
+          sideOffset={isCollapsed ? 20 : undefined}
         >
           <DropdownMenuLabel className="rounded-sm bg-secondary/50">
             <div className="flex flex-col text-xs">
-              <span className=" font-normal text-muted-foreground">
-                Current subscription:
-              </span>
+              <span className=" font-normal text-muted-foreground">Current subscription:</span>
               <span>Free tier</span>
             </div>
           </DropdownMenuLabel>
@@ -106,7 +104,7 @@ const MyAccountDropdown = () => {
             {nav.accountDropdown.map((i, index) => (
               <Link key={index} href={i.href}>
                 <DropdownMenuItem className="cursor-pointer">
-                  {i.icon}
+                  {i.icon && <i.icon className="mr-3 h-4 w-4" />}
                   {i.title}
                   <DropdownMenuShortcut>{i.shortcut}</DropdownMenuShortcut>
                 </DropdownMenuItem>
@@ -115,7 +113,6 @@ const MyAccountDropdown = () => {
           </div>
           <DropdownMenuSeparator />
 
-          {/* Add custom toggle switch for dark mode */}
           <DropdownMenuItem
             onClick={(event) => {
               event.preventDefault();
@@ -128,7 +125,6 @@ const MyAccountDropdown = () => {
             Switch to {resolvedTheme === 'light' ? 'dark' : 'light'} mode
             <Switch className="ml-auto" checked={resolvedTheme === 'dark'} />
           </DropdownMenuItem>
-
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="cursor-pointer text-red-500"

@@ -1,42 +1,25 @@
 'use client';
+
 import React, { createContext, useContext } from 'react';
-import { UserSettings, User } from '@prisma/client';
-import { getUser } from '@/lib/actions/user-data-actions';
 
-type UserData = Awaited<ReturnType<typeof getUser>>;
+import { UserData } from '@/types/database';
 
-const UserDataContext = createContext<{
-  user: User;
-  settings: UserSettings;
-} | null>(null);
 
-interface UserSettingsProviderProps {
+interface UserDataProviderProps {
   data: UserData | null;
-  children?: React.ReactNode;
+  children: React.ReactNode;
 }
+const UserDataContext = createContext<UserData | null>(null);
 
-export const UserDataProvider = ({
-  children,
-  data,
-}: UserSettingsProviderProps) => {
-  if (!data) {
-    throw new Error('UserDataProvider requires a valid data object');
-  }
-  let { settings, ...user } = data;
-  if (!settings) {
-    settings = {} as UserSettings;
-  }
-  return (
-    <UserDataContext.Provider value={{ user, settings }}>
-      {children}
-    </UserDataContext.Provider>
-  );
+export const UserDataProvider = ({ children, data }: UserDataProviderProps) => {
+
+  return <UserDataContext.Provider value={data}>{children}</UserDataContext.Provider>;
 };
 
 export const UseUserData = () => {
   const context = useContext(UserDataContext);
-  if (context === null) {
-    throw new Error('UseUserData must be used within a UserDataProvider');
+  if (context === undefined) {
+    throw new Error('useUserData must be used within a UserDataProvider');
   }
   return context;
 };

@@ -33,7 +33,8 @@
     "src/middleware.ts",
     "src/components/AuthProvider.js",
     "src/lib/actions/handle-filament-actions.ts",
-    "react-email/emails/verification.tsx"
-  ],
+    "react-email/emails/verification.tsx",
+    "src/components/dashboard/filaments/actions/delete-filament-action.ts"
+, "src/lib/hooks/use-local-storage.ts"  ],
   "exclude": ["node_modules"]
 }

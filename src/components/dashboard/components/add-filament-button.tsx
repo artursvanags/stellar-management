@@ -6,11 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
 import FilamentForm from '@/components/dashboard/filaments/components/add-filament-form';
 
-export const AddFilamentButton = () => {
+export const AddFilamentButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isInInteraction, setInInteraction] = useState(false);
+  const [isInInteraction, setInInteraction] = useState<boolean>(false);
 
-  const onCloseModal = () => {
+  const onCloseModal = (): void => {
     setIsModalOpen(false);
   };
 
@@ -36,6 +36,7 @@ export const AddFilamentButton = () => {
       <Button
         icon={<Icons.plus className="mr-2 h-5 w-5" />}
         onClick={() => setIsModalOpen(true)}
+        {...props}
       >
         Add Filament
       </Button>

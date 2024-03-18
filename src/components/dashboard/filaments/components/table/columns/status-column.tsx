@@ -3,10 +3,10 @@
 import { Icons } from '@/config/assets/icons';
 import { Badge } from '@/components/ui/badge';
 
-import { Filaments } from '@/types/database';
+import { FilamentDTO } from '@/types/database';
 
 interface StatusColumnProps {
-  status: Filaments['status'];
+  status: FilamentDTO['status'];
 }
 
 const statusBadge = {

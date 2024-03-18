@@ -4,10 +4,8 @@ interface FilamentLayoutProps {
 
 export default function FilamentLayout({ children }: FilamentLayoutProps) {
   return (
-    <>
-      <div className="container p-4 pb-16">
+      <div className="container">
         {children}
       </div>
-    </>
   );
 }

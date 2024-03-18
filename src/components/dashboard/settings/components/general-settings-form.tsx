@@ -9,23 +9,9 @@ import { useRouter } from 'next/navigation';
 import { userSettingsSchema } from '@/lib/validations/auth';
 
 import { useToast } from '@/components/ui/use-toast';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/config/assets/icons';
 import { Badge } from '@/components/ui/badge';
@@ -37,7 +23,7 @@ type FormData = z.infer<typeof userSettingsSchema>;
 const thresholdOptions = [10, 25, 50, 75, 100];
 
 const GeneralSettingsForm: React.FC = () => {
-  const { user, settings } = UseUserData();
+  const userData = UseUserData();
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
@@ -45,9 +31,9 @@ const GeneralSettingsForm: React.FC = () => {
   const form = useForm<FormData>({
     resolver: zodResolver(userSettingsSchema),
     defaultValues: {
-      weight_threshold: settings.weight_threshold,
-      auto_archive: settings.auto_archive,
-      auto_sort_archive: settings.auto_sort_archive,
+      weight_threshold: userData?.settings.weight_threshold,
+      auto_archive: userData?.settings.auto_archive,
+      auto_sort_archive: userData?.settings.auto_sort_archive,
     },
   });
 
@@ -60,7 +46,7 @@ const GeneralSettingsForm: React.FC = () => {
   const onSubmit = form.handleSubmit(async (formData: FormData) => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/account/${user.id}/general`, {
+      const response = await fetch(`/api/account/${userData?.id}/general`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -71,10 +57,7 @@ const GeneralSettingsForm: React.FC = () => {
         throw new Error(`${response.status}`);
       }
     } catch (error) {
-      console.error(
-        'There has been a problem with your fetch operation:',
-        error,
-      );
+      console.error('There has been a problem with your fetch operation:', error);
     } finally {
       setIsDirty(false);
       setLoading(false);
@@ -96,10 +79,7 @@ const GeneralSettingsForm: React.FC = () => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Low Weight Threshold</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value.toString()}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value.toString()} disabled={loading}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a verified email to display" />
@@ -108,8 +88,7 @@ const GeneralSettingsForm: React.FC = () => {
                   <SelectContent>
                     {thresholdOptions.map((option) => (
                       <SelectItem key={option} value={option.toString()}>
-                        {option.toString() ===
-                        settings.weight_threshold.toString() ? (
+                        {option.toString() === userData?.settings.weight_threshold.toString() ? (
                           <>
                             {option}g<Badge className="ml-2">Current</Badge>
                           </>
@@ -129,8 +108,7 @@ const GeneralSettingsForm: React.FC = () => {
                 </Select>
 
                 <FormDescription>
-                  Set your low weight threshold, in order to see a warning sign
-                  in your filaments.
+                  Set your low weight threshold, in order to see a warning sign in your filaments.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -143,16 +121,10 @@ const GeneralSettingsForm: React.FC = () => {
               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
                   <FormLabel>Auto archive</FormLabel>
-                  <FormDescription>
-                    Automatically archive your filaments when they reach the
-                    threshold.
-                  </FormDescription>
+                  <FormDescription>Automatically archive your filaments when they reach the threshold.</FormDescription>
                 </div>
                 <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
+                  <Switch checked={field.value} onCheckedChange={field.onChange} disabled={loading} />
                 </FormControl>
               </FormItem>
             )}
@@ -164,16 +136,10 @@ const GeneralSettingsForm: React.FC = () => {
               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
                   <FormLabel>Sort archived filaments</FormLabel>
-                  <FormDescription>
-                    Automatically move archived filaments to the bottom of the
-                    list.
-                  </FormDescription>
+                  <FormDescription>Automatically move archived filaments to the bottom of the list.</FormDescription>
                 </div>
                 <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
+                  <Switch checked={field.value} onCheckedChange={field.onChange} disabled={loading} />
                 </FormControl>
               </FormItem>
             )}

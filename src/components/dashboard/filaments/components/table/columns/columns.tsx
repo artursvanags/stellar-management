@@ -4,25 +4,20 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { Checkbox } from '@/components/ui/checkbox';
 
-import { DataTableColumnHeader } from '@/components/dashboard/filaments/components/table/dataTableColumnHeader';
-import { DataTableRowActions } from '@/components/dashboard/filaments/components/table/dataTableActions';
+import { DataTableColumnHeader } from '@/components/dashboard/filaments/components/table/data-table-header';
+import { DataTableRowActions } from '@/components/dashboard/filaments/components/table/data-table-actions';
 
-import { Filaments } from '@/types/database';
+import { FilamentDTO } from '@/types/database';
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Icons } from '@/config/assets/icons';
 
-import { TagColumn } from '@/components/dashboard/filaments/components/table/tag-column';
-import { StatusColumn } from '@/components/dashboard/filaments/components/table/status-column';
+import { TagColumn } from '@/components/dashboard/filaments/components/table/columns/tag-column';
+import { StatusColumn } from '@/components/dashboard/filaments/components/table/columns/status-column';
 import { Tags } from '@prisma/client';
 import { UseUserData } from '@/lib/context/userContext';
 
-export const columns: ColumnDef<Filaments>[] = [
+export const columns: ColumnDef<FilamentDTO>[] = [
   {
     accessorKey: 'select',
     header: ({ table }) => (
@@ -46,17 +41,14 @@ export const columns: ColumnDef<Filaments>[] = [
   },
   {
     accessorKey: 'id',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="ID" />,
     cell: ({ row }) => {
       const value = row.getValue('id') as string;
       const showFirst = value.slice(0, 8);
 
       return (
         <div className=" flex items-center text-muted-foreground">
-          {row.original.isFavorite && <Icons.Heart className="mr-2 h-4 w-4" />}{' '}
-          {showFirst}
+          {row.original.isFavorite && <Icons.Heart className="mr-2 h-4 w-4" />} {showFirst}
         </div>
       );
     },
@@ -65,46 +57,34 @@ export const columns: ColumnDef<Filaments>[] = [
   },
   {
     accessorKey: 'manufacturer',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Manufacturer" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Manufacturer" />,
     cell: ({ row }) => {
       return <div>{row.original.manufacturer}</div>;
     },
   },
   {
     accessorKey: 'material',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Material" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Material" />,
     cell: ({ row }) => {
       return <div>{row.original.material}</div>;
     },
   },
   {
     accessorKey: 'color',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Color" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Color" />,
     cell: ({ row }) => {
       return <div>{row.original.color}</div>;
     },
   },
   {
     accessorKey: 'remainingWeight',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Remaining" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Remaining" />,
     cell: ({ row }) => {
-      const { settings } = UseUserData();
+      const userData = UseUserData();
       const netWeight = row.original.weight;
       const remainingWeight = row.original.remainingWeight;
-      const weightThreshold = settings
-        ? parseFloat(settings.weight_threshold)
-        : 0;
-      const percentage = parseFloat(
-        ((remainingWeight / netWeight) * 100).toFixed(2),
-      );
+      const weightThreshold = userData?.settings ? parseFloat(userData.settings.weight_threshold) : 0;
+      const percentage = parseFloat(((remainingWeight / netWeight) * 100).toFixed(2));
       const color =
         remainingWeight < weightThreshold && row.original.status !== 'archived'
           ? 'text-red-400 group-hover/weight:text-red-400'
@@ -114,22 +94,12 @@ export const columns: ColumnDef<Filaments>[] = [
           <TooltipProvider delayDuration={200}>
             <Tooltip>
               <TooltipTrigger className="flex items-center">
-                <Icons.Info
-                  className={`mr-2 h-4 w-4 text-muted-foreground/10 transition ${color}`}
-                />
+                <Icons.Info className={`mr-2 h-4 w-4 text-muted-foreground/10 transition ${color}`} />
                 {remainingWeight} g{' '}
               </TooltipTrigger>
-              <TooltipContent
-                side="left"
-                align="center"
-                sideOffset={20}
-                className="bg-secondary"
-              >
+              <TooltipContent side="left" align="center" sideOffset={20} className="bg-secondary">
                 <div>
-                  {netWeight} g -{' '}
-                  <span className="text-sm text-muted-foreground">
-                    ( {percentage} % ) Remaining
-                  </span>
+                  {netWeight} g - <span className="text-sm text-muted-foreground">( {percentage} % ) Remaining</span>
                 </div>
               </TooltipContent>
             </Tooltip>
@@ -140,9 +110,7 @@ export const columns: ColumnDef<Filaments>[] = [
   },
   {
     accessorKey: 'status',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
     cell: ({ row }) => <StatusColumn status={row.original.status} />,
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
@@ -152,8 +120,8 @@ export const columns: ColumnDef<Filaments>[] = [
       const statusB = rowB.original.status === 'archived';
       const statusC = rowA.original.status === 'in_use';
       const statusD = rowB.original.status === 'in_use';
-      const { settings } = UseUserData();
-      const autoArchiveSort = settings?.auto_sort_archive;
+      const userData = UseUserData();
+      const autoArchiveSort = userData?.settings.auto_sort_archive;
 
       if (autoArchiveSort && statusA !== statusB) {
         return statusA ? 1 : -1;
@@ -162,18 +130,13 @@ export const columns: ColumnDef<Filaments>[] = [
         return statusC ? -1 : 1;
       } else {
         // If both rows have the same status, sort by 'createdAt'
-        return (
-          new Date(rowB.original.createdAt).getTime() -
-          new Date(rowA.original.createdAt).getTime()
-        );
+        return new Date(rowB.original.createdAt).getTime() - new Date(rowA.original.createdAt).getTime();
       }
     },
   },
   {
     accessorKey: 'tags',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Tags" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Tags" />,
     cell: ({ row }) => <TagColumn data={row.original} />,
     filterFn: (row, id, value) => {
       const rowTags: Tags[] = row.getValue(id);
@@ -185,14 +148,10 @@ export const columns: ColumnDef<Filaments>[] = [
   },
   {
     accessorKey: 'createdAt',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date Created" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Date Created" />,
     cell: ({ row }) => {
       const userData = UseUserData();
-      const date = new Date(row.original.createdAt).toLocaleDateString(
-        userData.settings?.timezone_format,
-      );
+      const date = new Date(row.original.createdAt).toLocaleDateString(userData?.settings.timezone_format);
       return <div>{date}</div>;
     },
   },

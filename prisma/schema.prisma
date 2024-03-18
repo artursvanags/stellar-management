@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
+  directUrl    = env("DATABASE_URL_NON_POOLING")
   relationMode = "prisma"
 }
 
@@ -53,7 +54,7 @@ model User {
 }
 
 model UserSettings {
-  user              User      @relation(fields: [userId], references: [id])
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId            String    @unique
   weight_threshold  String    @default("50")
   auto_archive      Boolean   @default(false)
@@ -71,7 +72,7 @@ model VerificationToken {
 }
 
 model Tags {
-  id        String           @id @default(uuid())
+  id        String     @id @default(uuid())
   name      String
   filaments Filament[]
 
@@ -79,19 +80,19 @@ model Tags {
 }
 
 model Filament {
-  id              String           @id @default(uuid())
-  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              String         @id @default(uuid())
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
-  status          FilamentStatus   @default(new)
+  status          FilamentStatus @default(new)
   diameter        String
   manufacturer    String
   material        String
   color           String
   weight          Float
   remainingWeight Float
-  isFavorite      Boolean          @default(false)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime?        @updatedAt
+  isFavorite      Boolean        @default(false)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime?      @updatedAt
   tags            Tags[]
 
   @@index([userId])

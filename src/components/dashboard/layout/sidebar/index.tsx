@@ -1,30 +1,54 @@
 'use client';
-import Link from 'next/link';
 
-import Logo from '@/config/assets/logo';
+import Link from 'next/link';
+import React from 'react';
+
+import { LogoIcon } from '@/config/assets/logo';
 import { SideBarNavigation as nav } from '@/config/dashboard';
+import { SidebarIcons } from '@/config/assets/icons';
 
 import MyAccountDropdown from '@/components/dashboard/components/my-account-dropdown';
-import SideBarNavigation from '@/components/navigation/sidebar-navigation';
+import DashboardNavigation from '@/components/navigation/dashboard-navigation';
 
+import { Button } from '@/components/ui/button';
 
-const SideBar = () => {
+interface SideBarProps {
+  setSidebarCollapsed: (collapsed: boolean) => void;
+  isCollapsed: boolean;
+  className?: string;
+  props?: React.HTMLProps<HTMLDivElement>;
+}
+
+const SideBar = ({ setSidebarCollapsed, isCollapsed, className, props }: SideBarProps) => {
   return (
-    <div className="flex h-screen flex-col gap-4 p-4">
-      <div className="flex h-20 items-center border-b">
-        <Link href={'/dashboard'}>
-          <Logo className="w-24" />
-        </Link>
-      </div>
-      <div>
-        <div className="pb-2 text-sm font-medium text-muted-foreground">
-          MAIN
+    <div className={className} {...props}>
+      <Button
+        onClick={() => (setSidebarCollapsed(!isCollapsed))}
+        className="absolute -right-10 top-2 h-8 w-8 rounded-md text-muted-foreground"
+        size="icon"
+        variant={'ghost'}
+        aria-label="Toggle Sidebar"
+      >
+        {!isCollapsed ? (
+          <SidebarIcons.SidebarOpen className="h-6 w-6" />
+          
+        ) : (
+          <SidebarIcons.SidebarClose className="h-6 w-6" />
+        )}
+      </Button>
+      <div className="flex h-screen flex-col p-2">
+        <div className="flex h-20 items-center border-b">
+          <Link href={`/dashboard`} className="inline-flex h-9 w-full items-center">
+            <LogoIcon className="p-2" />
+            {!isCollapsed && <p className="font-semi align-middle">Stelpine</p>}
+          </Link>
         </div>
-        <SideBarNavigation items={nav.mainNav} className="flex flex-col" />
-      </div>
-      <div className="mt-auto">
-        <SideBarNavigation items={nav.bottomNav} className="flex flex-col" />
-        <MyAccountDropdown />
+        <div>
+          <DashboardNavigation items={nav.mainNav} isCollapsed={isCollapsed} />
+        </div>
+        <div className="mt-auto">
+          <MyAccountDropdown isCollapsed={isCollapsed} />
+        </div>
       </div>
     </div>
   );

@@ -1,9 +1,9 @@
 'use client';
-import { Filaments } from '@/types/database';
+import { FilamentDTO } from '@/types/database';
 import { AlertModal } from './alertModal';
 
 interface DeleteAlertModalProps {
-  data: Filaments[];
+  data: FilamentDTO[];
   isOpen: boolean;
   onClose: () => void;
   onAction: () => void;

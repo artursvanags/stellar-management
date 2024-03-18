@@ -33,6 +33,10 @@ import {
   Tag,
   MoreVertical,
   Copy,
+ CheckCheck,
+   X,
+   PanelLeftClose,
+   PanelLeftOpen
 } from 'lucide-react';
 
 import {
@@ -98,6 +102,8 @@ export const SidebarIcons = {
   Filaments: CircleDot,
   Favorites: Heart,
   Files: File,
+  SidebarClose: PanelLeftClose,
+  SidebarOpen: PanelLeftOpen,
 };
 
 export const MyAccount = {
@@ -110,9 +116,15 @@ export const MyAccount = {
 };
 
 export const ActionsIcons = {
+  SelectAll: CheckCheck,
   Edit: Pencil,
   Archive: Archive,
   Favorite: Star,
   Unfavorite: StarOff,
+  Clear: X,
   Delete: Trash,
+};
+
+export const EmptyStateIcons = {
+  Filament: Package,
 };

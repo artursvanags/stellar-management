@@ -50,7 +50,7 @@ function flattenCounts(valueMap: any) {
 
   return flattenedCounts;
 }
-console.log(flattenCounts)
+
 export function DataTableFacetedFilter<TData, TValue>({
   column,
   title,

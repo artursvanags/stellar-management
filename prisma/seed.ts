@@ -1,4 +1,3 @@
-import { Filaments } from "@/types/database";
 import { PrismaClient, FilamentStatus } from "@prisma/client";
 import { data } from "./data";
 const prisma = new PrismaClient();
